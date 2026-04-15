@@ -9,7 +9,9 @@
         public string Immatriculation { get; set; } = string.Empty;
         public string Statut { get; set; } = "Disponible";
 
-        // ✅ String nullable (peut être null)
+        // Valeurs liées au type de véhicule
         public string? Libelle_Type { get; set; }
+        public string? Marque { get; set; }
+        public int? Nombre_Place { get; set; }
     }
 }

@@ -43,17 +43,19 @@
         }
       }
     },
-    "/api/AffectationChauffeurAgences/rechercher": {
+    "/api/AffectationChauffeurAgences/{id}": {
       "get": {
         "tags": [
           "AffectationChauffeurAgences"
         ],
         "parameters": [
           {
-            "name": "motCle",
-            "in": "query",
+            "name": "id",
+            "in": "path",
+            "required": true,
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
@@ -63,26 +65,17 @@
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AffectationChauffeurAgenceModel"
-                  }
+                  "$ref": "#/components/schemas/AffectationChauffeurAgenceModel"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AffectationChauffeurAgenceModel"
-                  }
+                  "$ref": "#/components/schemas/AffectationChauffeurAgenceModel"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AffectationChauffeurAgenceModel"
-                  }
+                  "$ref": "#/components/schemas/AffectationChauffeurAgenceModel"
                 }
               }
             }
@@ -237,226 +230,7 @@
         }
       }
     },
-    "/api/AffectationChauffeurAgences/{id}": {
-      "get": {
-        "tags": [
-          "AffectationChauffeurAgences"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/AffectationChauffeurAgenceModel"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AffectationChauffeurAgenceModel"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/AffectationChauffeurAgenceModel"
-                }
-              }
-            }
-          }
-        }
-      },
-      "put": {
-        "tags": [
-          "AffectationChauffeurAgences"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AffectationChauffeurAgenceModel"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AffectationChauffeurAgenceModel"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/AffectationChauffeurAgenceModel"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      },
-      "delete": {
-        "tags": [
-          "AffectationChauffeurAgences"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/AffectationChauffeurAgences": {
-      "get": {
-        "tags": [
-          "AffectationChauffeurAgences"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AffectationChauffeurAgenceModel"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AffectationChauffeurAgenceModel"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AffectationChauffeurAgenceModel"
-                  }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "AffectationChauffeurAgences"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AffectationChauffeurAgenceModel"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AffectationChauffeurAgenceModel"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/AffectationChauffeurAgenceModel"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/AffectationVehiculeAgences": {
+    "/api/AffectationVehiculeAgences/liste": {
       "get": {
         "tags": [
           "AffectationVehiculeAgences"
@@ -487,52 +261,6 @@
                   "items": {
                     "$ref": "#/components/schemas/AffectationVehiculeAgenceModel"
                   }
-                }
-              }
-            }
-          }
-        }
-      },
-      "post": {
-        "tags": [
-          "AffectationVehiculeAgences"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AffectationVehiculeAgenceModel"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/AffectationVehiculeAgenceModel"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/AffectationVehiculeAgenceModel"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "string"
                 }
               }
             }
@@ -578,7 +306,104 @@
             }
           }
         }
-      },
+      }
+    },
+    "/api/AffectationVehiculeAgences/rechercher": {
+      "get": {
+        "tags": [
+          "AffectationVehiculeAgences"
+        ],
+        "parameters": [
+          {
+            "name": "motCle",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AffectationVehiculeAgenceModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AffectationVehiculeAgenceModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AffectationVehiculeAgenceModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/AffectationVehiculeAgences/ajouter": {
+      "post": {
+        "tags": [
+          "AffectationVehiculeAgences"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AffectationVehiculeAgenceModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AffectationVehiculeAgenceModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AffectationVehiculeAgenceModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/AffectationVehiculeAgences/modifier/{id}": {
       "put": {
         "tags": [
           "AffectationVehiculeAgences"
@@ -635,7 +460,9 @@
             }
           }
         }
-      },
+      }
+    },
+    "/api/AffectationVehiculeAgences/supprimer/{id}": {
       "delete": {
         "tags": [
           "AffectationVehiculeAgences"
@@ -1438,10 +1265,10 @@
         }
       }
     },
-    "/api/EmbarquementVoyagePassagers": {
+    "/api/Embarquements/liste": {
       "get": {
         "tags": [
-          "EmbarquementVoyagePassagers"
+          "Embarquements"
         ],
         "responses": {
           "200": {
@@ -1474,10 +1301,52 @@
             }
           }
         }
-      },
+      }
+    },
+    "/api/Embarquements/{id}": {
+      "get": {
+        "tags": [
+          "Embarquements"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Embarquements/ajouter": {
       "post": {
         "tags": [
-          "EmbarquementVoyagePassagers"
+          "Embarquements"
         ],
         "requestBody": {
           "content": {
@@ -1522,48 +1391,10 @@
         }
       }
     },
-    "/api/EmbarquementVoyagePassagers/{id}": {
-      "get": {
-        "tags": [
-          "EmbarquementVoyagePassagers"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
-                }
-              }
-            }
-          }
-        }
-      },
+    "/api/Embarquements/modifier/{id}": {
       "put": {
         "tags": [
-          "EmbarquementVoyagePassagers"
+          "Embarquements"
         ],
         "parameters": [
           {
@@ -1617,10 +1448,12 @@
             }
           }
         }
-      },
+      }
+    },
+    "/api/Embarquements/supprimer/{id}": {
       "delete": {
         "tags": [
-          "EmbarquementVoyagePassagers"
+          "Embarquements"
         ],
         "parameters": [
           {
@@ -1650,6 +1483,286 @@
               "text/json": {
                 "schema": {
                   "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Embarquements/rechercher": {
+      "get": {
+        "tags": [
+          "Embarquements"
+        ],
+        "parameters": [
+          {
+            "name": "motCle",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Embarquements/par-voyage/{idVoyage}": {
+      "get": {
+        "tags": [
+          "Embarquements"
+        ],
+        "parameters": [
+          {
+            "name": "idVoyage",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Embarquements/par-passager/{idPassager}": {
+      "get": {
+        "tags": [
+          "Embarquements"
+        ],
+        "parameters": [
+          {
+            "name": "idPassager",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Embarquements/par-statut/{statut}": {
+      "get": {
+        "tags": [
+          "Embarquements"
+        ],
+        "parameters": [
+          {
+            "name": "statut",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Embarquements/confirme": {
+      "get": {
+        "tags": [
+          "Embarquements"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Embarquements/verification-siege/{idVoyage}/{numeroSiege}": {
+      "get": {
+        "tags": [
+          "Embarquements"
+        ],
+        "parameters": [
+          {
+            "name": "idVoyage",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "numeroSiege",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "boolean"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "boolean"
                 }
               }
             }
@@ -3242,6 +3355,18 @@
           "Observations": {
             "type": "string",
             "nullable": true
+          },
+          "Nom_Chauffeur": {
+            "type": "string",
+            "nullable": true
+          },
+          "Prenom_Chauffeur": {
+            "type": "string",
+            "nullable": true
+          },
+          "Nom_Agence": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3269,16 +3394,22 @@
             "type": "string",
             "format": "date-time",
             "nullable": true
-          }
-        },
-        "additionalProperties": false
-      },
-      "AgenceModel": {
-        "type": "object",
-        "properties": {
-          "Id_Agence": {
-            "type": "integer",
-            "format": "int32"
+          },
+          "Statut": {
+            "type": "string",
+            "nullable": true
+          },
+          "Observations": {
+            "type": "string",
+            "nullable": true
+          },
+          "Immatriculation": {
+            "type": "string",
+            "nullable": true
+          },
+          "Marque": {
+            "type": "string",
+            "nullable": true
           },
           "Nom_Agence": {
             "type": "string",
@@ -3287,23 +3418,46 @@
           "Ville": {
             "type": "string",
             "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "AgenceModel": {
+        "required": [
+          "Adresse",
+          "Nom_Agence",
+          "Ville"
+        ],
+        "type": "object",
+        "properties": {
+          "Id_Agence": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Nom_Agence": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
+          },
+          "Ville": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
           },
           "Adresse": {
-            "type": "string",
-            "nullable": true
+            "maxLength": 150,
+            "minLength": 0,
+            "type": "string"
           },
           "Telephone": {
-            "type": "string",
-            "nullable": true
-          },
-          "Email": {
+            "maxLength": 20,
+            "minLength": 0,
             "type": "string",
             "nullable": true
           },
           "Date_Creation": {
             "type": "string",
-            "format": "date-time",
-            "nullable": true
+            "format": "date-time"
           }
         },
         "additionalProperties": false
@@ -3438,39 +3592,39 @@
             "type": "integer",
             "format": "int32"
           },
-          "Id_Passager": {
-            "type": "integer",
-            "format": "int32"
-          },
           "Id_Voyage": {
             "type": "integer",
             "format": "int32"
           },
-          "Date_Embarquement": {
-            "type": "string",
-            "format": "date-time"
-          },
-          "Numero_Siege": {
+          "Id_Passager": {
             "type": "integer",
             "format": "int32"
           },
-          "Date_Enregistrement": {
-            "type": "string",
-            "format": "date-time"
-          },
           "Statut_Embarquement": {
+            "maxLength": 50,
+            "minLength": 0,
             "type": "string",
             "nullable": true
           },
-          "Statut": {
+          "Numero_Siege": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Date_Enregistrement": {
             "type": "string",
+            "format": "date-time",
             "nullable": true
           },
           "Nom_Passager": {
             "type": "string",
             "nullable": true
           },
-          "Details_Voyage": {
+          "Prenom_Passager": {
+            "type": "string",
+            "nullable": true
+          },
+          "Trajet": {
             "type": "string",
             "nullable": true
           }
@@ -3489,6 +3643,18 @@
             "nullable": true
           },
           "Prenom": {
+            "type": "string",
+            "nullable": true
+          },
+          "Nom_Passager": {
+            "type": "string",
+            "nullable": true
+          },
+          "Prenom_Passager": {
+            "type": "string",
+            "nullable": true
+          },
+          "Numero_CNI_Passager": {
             "type": "string",
             "nullable": true
           },
@@ -3567,8 +3733,20 @@
             "format": "int32"
           },
           "Libelle_Type": {
+            "maxLength": 100,
+            "minLength": 0,
             "type": "string",
             "nullable": true
+          },
+          "Marque": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Nombre_Place": {
+            "type": "integer",
+            "format": "int32"
           }
         },
         "additionalProperties": false
@@ -3612,6 +3790,15 @@
           },
           "Libelle_Type": {
             "type": "string",
+            "nullable": true
+          },
+          "Marque": {
+            "type": "string",
+            "nullable": true
+          },
+          "Nombre_Place": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           }
         },
@@ -3659,11 +3846,24 @@
           },
           "Duree": {
             "type": "string",
-            "format": "date-span"
+            "format": "date-span",
+            "nullable": true
           },
           "Statut": {
             "type": "string",
             "nullable": true
+          },
+          "Immatriculation": {
+            "type": "string",
+            "nullable": true
+          },
+          "Libelle_Type_Voyage": {
+            "type": "string",
+            "nullable": true
+          },
+          "Prix": {
+            "type": "number",
+            "format": "double"
           }
         },
         "additionalProperties": false

@@ -26,10 +26,14 @@ namespace pAgenceAPI.Repositories
                     await connection.OpenAsync();
 
                     var affectations = (await connection.QueryAsync<AffectationChauffeurAgenceModel>(
-                        @"SELECT Id_Affectation_Chauffeur, Id_Chauffeur, Id_Agence, 
-                                 Date_Debut, Date_Fin, Statut, Observations
-                          FROM affectation_chauffeur_agence 
-                          ORDER BY Date_Debut DESC"
+                        @"SELECT a.Id_Affectation_Chauffeur, a.Id_Chauffeur, a.Id_Agence, 
+                                 a.Date_Debut, a.Date_Fin, a.Statut, a.Observations,
+                                 c.Nom AS Nom_Chauffeur, c.Prenom AS Prenom_Chauffeur,
+                                 ag.Nom_Agence AS Nom_Agence
+                          FROM affectation_chauffeur_agence a
+                          LEFT JOIN chauffeur c ON a.Id_Chauffeur = c.Id_Chauffeur
+                          LEFT JOIN agence ag ON a.Id_Agence = ag.Id_Agence
+                          ORDER BY a.Date_Debut DESC"
                     )).ToList();
 
                     return affectations;
@@ -42,7 +46,7 @@ namespace pAgenceAPI.Repositories
             }
         }
 
-        public async Task<AffectationChauffeurAgenceModel> GetByIdAsync(int id)
+        public async Task<AffectationChauffeurAgenceModel?> GetByIdAsync(int id)
         {
             try
             {
@@ -51,10 +55,14 @@ namespace pAgenceAPI.Repositories
                     await connection.OpenAsync();
 
                     var affectation = await connection.QueryFirstOrDefaultAsync<AffectationChauffeurAgenceModel>(
-                        @"SELECT Id_Affectation_Chauffeur, Id_Chauffeur, Id_Agence, 
-                                 Date_Debut, Date_Fin, Statut, Observations
-                          FROM affectation_chauffeur_agence 
-                          WHERE Id_Affectation_Chauffeur = @Id",
+                        @"SELECT a.Id_Affectation_Chauffeur, a.Id_Chauffeur, a.Id_Agence, 
+                                 a.Date_Debut, a.Date_Fin, a.Statut, a.Observations,
+                                 c.Nom AS Nom_Chauffeur, c.Prenom AS Prenom_Chauffeur,
+                                 ag.Nom_Agence AS Nom_Agence
+                          FROM affectation_chauffeur_agence a
+                          LEFT JOIN chauffeur c ON a.Id_Chauffeur = c.Id_Chauffeur
+                          LEFT JOIN agence ag ON a.Id_Agence = ag.Id_Agence
+                          WHERE a.Id_Affectation_Chauffeur = @Id",
                         new { Id = id }
                     );
 

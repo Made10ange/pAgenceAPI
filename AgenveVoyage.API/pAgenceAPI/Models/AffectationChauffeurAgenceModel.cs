@@ -14,5 +14,10 @@ namespace pAgenceAPI.Models
         public DateTime? Date_Fin { get; set; }
         public string Statut { get; set; } = "Active";
         public string Observations { get; set; }
+
+        // Champs de lecture pour le nom du chauffeur et de l'agence
+        public string? Nom_Chauffeur { get; set; }
+        public string? Prenom_Chauffeur { get; set; }
+        public string? Nom_Agence { get; set; }
     }
 }

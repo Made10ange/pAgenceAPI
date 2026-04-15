@@ -27,21 +27,13 @@ namespace pAgenceAPI.Controllers.parametres
             return Ok(affectations);
         }
 
-        // ✅ RECHERCHE
-        [HttpGet("rechercher")]
-        public async Task<ActionResult<List<AffectationChauffeurAgenceModel>>> Search([FromQuery] string motCle)
+        // ✅ GET PAR ID
+        [HttpGet("{id}")]
+        public async Task<ActionResult<AffectationChauffeurAgenceModel>> GetById(int id)
         {
-            var affectations = await _repository.GetAllAsync();
-
-            if (!string.IsNullOrEmpty(motCle))
-            {
-                affectations = affectations.Where(a =>
-                    a.Id_Chauffeur.ToString().Contains(motCle) ||
-                    a.Id_Agence.ToString().Contains(motCle) ||
-                    a.Statut?.Contains(motCle, StringComparison.OrdinalIgnoreCase) == true).ToList();
-            }
-
-            return Ok(affectations);
+            var affectation = await _repository.GetByIdAsync(id);
+            if (affectation == null) return NotFound();
+            return Ok(affectation);
         }
 
         // ✅ AJOUTER
@@ -68,34 +60,5 @@ namespace pAgenceAPI.Controllers.parametres
             var message = await _repository.DeleteAsync(id);
             return Ok(new { message });
         }
-
-        // ✅ GET BY ID (pour modification)
-        [HttpGet("{id}")]
-        public async Task<ActionResult<AffectationChauffeurAgenceModel>> GetById(int id)
-        {
-            var affectation = await _repository.GetByIdAsync(id);
-            if (affectation == null) return NotFound();
-            return Ok(affectation);
-        }
-
-        // ============================================
-        // ✅ ROUTES STANDARDS REST (compatibilité)
-        // ============================================
-
-        [HttpGet]
-        public async Task<ActionResult<List<AffectationChauffeurAgenceModel>>> GetAllStandard()
-            => await GetAll();
-
-        [HttpPost]
-        public async Task<ActionResult<string>> CreateStandard([FromBody] AffectationChauffeurAgenceModel affectation)
-            => await Create(affectation);
-
-        [HttpPut("{id}")]
-        public async Task<ActionResult<string>> UpdateStandard(int id, [FromBody] AffectationChauffeurAgenceModel affectation)
-            => await Update(id, affectation);
-
-        [HttpDelete("{id}")]
-        public async Task<ActionResult<string>> DeleteStandard(int id)
-            => await Delete(id);
     }
 }

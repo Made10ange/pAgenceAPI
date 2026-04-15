@@ -24,7 +24,7 @@ namespace pAgenceAPI.Repositories
             }
         }
 
-        public async Task<TypeVoyageModel> GetByIdAsync(int id)
+        public async Task<TypeVoyageModel?> GetByIdAsync(int id)
         {
             using (var connection = new MySqlConnection(_connectionString))
             {

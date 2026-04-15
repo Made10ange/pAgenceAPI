@@ -73,12 +73,21 @@ namespace pAgenceAPI.Controllers.parametres
         {
             try
             {
+                _logger.LogInformation("Ajout voyage : {@Voyage}", voyage);
+                
+                if (!ModelState.IsValid)
+                {
+                    _logger.LogWarning("ModelState invalide : {@Errors}", ModelState.Values.SelectMany(m => m.Errors));
+                    return BadRequest(ModelState);
+                }
+
                 var message = await _repository.AddAsync(voyage);
+                _logger.LogInformation("Voyage ajouté avec succès: {@Message}", message);
                 return Ok(new { message });
             }
             catch (Exception ex)
             {
-                _logger.LogError(ex, "Erreur Create voyage");
+                _logger.LogError(ex, "Erreur Create voyage: {@Voyage}", voyage);
                 return Problem(detail: ex.Message, statusCode: 500, title: "Erreur lors de l'ajout du voyage");
             }
         }

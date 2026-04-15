@@ -78,6 +78,7 @@ namespace pAgenceAPI.Controllers.parametres
                 vehicules = vehicules.Where(v =>
                     v.Immatriculation.Contains(motCle, StringComparison.OrdinalIgnoreCase) ||
                     (v.Libelle_Type != null && v.Libelle_Type.Contains(motCle, StringComparison.OrdinalIgnoreCase)) ||
+                    (v.Marque != null && v.Marque.Contains(motCle, StringComparison.OrdinalIgnoreCase)) ||
                     v.Statut.Contains(motCle, StringComparison.OrdinalIgnoreCase)
                 ).ToList();
             }

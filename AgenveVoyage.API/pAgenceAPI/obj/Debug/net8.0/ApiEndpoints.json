@@ -1,52 +1,6 @@
 [
   {
     "ContainingType": "pAgenceAPI.Controllers.parametres.AffectationChauffeurAgencesController",
-    "Method": "GetAllStandard",
-    "RelativePath": "api/AffectationChauffeurAgences",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.AffectationChauffeurAgenceModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "pAgenceAPI.Controllers.parametres.AffectationChauffeurAgencesController",
-    "Method": "CreateStandard",
-    "RelativePath": "api/AffectationChauffeurAgences",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "affectation",
-        "Type": "pAgenceAPI.Models.AffectationChauffeurAgenceModel",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.String",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "pAgenceAPI.Controllers.parametres.AffectationChauffeurAgencesController",
     "Method": "GetById",
     "RelativePath": "api/AffectationChauffeurAgences/{id}",
     "HttpMethod": "GET",
@@ -62,63 +16,6 @@
     "ReturnTypes": [
       {
         "Type": "pAgenceAPI.Models.AffectationChauffeurAgenceModel",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "pAgenceAPI.Controllers.parametres.AffectationChauffeurAgencesController",
-    "Method": "UpdateStandard",
-    "RelativePath": "api/AffectationChauffeurAgences/{id}",
-    "HttpMethod": "PUT",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      },
-      {
-        "Name": "affectation",
-        "Type": "pAgenceAPI.Models.AffectationChauffeurAgenceModel",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.String",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "pAgenceAPI.Controllers.parametres.AffectationChauffeurAgencesController",
-    "Method": "DeleteStandard",
-    "RelativePath": "api/AffectationChauffeurAgences/{id}",
-    "HttpMethod": "DELETE",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "id",
-        "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.String",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -207,32 +104,6 @@
   },
   {
     "ContainingType": "pAgenceAPI.Controllers.parametres.AffectationChauffeurAgencesController",
-    "Method": "Search",
-    "RelativePath": "api/AffectationChauffeurAgences/rechercher",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "motCle",
-        "Type": "System.String",
-        "IsRequired": false
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.AffectationChauffeurAgenceModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "pAgenceAPI.Controllers.parametres.AffectationChauffeurAgencesController",
     "Method": "Delete",
     "RelativePath": "api/AffectationChauffeurAgences/supprimer/{id}",
     "HttpMethod": "DELETE",
@@ -242,52 +113,6 @@
       {
         "Name": "id",
         "Type": "System.Int32",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.String",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "pAgenceAPI.Controllers.parametres.AffectationVehiculeAgencesController",
-    "Method": "GetAll",
-    "RelativePath": "api/AffectationVehiculeAgences",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.AffectationVehiculeAgenceModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "pAgenceAPI.Controllers.parametres.AffectationVehiculeAgencesController",
-    "Method": "Create",
-    "RelativePath": "api/AffectationVehiculeAgences",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "affectation",
-        "Type": "pAgenceAPI.Models.AffectationVehiculeAgenceModel",
         "IsRequired": true
       }
     ],
@@ -331,8 +156,54 @@
   },
   {
     "ContainingType": "pAgenceAPI.Controllers.parametres.AffectationVehiculeAgencesController",
+    "Method": "Create",
+    "RelativePath": "api/AffectationVehiculeAgences/ajouter",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "affectation",
+        "Type": "pAgenceAPI.Models.AffectationVehiculeAgenceModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.AffectationVehiculeAgencesController",
+    "Method": "GetAll",
+    "RelativePath": "api/AffectationVehiculeAgences/liste",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.AffectationVehiculeAgenceModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.AffectationVehiculeAgencesController",
     "Method": "Update",
-    "RelativePath": "api/AffectationVehiculeAgences/{id}",
+    "RelativePath": "api/AffectationVehiculeAgences/modifier/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
@@ -362,8 +233,34 @@
   },
   {
     "ContainingType": "pAgenceAPI.Controllers.parametres.AffectationVehiculeAgencesController",
+    "Method": "Search",
+    "RelativePath": "api/AffectationVehiculeAgences/rechercher",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "motCle",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.AffectationVehiculeAgenceModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.AffectationVehiculeAgencesController",
     "Method": "Delete",
-    "RelativePath": "api/AffectationVehiculeAgences/{id}",
+    "RelativePath": "api/AffectationVehiculeAgences/supprimer/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -826,55 +723,9 @@
     ]
   },
   {
-    "ContainingType": "pAgenceAPI.Controllers.parametres.EmbarquementVoyagePassagersController",
-    "Method": "GetAll",
-    "RelativePath": "api/EmbarquementVoyagePassagers",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.EmbarquementVoyagePassagerModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "pAgenceAPI.Controllers.parametres.EmbarquementVoyagePassagersController",
-    "Method": "Create",
-    "RelativePath": "api/EmbarquementVoyagePassagers",
-    "HttpMethod": "POST",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [
-      {
-        "Name": "embarquement",
-        "Type": "pAgenceAPI.Models.EmbarquementVoyagePassagerModel",
-        "IsRequired": true
-      }
-    ],
-    "ReturnTypes": [
-      {
-        "Type": "System.String",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
-  },
-  {
-    "ContainingType": "pAgenceAPI.Controllers.parametres.EmbarquementVoyagePassagersController",
+    "ContainingType": "pAgenceAPI.Controllers.parametres.EmbarquementsController",
     "Method": "GetById",
-    "RelativePath": "api/EmbarquementVoyagePassagers/{id}",
+    "RelativePath": "api/Embarquements/{id}",
     "HttpMethod": "GET",
     "IsController": true,
     "Order": 0,
@@ -898,9 +749,75 @@
     ]
   },
   {
-    "ContainingType": "pAgenceAPI.Controllers.parametres.EmbarquementVoyagePassagersController",
+    "ContainingType": "pAgenceAPI.Controllers.parametres.EmbarquementsController",
+    "Method": "Create",
+    "RelativePath": "api/Embarquements/ajouter",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "embarquement",
+        "Type": "pAgenceAPI.Models.EmbarquementVoyagePassagerModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.EmbarquementsController",
+    "Method": "GetConfirmes",
+    "RelativePath": "api/Embarquements/confirme",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.EmbarquementVoyagePassagerModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.EmbarquementsController",
+    "Method": "GetAll",
+    "RelativePath": "api/Embarquements/liste",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.EmbarquementVoyagePassagerModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.EmbarquementsController",
     "Method": "Update",
-    "RelativePath": "api/EmbarquementVoyagePassagers/{id}",
+    "RelativePath": "api/Embarquements/modifier/{id}",
     "HttpMethod": "PUT",
     "IsController": true,
     "Order": 0,
@@ -929,9 +846,113 @@
     ]
   },
   {
-    "ContainingType": "pAgenceAPI.Controllers.parametres.EmbarquementVoyagePassagersController",
+    "ContainingType": "pAgenceAPI.Controllers.parametres.EmbarquementsController",
+    "Method": "GetByPassager",
+    "RelativePath": "api/Embarquements/par-passager/{idPassager}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idPassager",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.EmbarquementVoyagePassagerModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.EmbarquementsController",
+    "Method": "GetByStatut",
+    "RelativePath": "api/Embarquements/par-statut/{statut}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "statut",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.EmbarquementVoyagePassagerModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.EmbarquementsController",
+    "Method": "GetByVoyage",
+    "RelativePath": "api/Embarquements/par-voyage/{idVoyage}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idVoyage",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.EmbarquementVoyagePassagerModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.EmbarquementsController",
+    "Method": "Search",
+    "RelativePath": "api/Embarquements/rechercher",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "motCle",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.EmbarquementVoyagePassagerModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.EmbarquementsController",
     "Method": "Delete",
-    "RelativePath": "api/EmbarquementVoyagePassagers/{id}",
+    "RelativePath": "api/Embarquements/supprimer/{id}",
     "HttpMethod": "DELETE",
     "IsController": true,
     "Order": 0,
@@ -945,6 +966,37 @@
     "ReturnTypes": [
       {
         "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.EmbarquementsController",
+    "Method": "VerifierDisponibiliteSiege",
+    "RelativePath": "api/Embarquements/verification-siege/{idVoyage}/{numeroSiege}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idVoyage",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "numeroSiege",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Boolean",
         "MediaTypes": [
           "text/plain",
           "application/json",

@@ -10,6 +10,8 @@ builder.Services.AddControllers()
     {
         // ✅ Utiliser PascalCase pour correspondre aux modèles C#
         options.JsonSerializerOptions.PropertyNamingPolicy = null;
+        // ✅ Ajouter conversor TimeSpan
+        options.JsonSerializerOptions.Converters.Add(new pAgenceAPI.TimeSpanConverter());
     });
 
 builder.Services.AddEndpointsApiExplorer();
@@ -43,7 +45,7 @@ builder.Services.AddScoped<IVoyageRepository, VoyageRepository>();  // ← AJOUT
 builder.Services.AddScoped<IAffectationChauffeurAgenceRepository, AffectationChauffeurAgenceRepository>();
 builder.Services.AddScoped<IAffectationVehiculeAgenceRepository, AffectationVehiculeAgenceRepository>();
 builder.Services.AddScoped<IAssignationChauffeurVoyageRepository, AssignationChauffeurVoyageRepository>();
-builder.Services.AddScoped<IEmbarquementVoyagePassagerRepository, EmbarquementVoyagePassagerRepository>();  // ← DERNIÈRE LIGNE !
+builder.Services.AddScoped<IEmbarquementRepository, EmbarquementRepository>();
 
 var app = builder.Build();
 

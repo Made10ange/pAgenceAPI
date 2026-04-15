@@ -1,10 +1,16 @@
-﻿
+﻿#nullable disable
 using pAgenceAPI.Models;
-public interface IAgenceRepository
+using System.Collections.Generic;
+using System.Threading.Tasks;
+
+namespace pAgenceAPI.Repositories
 {
-    Task<List<AgenceModel>> GetAllAsync();
-    Task<AgenceModel?> GetByIdAsync(int id);  // ← Ajoute ?
-    Task<string> AddAsync(AgenceModel agence);
-    Task<string> UpdateAsync(AgenceModel agence);
-    Task<string> DeleteAsync(int id);
+    public interface IAgenceRepository
+    {
+        Task<List<AgenceModel>> GetAllAsync();
+        Task<AgenceModel?> GetByIdAsync(int id);
+        Task<string> AddAsync(AgenceModel agence);
+        Task<string> UpdateAsync(AgenceModel agence);
+        Task<string> DeleteAsync(int id);
+    }
 }

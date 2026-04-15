@@ -1,4 +1,6 @@
-﻿namespace pAgenceAPI.Models
+﻿using System.ComponentModel.DataAnnotations.Schema;
+
+namespace pAgenceAPI.Models
 {
     public class VoyageModel
     {
@@ -13,8 +15,18 @@
         // ✅ CHANGER EN TimeSpan (pas string)
         public TimeSpan Heure_Depart { get; set; }
         public TimeSpan Heure_Arrivee { get; set; }
-        public TimeSpan Duree { get; set; }
+        public TimeSpan? Duree { get; set; }
 
         public string Statut { get; set; } = "Programmé";
+
+        // ✅ Propriétés pour l'affichage (jointures)
+        [NotMapped]
+        public string Immatriculation { get; set; } = string.Empty;
+
+        [NotMapped]
+        public string Libelle_Type_Voyage { get; set; } = string.Empty;
+
+        [NotMapped]
+        public decimal Prix { get; set; }
     }
 }

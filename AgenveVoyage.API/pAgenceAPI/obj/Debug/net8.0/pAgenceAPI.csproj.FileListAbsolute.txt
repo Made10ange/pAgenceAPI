@@ -91,6 +91,7 @@ F:\Application\AgenceV\AgenveVoyage.API\pAgenceAPI\obj\Debug\net8.0\pAgenceAPI.A
 F:\Application\AgenceV\AgenveVoyage.API\pAgenceAPI\obj\Debug\net8.0\pAgenceAPI.csproj.CoreCompileInputs.cache
 F:\Application\AgenceV\AgenveVoyage.API\pAgenceAPI\obj\Debug\net8.0\pAgenceAPI.MvcApplicationPartsAssemblyInfo.cs
 F:\Application\AgenceV\AgenveVoyage.API\pAgenceAPI\obj\Debug\net8.0\pAgenceAPI.MvcApplicationPartsAssemblyInfo.cache
+F:\Application\AgenceV\AgenveVoyage.API\pAgenceAPI\obj\Debug\net8.0\pAgenceAPI.sourcelink.json
 F:\Application\AgenceV\AgenveVoyage.API\pAgenceAPI\obj\Debug\net8.0\rjimswa.dswa.cache.json
 F:\Application\AgenceV\AgenveVoyage.API\pAgenceAPI\obj\Debug\net8.0\rjsmrazor.dswa.cache.json
 F:\Application\AgenceV\AgenveVoyage.API\pAgenceAPI\obj\Debug\net8.0\rjsmcshtml.dswa.cache.json

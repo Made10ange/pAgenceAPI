@@ -44,7 +44,7 @@ namespace pAgenceAPI.Repositories
             }
         }
 
-        public async Task<ChauffeurModel> GetByIdAsync(int id)
+        public async Task<ChauffeurModel?> GetByIdAsync(int id)
         {
             try
             {

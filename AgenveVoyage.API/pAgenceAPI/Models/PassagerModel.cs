@@ -11,6 +11,28 @@ namespace pAgenceAPI.Models
         public string Nom { get; set; } = string.Empty;
         public string Prenom { get; set; } = string.Empty;
 
+        // Alias de compatibilite pour les vues / appels encore bases sur l'ancien contrat.
+        [NotMapped]
+        public string Nom_Passager
+        {
+            get => Nom;
+            set => Nom = value;
+        }
+
+        [NotMapped]
+        public string Prenom_Passager
+        {
+            get => Prenom;
+            set => Prenom = value;
+        }
+
+        [NotMapped]
+        public string? Numero_CNI_Passager
+        {
+            get => Numero_Piece;
+            set => Numero_Piece = value;
+        }
+
         // ✅ Strings OPTIONNELS (ajouter ?)
         public string? Type_Piece { get; set; }
         public string? Telephone { get; set; }
