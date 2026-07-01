@@ -285,6 +285,26 @@
   },
   {
     "ContainingType": "pAgenceAPI.Controllers.parametres.AgencesController",
+    "Method": "GetAll",
+    "RelativePath": "api/Agences",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.AgenceModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.AgencesController",
     "Method": "GetById",
     "RelativePath": "api/Agences/{id}",
     "HttpMethod": "GET",
@@ -439,6 +459,22 @@
     ]
   },
   {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.AnalytiqueController",
+    "Method": "Resume",
+    "RelativePath": "api/Analytique/resume",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "annee",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "pAgenceAPI.Controllers.parametres.AssignationChauffeurVoyagesController",
     "Method": "GetAll",
     "RelativePath": "api/AssignationChauffeurVoyages",
@@ -568,6 +604,970 @@
     ]
   },
   {
+    "ContainingType": "pAgenceAPI.Controllers.AuthController",
+    "Method": "Login",
+    "RelativePath": "api/Auth/login",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "request",
+        "Type": "pAgenceAPI.Models.LoginRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "pAgenceAPI.Models.LoginResponse",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BackupController",
+    "Method": "Lancer",
+    "RelativePath": "api/Backup/lancer",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BackupController",
+    "Method": "Liste",
+    "RelativePath": "api/Backup/liste",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BackupController",
+    "Method": "Telecharger",
+    "RelativePath": "api/Backup/telecharger/{nom}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "nom",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BagagesController",
+    "Method": "GetAll",
+    "RelativePath": "api/Bagages",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.BagageModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BagagesController",
+    "Method": "GetById",
+    "RelativePath": "api/Bagages/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "pAgenceAPI.Models.BagageModel",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BagagesController",
+    "Method": "Add",
+    "RelativePath": "api/Bagages/ajouter",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "bagage",
+        "Type": "pAgenceAPI.Models.BagageModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Int32",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BagagesController",
+    "Method": "GetArchives",
+    "RelativePath": "api/Bagages/archives",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.BagageModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BagagesController",
+    "Method": "AssignerVoyage",
+    "RelativePath": "api/Bagages/assigner-voyage/{idBagage}",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idBagage",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "idVoyage",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BagagesController",
+    "Method": "GetEnAttente",
+    "RelativePath": "api/Bagages/en-attente",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.BagageModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BagagesController",
+    "Method": "EnregistrerParPassager",
+    "RelativePath": "api/Bagages/enregistrer-par-passager",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "req",
+        "Type": "pAgenceAPI.Models.BagageParPassagerRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BagagesController",
+    "Method": "GetAll",
+    "RelativePath": "api/Bagages/liste",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.BagageModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BagagesController",
+    "Method": "Update",
+    "RelativePath": "api/Bagages/modifier",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "bagage",
+        "Type": "pAgenceAPI.Models.BagageModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BagagesController",
+    "Method": "GetParPassagerVoyage",
+    "RelativePath": "api/Bagages/par-passager-voyage/{idPassager}/{idVoyage}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idPassager",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "idVoyage",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.BagageModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BagagesController",
+    "Method": "GetByPassager",
+    "RelativePath": "api/Bagages/par-passager/{idPassager}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idPassager",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.BagageModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BagagesController",
+    "Method": "GetPassagersAvecBagages",
+    "RelativePath": "api/Bagages/par-voyage-passagers/{idVoyage}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idVoyage",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.PassagerAvecBagagesDto, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BagagesController",
+    "Method": "GetByVoyage",
+    "RelativePath": "api/Bagages/par-voyage/{idVoyage}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idVoyage",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.BagageModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BagagesController",
+    "Method": "Search",
+    "RelativePath": "api/Bagages/rechercher",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "motCle",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.BagageModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BagagesController",
+    "Method": "UpdateStatut",
+    "RelativePath": "api/Bagages/statut/{id}",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "statut",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BagagesController",
+    "Method": "Delete",
+    "RelativePath": "api/Bagages/supprimer/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BalanceController",
+    "Method": "Generale",
+    "RelativePath": "api/Balance/generale",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dateDebut",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "dateFin",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BilletsController",
+    "Method": "GetById",
+    "RelativePath": "api/Billets/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BilletsController",
+    "Method": "ChangerType",
+    "RelativePath": "api/Billets/{id}/changer-type",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "idTypeVoyage",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "idVoyagePrevu",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "montant",
+        "Type": "System.Decimal",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BilletsController",
+    "Method": "Reporter",
+    "RelativePath": "api/Billets/{id}/reporter",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "idNouveauVoyage",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BilletsController",
+    "Method": "Utiliser",
+    "RelativePath": "api/Billets/{id}/utiliser",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "idVoyage",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BilletsController",
+    "Method": "Expirer",
+    "RelativePath": "api/Billets/expirer",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BilletsController",
+    "Method": "Liste",
+    "RelativePath": "api/Billets/liste",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BilletsController",
+    "Method": "GetByNumero",
+    "RelativePath": "api/Billets/numero/{numero}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "numero",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BilletsController",
+    "Method": "ParVoyageEtendu",
+    "RelativePath": "api/Billets/par-voyage-etendu/{idVoyage}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idVoyage",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BilletsController",
+    "Method": "ParVoyage",
+    "RelativePath": "api/Billets/par-voyage/{idVoyage}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idVoyage",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BilletsController",
+    "Method": "ParPassager",
+    "RelativePath": "api/Billets/passager/{idPassager}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idPassager",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BilletsController",
+    "Method": "PourEmbarquement",
+    "RelativePath": "api/Billets/pour-embarquement/{idVoyage}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idVoyage",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BilletsController",
+    "Method": "Rechercher",
+    "RelativePath": "api/Billets/rechercher",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "keyword",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "statut",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "dateDebut",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "dateFin",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BilletsController",
+    "Method": "SiegesOccupes",
+    "RelativePath": "api/Billets/sieges-occupes/{idVoyage}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idVoyage",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.BilletsController",
+    "Method": "Vendre",
+    "RelativePath": "api/Billets/vendre",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "billet",
+        "Type": "pAgenceAPI.Models.BilletModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.CaissesController",
+    "Method": "GetById",
+    "RelativePath": "api/Caisses/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.CaissesController",
+    "Method": "Affectations",
+    "RelativePath": "api/Caisses/affectations",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idCaisse",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.CaissesController",
+    "Method": "Affecter",
+    "RelativePath": "api/Caisses/affecter",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "pAgenceAPI.Models.AffectationCaissierModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.CaissesController",
+    "Method": "Ajouter",
+    "RelativePath": "api/Caisses/ajouter",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "pAgenceAPI.Models.CaisseModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.CaissesController",
+    "Method": "Desaffecter",
+    "RelativePath": "api/Caisses/desaffecter/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.CaissesController",
+    "Method": "Liste",
+    "RelativePath": "api/Caisses/liste",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.CaissesController",
+    "Method": "Modifier",
+    "RelativePath": "api/Caisses/modifier",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "pAgenceAPI.Models.CaisseModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.CaissesController",
+    "Method": "Supprimer",
+    "RelativePath": "api/Caisses/supprimer/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.CaissierController",
+    "Method": "GetById",
+    "RelativePath": "api/Caissier/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.CaissierController",
+    "Method": "Ajouter",
+    "RelativePath": "api/Caissier/ajouter",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "pAgenceAPI.Models.CaissierModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.CaissierController",
+    "Method": "Liste",
+    "RelativePath": "api/Caissier/liste",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.CaissierController",
+    "Method": "Modifier",
+    "RelativePath": "api/Caissier/modifier",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "pAgenceAPI.Models.CaissierModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.CaissierController",
+    "Method": "Supprimer",
+    "RelativePath": "api/Caissier/supprimer/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.CaissierController",
+    "Method": "Toggle",
+    "RelativePath": "api/Caissier/toggle/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.ChauffeursController",
+    "Method": "GetAll",
+    "RelativePath": "api/Chauffeurs",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.ChauffeurModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
     "ContainingType": "pAgenceAPI.Controllers.parametres.ChauffeursController",
     "Method": "GetById",
     "RelativePath": "api/Chauffeurs/{id}",
@@ -610,6 +1610,26 @@
     "ReturnTypes": [
       {
         "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.ChauffeursController",
+    "Method": "GetDisponibles",
+    "RelativePath": "api/Chauffeurs/disponibles",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.ChauffeurModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -713,6 +1733,515 @@
     "ReturnTypes": [
       {
         "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.ColisController",
+    "Method": "GetAll",
+    "RelativePath": "api/Colis",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.ColisModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.ColisController",
+    "Method": "GetById",
+    "RelativePath": "api/Colis/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "pAgenceAPI.Models.ColisModel",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.ColisController",
+    "Method": "Add",
+    "RelativePath": "api/Colis/ajouter",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "colis",
+        "Type": "pAgenceAPI.Models.ColisModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Int32",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.ColisController",
+    "Method": "GenererReference",
+    "RelativePath": "api/Colis/generer-reference",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.ColisController",
+    "Method": "GetAll",
+    "RelativePath": "api/Colis/liste",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.ColisModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.ColisController",
+    "Method": "Update",
+    "RelativePath": "api/Colis/modifier",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "colis",
+        "Type": "pAgenceAPI.Models.ColisModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.ColisController",
+    "Method": "GetByReference",
+    "RelativePath": "api/Colis/par-reference/{reference}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "reference",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "pAgenceAPI.Models.ColisModel",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.ColisController",
+    "Method": "GetByStatut",
+    "RelativePath": "api/Colis/par-statut",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "statut",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.ColisModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.ColisController",
+    "Method": "GetByVoyage",
+    "RelativePath": "api/Colis/par-voyage/{idVoyage}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idVoyage",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.ColisModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.ColisController",
+    "Method": "Search",
+    "RelativePath": "api/Colis/rechercher",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "motCle",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.ColisModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.ColisController",
+    "Method": "UpdateStatut",
+    "RelativePath": "api/Colis/statut/{id}",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "statut",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.ColisController",
+    "Method": "Delete",
+    "RelativePath": "api/Colis/supprimer/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.ComptesController",
+    "Method": "GetByNum",
+    "RelativePath": "api/Comptes/{numcompte}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "numcompte",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.ComptesController",
+    "Method": "Ajouter",
+    "RelativePath": "api/Comptes/ajouter",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "pAgenceAPI.Models.CompteModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.ComptesController",
+    "Method": "Liste",
+    "RelativePath": "api/Comptes/liste",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.ComptesController",
+    "Method": "Modifier",
+    "RelativePath": "api/Comptes/modifier",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "pAgenceAPI.Models.CompteModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.ComptesController",
+    "Method": "Supprimer",
+    "RelativePath": "api/Comptes/supprimer/{numcompte}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "numcompte",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.EcrituresController",
+    "Method": "Brouillard",
+    "RelativePath": "api/Ecritures/brouillard",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dateDebut",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "dateFin",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "idCaisse",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.EcrituresController",
+    "Method": "CloturerJournee",
+    "RelativePath": "api/Ecritures/cloturer-journee",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "date",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.EcrituresController",
+    "Method": "DuJour",
+    "RelativePath": "api/Ecritures/du-jour",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "date",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.EcrituresController",
+    "Method": "Enregistrer",
+    "RelativePath": "api/Ecritures/enregistrer",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "ecriture",
+        "Type": "pAgenceAPI.Models.EcritureComptableModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.EcrituresController",
+    "Method": "JourneeOuverte",
+    "RelativePath": "api/Ecritures/journee-ouverte",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "date",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.EcrituresController",
+    "Method": "OuvrirJournee",
+    "RelativePath": "api/Ecritures/ouvrir-journee",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "date",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.EcrituresController",
+    "Method": "ProchaineJournee",
+    "RelativePath": "api/Ecritures/prochaine-journee",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.EmbarquementsController",
+    "Method": "GetAll",
+    "RelativePath": "api/Embarquements",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.EmbarquementVoyagePassagerModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -977,6 +2506,22 @@
   },
   {
     "ContainingType": "pAgenceAPI.Controllers.parametres.EmbarquementsController",
+    "Method": "ValiderGroupe",
+    "RelativePath": "api/Embarquements/valider-groupe",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "embarquements",
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.EmbarquementVoyagePassagerModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.EmbarquementsController",
     "Method": "VerifierDisponibiliteSiege",
     "RelativePath": "api/Embarquements/verification-siege/{idVoyage}/{numeroSiege}",
     "HttpMethod": "GET",
@@ -997,6 +2542,602 @@
     "ReturnTypes": [
       {
         "Type": "System.Boolean",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.personnel.FichePayeController",
+    "Method": "Detail",
+    "RelativePath": "api/FichePaye/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.personnel.FichePayeController",
+    "Method": "Ajouter",
+    "RelativePath": "api/FichePaye/ajouter",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fiche",
+        "Type": "pAgenceAPI.Models.FichePayeModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.personnel.FichePayeController",
+    "Method": "Generer",
+    "RelativePath": "api/FichePaye/generer",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "mois",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "annee",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.personnel.FichePayeController",
+    "Method": "Liste",
+    "RelativePath": "api/FichePaye/liste",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "annee",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "mois",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.personnel.FichePayeController",
+    "Method": "Modifier",
+    "RelativePath": "api/FichePaye/modifier",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "fiche",
+        "Type": "pAgenceAPI.Models.FichePayeModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.personnel.FichePayeController",
+    "Method": "MarquerPaye",
+    "RelativePath": "api/FichePaye/payer/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.personnel.FichePayeController",
+    "Method": "ParPersonnel",
+    "RelativePath": "api/FichePaye/personnel/{idPersonnel}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idPersonnel",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.personnel.FichePayeController",
+    "Method": "Supprimer",
+    "RelativePath": "api/FichePaye/supprimer/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.securite.GroupesController",
+    "Method": "GetById",
+    "RelativePath": "api/Groupes/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.securite.GroupesController",
+    "Method": "AffecterAgent",
+    "RelativePath": "api/Groupes/{id}/affecter/{idAgent}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "idAgent",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.securite.GroupesController",
+    "Method": "GetAgents",
+    "RelativePath": "api/Groupes/{id}/agents",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.securite.GroupesController",
+    "Method": "RetirerAgent",
+    "RelativePath": "api/Groupes/{idGroupe}/retirer/{idAgent}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idGroupe",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "idAgent",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.securite.GroupesController",
+    "Method": "Ajouter",
+    "RelativePath": "api/Groupes/ajouter",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "groupe",
+        "Type": "pAgenceAPI.Models.GroupeModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.securite.GroupesController",
+    "Method": "Liste",
+    "RelativePath": "api/Groupes/liste",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.securite.GroupesController",
+    "Method": "Modifier",
+    "RelativePath": "api/Groupes/modifier/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "groupe",
+        "Type": "pAgenceAPI.Models.GroupeModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.securite.GroupesController",
+    "Method": "Supprimer",
+    "RelativePath": "api/Groupes/supprimer/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.securite.HistoriqueConnexionController",
+    "Method": "EchecsRecents",
+    "RelativePath": "api/HistoriqueConnexion/echecs-recents",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "minutes",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.securite.HistoriqueConnexionController",
+    "Method": "Enregistrer",
+    "RelativePath": "api/HistoriqueConnexion/enregistrer",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "entry",
+        "Type": "pAgenceAPI.Models.HistoriqueConnexionModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.securite.HistoriqueConnexionController",
+    "Method": "Liste",
+    "RelativePath": "api/HistoriqueConnexion/liste",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.securite.JournalAuditController",
+    "Method": "Enregistrer",
+    "RelativePath": "api/JournalAudit/enregistrer",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "entry",
+        "Type": "pAgenceAPI.Models.JournalAuditModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.securite.JournalAuditController",
+    "Method": "Liste",
+    "RelativePath": "api/JournalAudit/liste",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "page",
+        "Type": "System.Int32",
+        "IsRequired": false
+      },
+      {
+        "Name": "pageSize",
+        "Type": "System.Int32",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.securite.JournalAuditController",
+    "Method": "Rechercher",
+    "RelativePath": "api/JournalAudit/rechercher",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "module",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "login",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "dateDebut",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "dateFin",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.PaiementsController",
+    "Method": "GetById",
+    "RelativePath": "api/Paiements/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.PaiementsController",
+    "Method": "Ajouter",
+    "RelativePath": "api/Paiements/ajouter",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "paiement",
+        "Type": "pAgenceAPI.Models.PaiementModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.PaiementsController",
+    "Method": "ChiffreAffaireMensuel",
+    "RelativePath": "api/Paiements/chiffre-affaire-mensuel",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "annee",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.PaiementsController",
+    "Method": "Liste",
+    "RelativePath": "api/Paiements/liste",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.PaiementsController",
+    "Method": "Modifier",
+    "RelativePath": "api/Paiements/modifier",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "paiement",
+        "Type": "pAgenceAPI.Models.PaiementModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.PaiementsController",
+    "Method": "ParColis",
+    "RelativePath": "api/Paiements/par-colis/{idColis}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idColis",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.PaiementsController",
+    "Method": "ParPassager",
+    "RelativePath": "api/Paiements/par-passager/{idPassager}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idPassager",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.PaiementsController",
+    "Method": "ParPeriode",
+    "RelativePath": "api/Paiements/par-periode",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dateDebut",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "dateFin",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.PaiementsController",
+    "Method": "Rechercher",
+    "RelativePath": "api/Paiements/rechercher",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "motCle",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.PaiementsController",
+    "Method": "Supprimer",
+    "RelativePath": "api/Paiements/supprimer/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.PaiementsController",
+    "Method": "TotalPeriode",
+    "RelativePath": "api/Paiements/total-periode",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dateDebut",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      },
+      {
+        "Name": "dateFin",
+        "Type": "System.DateTime",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.PassagersController",
+    "Method": "GetAll",
+    "RelativePath": "api/Passagers",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.PassagerModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1046,17 +3187,7 @@
         "IsRequired": true
       }
     ],
-    "ReturnTypes": [
-      {
-        "Type": "System.String",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ]
+    "ReturnTypes": []
   },
   {
     "ContainingType": "pAgenceAPI.Controllers.parametres.PassagersController",
@@ -1162,6 +3293,439 @@
     ]
   },
   {
+    "ContainingType": "pAgenceAPI.Controllers.personnel.PersonnelController",
+    "Method": "Detail",
+    "RelativePath": "api/Personnel/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.personnel.PersonnelController",
+    "Method": "Ajouter",
+    "RelativePath": "api/Personnel/ajouter",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "personnel",
+        "Type": "pAgenceAPI.Models.PersonnelModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.personnel.PersonnelController",
+    "Method": "Liste",
+    "RelativePath": "api/Personnel/liste",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.personnel.PersonnelController",
+    "Method": "Modifier",
+    "RelativePath": "api/Personnel/modifier",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "personnel",
+        "Type": "pAgenceAPI.Models.PersonnelModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.personnel.PersonnelController",
+    "Method": "Supprimer",
+    "RelativePath": "api/Personnel/supprimer/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.personnel.PostesController",
+    "Method": "Detail",
+    "RelativePath": "api/Postes/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.personnel.PostesController",
+    "Method": "Ajouter",
+    "RelativePath": "api/Postes/ajouter",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "poste",
+        "Type": "pAgenceAPI.Models.PosteModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.personnel.PostesController",
+    "Method": "Liste",
+    "RelativePath": "api/Postes/liste",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.personnel.PostesController",
+    "Method": "Modifier",
+    "RelativePath": "api/Postes/modifier",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "poste",
+        "Type": "pAgenceAPI.Models.PosteModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.personnel.PostesController",
+    "Method": "Supprimer",
+    "RelativePath": "api/Postes/supprimer/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.securite.PrivilegesController",
+    "Method": "ParGroupe",
+    "RelativePath": "api/Privileges/par-groupe/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.securite.PrivilegesController",
+    "Method": "Sauvegarder",
+    "RelativePath": "api/Privileges/sauvegarder/{id}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "privileges",
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[pAgenceAPI.Models.PrivilegeModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.ReservationsController",
+    "Method": "GetById",
+    "RelativePath": "api/Reservations/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.ReservationsController",
+    "Method": "ConfirmerPaiement",
+    "RelativePath": "api/Reservations/confirmer-paiement/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "pAgenceAPI.Controllers.parametres.ConfirmerPaiementDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.ReservationsController",
+    "Method": "Creer",
+    "RelativePath": "api/Reservations/creer",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "pAgenceAPI.Models.ReservationModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.ReservationsController",
+    "Method": "Liste",
+    "RelativePath": "api/Reservations/liste",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "recherche",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.ReservationsController",
+    "Method": "GetByReference",
+    "RelativePath": "api/Reservations/reference/{reference}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "reference",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.ReservationsController",
+    "Method": "Supprimer",
+    "RelativePath": "api/Reservations/supprimer/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.ReservationsController",
+    "Method": "Valider",
+    "RelativePath": "api/Reservations/valider/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "dto",
+        "Type": "pAgenceAPI.Controllers.parametres.ValiderDto",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.ReservationsController",
+    "Method": "GetByVoyage",
+    "RelativePath": "api/Reservations/voyage/{idVoyage}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idVoyage",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.TarifsController",
+    "Method": "GetById",
+    "RelativePath": "api/Tarifs/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.TarifsController",
+    "Method": "Ajouter",
+    "RelativePath": "api/Tarifs/ajouter",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "tarif",
+        "Type": "pAgenceAPI.Models.TarifModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.TarifsController",
+    "Method": "Liste",
+    "RelativePath": "api/Tarifs/liste",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.TarifsController",
+    "Method": "Modifier",
+    "RelativePath": "api/Tarifs/modifier/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "tarif",
+        "Type": "pAgenceAPI.Models.TarifModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.TarifsController",
+    "Method": "Rechercher",
+    "RelativePath": "api/Tarifs/rechercher",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idTypeVoyage",
+        "Type": "System.Nullable\u00601[[System.Int32, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "depart",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "arrivee",
+        "Type": "System.String",
+        "IsRequired": false
+      },
+      {
+        "Name": "typePassager",
+        "Type": "System.String",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.TarifsController",
+    "Method": "Supprimer",
+    "RelativePath": "api/Tarifs/supprimer/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "pAgenceAPI.Controllers.TestController",
     "Method": "TestConnection",
     "RelativePath": "api/Test/connection",
@@ -1192,6 +3756,121 @@
     "ReturnTypes": [
       {
         "Type": "System.Collections.Generic.List\u00601[[System.String, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.TransfertsCaisseController",
+    "Method": "GetById",
+    "RelativePath": "api/TransfertsCaisse/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.TransfertsCaisseController",
+    "Method": "Annuler",
+    "RelativePath": "api/TransfertsCaisse/{id}/annuler",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.TransfertsCaisseController",
+    "Method": "Valider",
+    "RelativePath": "api/TransfertsCaisse/{id}/valider",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.TransfertsCaisseController",
+    "Method": "EnAttente",
+    "RelativePath": "api/TransfertsCaisse/en-attente",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.TransfertsCaisseController",
+    "Method": "Historique",
+    "RelativePath": "api/TransfertsCaisse/historique",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "dateDebut",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      },
+      {
+        "Name": "dateFin",
+        "Type": "System.Nullable\u00601[[System.DateTime, System.Private.CoreLib, Version=8.0.0.0, Culture=neutral, PublicKeyToken=7cec85d7bea7798e]]",
+        "IsRequired": false
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.TransfertsCaisseController",
+    "Method": "Initier",
+    "RelativePath": "api/TransfertsCaisse/initier",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "model",
+        "Type": "pAgenceAPI.Models.TransfertCaisseModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.TypeVehiculesController",
+    "Method": "GetAll",
+    "RelativePath": "api/TypeVehicules",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.TypeVehiculeModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1358,6 +4037,26 @@
   },
   {
     "ContainingType": "pAgenceAPI.Controllers.parametres.TypeVoyagesController",
+    "Method": "GetAll",
+    "RelativePath": "api/TypeVoyages",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.TypeVoyageModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.TypeVoyagesController",
     "Method": "GetById",
     "RelativePath": "api/TypeVoyages/{id}",
     "HttpMethod": "GET",
@@ -1512,6 +4211,126 @@
     ]
   },
   {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.UtilisateursController",
+    "Method": "GetById",
+    "RelativePath": "api/Utilisateurs/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "pAgenceAPI.Models.UtilisateurModel",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.UtilisateursController",
+    "Method": "Ajouter",
+    "RelativePath": "api/Utilisateurs/ajouter",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "agent",
+        "Type": "pAgenceAPI.Models.UtilisateurModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.UtilisateursController",
+    "Method": "Liste",
+    "RelativePath": "api/Utilisateurs/liste",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.IEnumerable\u00601[[pAgenceAPI.Models.UtilisateurModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.UtilisateursController",
+    "Method": "ModifierMotDePasse",
+    "RelativePath": "api/Utilisateurs/modifier-mdp/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "req",
+        "Type": "pAgenceAPI.Controllers.parametres.ChangerMotDePasseRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.UtilisateursController",
+    "Method": "Modifier",
+    "RelativePath": "api/Utilisateurs/modifier/{id}",
+    "HttpMethod": "PUT",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "agent",
+        "Type": "pAgenceAPI.Models.UtilisateurModel",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.UtilisateursController",
+    "Method": "Supprimer",
+    "RelativePath": "api/Utilisateurs/supprimer/{id}",
+    "HttpMethod": "DELETE",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
     "ContainingType": "pAgenceAPI.Controllers.parametres.VehiculesController",
     "Method": "GetById",
     "RelativePath": "api/Vehicules/{id}",
@@ -1554,6 +4373,53 @@
     "ReturnTypes": [
       {
         "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.VehiculesController",
+    "Method": "ChangerEtat",
+    "RelativePath": "api/Vehicules/changer-etat/{id}",
+    "HttpMethod": "POST",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "req",
+        "Type": "pAgenceAPI.Models.ChangerEtatRequest",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": []
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.VehiculesController",
+    "Method": "GetHistorique",
+    "RelativePath": "api/Vehicules/historique/{id}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.HistoriqueEtatVehiculeModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1694,7 +4560,7 @@
   },
   {
     "ContainingType": "pAgenceAPI.Controllers.parametres.VoyagesController",
-    "Method": "GetAllStandard",
+    "Method": "GetAll",
     "RelativePath": "api/Voyages",
     "HttpMethod": "GET",
     "IsController": true,
@@ -1786,6 +4652,37 @@
   },
   {
     "ContainingType": "pAgenceAPI.Controllers.parametres.VoyagesController",
+    "Method": "UpdateStatus",
+    "RelativePath": "api/Voyages/modifier-statut/{id}",
+    "HttpMethod": "PATCH",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "id",
+        "Type": "System.Int32",
+        "IsRequired": true
+      },
+      {
+        "Name": "statut",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.VoyagesController",
     "Method": "Update",
     "RelativePath": "api/Voyages/modifier/{id}",
     "HttpMethod": "PUT",
@@ -1806,6 +4703,58 @@
     "ReturnTypes": [
       {
         "Type": "System.String",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.VoyagesController",
+    "Method": "GetByStatut",
+    "RelativePath": "api/Voyages/par-statut/{statut}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "statut",
+        "Type": "System.String",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.VoyageModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
+        "MediaTypes": [
+          "text/plain",
+          "application/json",
+          "text/json"
+        ],
+        "StatusCode": 200
+      }
+    ]
+  },
+  {
+    "ContainingType": "pAgenceAPI.Controllers.parametres.VoyagesController",
+    "Method": "GetByVehicule",
+    "RelativePath": "api/Voyages/par-vehicule/{idVehicule}",
+    "HttpMethod": "GET",
+    "IsController": true,
+    "Order": 0,
+    "Parameters": [
+      {
+        "Name": "idVehicule",
+        "Type": "System.Int32",
+        "IsRequired": true
+      }
+    ],
+    "ReturnTypes": [
+      {
+        "Type": "System.Collections.Generic.List\u00601[[pAgenceAPI.Models.VoyageModel, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
         "MediaTypes": [
           "text/plain",
           "application/json",
@@ -1866,26 +4815,5 @@
         "StatusCode": 200
       }
     ]
-  },
-  {
-    "ContainingType": "pAgenceAPI.Controllers.WeatherForecastController",
-    "Method": "Get",
-    "RelativePath": "WeatherForecast",
-    "HttpMethod": "GET",
-    "IsController": true,
-    "Order": 0,
-    "Parameters": [],
-    "ReturnTypes": [
-      {
-        "Type": "System.Collections.Generic.IEnumerable\u00601[[pAgenceAPI.WeatherForecast, pAgenceAPI, Version=1.0.0.0, Culture=neutral, PublicKeyToken=null]]",
-        "MediaTypes": [
-          "text/plain",
-          "application/json",
-          "text/json"
-        ],
-        "StatusCode": 200
-      }
-    ],
-    "EndpointName": "GetWeatherForecast"
   }
 ]

@@ -1,4 +1,4 @@
-﻿using Dapper;
+using Dapper;
 using Microsoft.Extensions.Configuration;
 using MySqlConnector;
 using pAgenceAPI.Models;
@@ -7,71 +7,135 @@ namespace pAgenceAPI.Repositories
 {
     public class TypeVehiculeRepository : ITypeVehiculeRepository
     {
-        private readonly string? _connectionString;
+        private readonly string _connectionString;
+        private readonly ILogger<TypeVehiculeRepository> _logger;
 
-        public TypeVehiculeRepository(IConfiguration configuration)
+        public TypeVehiculeRepository(IConfiguration configuration, ILogger<TypeVehiculeRepository> logger)
         {
-            _connectionString = configuration.GetConnectionString("DefaultConnection");
+            _connectionString = configuration.GetConnectionString("DefaultConnection")
+                ?? throw new ArgumentNullException(nameof(configuration), "Connection string is missing");
+            _logger = logger;
         }
 
-        public async Task<List<TypeVehiculeModel>> GetAllAsync()
+        private const string BaseSelect = @"
+            SELECT tv.ID_TYPE AS Id_Type, tv.LIBELLE_TYPE AS Libelle_Type,
+                   tv.MARQUE AS Marque, tv.NOMBRE_PLACE AS Nombre_Place,
+                   tv.ID_TYPE_VOYAGE AS Id_Type_Voyage, tv.Id_Agence AS Id_Agence,
+                   ty.LIBELLE_TYPE_VOYAGE AS Libelle_Type_Voyage
+            FROM TYPE_VEHICULE tv
+            LEFT JOIN TYPE_VOYAGE ty ON ty.ID_TYPE_VOYAGE = tv.ID_TYPE_VOYAGE ";
+
+        public async Task<List<TypeVehiculeModel>> GetAllAsync(int? idAgence = null)
         {
-            using (var connection = new MySqlConnection(_connectionString))
+            try
             {
-                await connection.OpenAsync();
-                var result = await connection.QueryAsync<TypeVehiculeModel>(
-                    @"SELECT ID_TYPE AS Id_Type, LIBELLE_TYPE AS Libelle_Type, 
-                     MARQUE AS Marque, NOMBRE_PLACE AS Nombre_Place 
-              FROM TYPE_VEHICULE 
-              ORDER BY LIBELLE_TYPE");
-                return result.ToList();
+                using var connection = new MySqlConnection(_connectionString);
+                var where = idAgence.HasValue ? "WHERE tv.Id_Agence = @IdAgence " : "";
+                return (await connection.QueryAsync<TypeVehiculeModel>(
+                    BaseSelect + where + "ORDER BY tv.LIBELLE_TYPE",
+                    new { IdAgence = idAgence }
+                )).ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur GetAllAsync type véhicules");
+                throw;
+            }
+        }
+
+        public async Task<List<TypeVehiculeModel>> SearchAsync(string motCle, int? idAgence = null)
+        {
+            try
+            {
+                using var connection = new MySqlConnection(_connectionString);
+                var pattern = $"%{motCle.Trim()}%";
+                var where = idAgence.HasValue ? " AND tv.Id_Agence = @IdAgence" : "";
+                return (await connection.QueryAsync<TypeVehiculeModel>(
+                    BaseSelect + "WHERE (tv.LIBELLE_TYPE LIKE @Pattern OR tv.MARQUE LIKE @Pattern)" + where + " ORDER BY tv.LIBELLE_TYPE",
+                    new { Pattern = pattern, IdAgence = idAgence }
+                )).ToList();
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur SearchAsync type véhicules motCle={MotCle}", motCle);
+                throw;
             }
         }
 
         public async Task<TypeVehiculeModel?> GetByIdAsync(int id)
         {
-            using (var connection = new MySqlConnection(_connectionString))
+            try
             {
+                using var connection = new MySqlConnection(_connectionString);
                 return await connection.QueryFirstOrDefaultAsync<TypeVehiculeModel>(
-                    "SELECT * FROM TYPE_VEHICULE WHERE ID_TYPE = @Id",
+                    BaseSelect + "WHERE tv.ID_TYPE = @Id",
                     new { Id = id }
                 );
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur GetByIdAsync type véhicule id={Id}", id);
+                throw;
             }
         }
 
         public async Task<string> AddAsync(TypeVehiculeModel type)
         {
-            using (var connection = new MySqlConnection(_connectionString))
+            try
             {
+                using var connection = new MySqlConnection(_connectionString);
                 await connection.ExecuteAsync(
-                    "INSERT INTO TYPE_VEHICULE (LIBELLE_TYPE, MARQUE, NOMBRE_PLACE) VALUES (@Libelle, @Marque, @Places)",
-                    new { Libelle = type.Libelle_Type, Marque = type.Marque, Places = type.Nombre_Place }
+                    @"INSERT INTO TYPE_VEHICULE (LIBELLE_TYPE, MARQUE, NOMBRE_PLACE, ID_TYPE_VOYAGE, Id_Agence)
+                      VALUES (@Libelle, @Marque, @Places, @IdTypeVoyage, @IdAgence)",
+                    new { Libelle = type.Libelle_Type, Marque = type.Marque,
+                          Places = type.Nombre_Place, IdTypeVoyage = type.Id_Type_Voyage, IdAgence = type.Id_Agence }
                 );
                 return "Type de véhicule ajouté avec succès !";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur AddAsync type véhicule");
+                throw;
             }
         }
 
         public async Task<string> UpdateAsync(TypeVehiculeModel type)
         {
-            using (var connection = new MySqlConnection(_connectionString))
+            try
             {
+                using var connection = new MySqlConnection(_connectionString);
                 await connection.ExecuteAsync(
-                    "UPDATE TYPE_VEHICULE SET LIBELLE_TYPE = @Libelle, MARQUE = @Marque, NOMBRE_PLACE = @Places WHERE ID_TYPE = @Id",
-                    new { Id = type.Id_Type, Libelle = type.Libelle_Type, Marque = type.Marque, Places = type.Nombre_Place }
+                    @"UPDATE TYPE_VEHICULE
+                      SET LIBELLE_TYPE = @Libelle, MARQUE = @Marque,
+                          NOMBRE_PLACE = @Places, ID_TYPE_VOYAGE = @IdTypeVoyage
+                      WHERE ID_TYPE = @Id",
+                    new { Id = type.Id_Type, Libelle = type.Libelle_Type, Marque = type.Marque,
+                          Places = type.Nombre_Place, IdTypeVoyage = type.Id_Type_Voyage }
                 );
                 return "Type de véhicule modifié avec succès !";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur UpdateAsync type véhicule id={Id}", type.Id_Type);
+                throw;
             }
         }
 
         public async Task<string> DeleteAsync(int id)
         {
-            using (var connection = new MySqlConnection(_connectionString))
+            try
             {
+                using var connection = new MySqlConnection(_connectionString);
                 await connection.ExecuteAsync(
                     "DELETE FROM TYPE_VEHICULE WHERE ID_TYPE = @Id",
                     new { Id = id }
                 );
                 return "Type de véhicule supprimé avec succès !";
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur DeleteAsync type véhicule id={Id}", id);
+                throw;
             }
         }
     }

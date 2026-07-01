@@ -1,4 +1,4 @@
-﻿#nullable disable
+﻿#nullable enable
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -21,5 +21,15 @@ namespace pAgenceAPI.Models
 
         [Column("NOMBRE_PLACE")]
         public int Nombre_Place { get; set; }
+
+        [Column("ID_TYPE_VOYAGE")]
+        public int? Id_Type_Voyage { get; set; }
+
+        [Column("Id_Agence")]
+        public int? Id_Agence { get; set; }
+
+        // Jointure — libellé du type de voyage associé
+        [NotMapped]
+        public string? Libelle_Type_Voyage { get; set; }
     }
 }

@@ -1,4 +1,4 @@
-﻿#nullable disable
+﻿#nullable enable
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -32,13 +32,13 @@ namespace pAgenceAPI.Models
         public DateTime? Date_Enregistrement { get; set; }  // ✅ CORRIGÉ : DateTime? au lieu de DateTime
 
         // ✅ PROPRIÉTÉS POUR L'AFFICHAGE (JOINTURES) - [NotMapped]
-        [NotMapped]
-        public string Nom_Passager { get; set; }
-
-        [NotMapped]
-        public string Prenom_Passager { get; set; }  // ✅ AJOUTÉ : manquait dans ton modèle
-
-        [NotMapped]
-        public string Trajet { get; set; }  // ✅ AJOUTÉ : remplace Details_Voyage pour cohérence
+        [NotMapped] public string? Nom_Passager { get; set; }
+        [NotMapped] public string? Prenom_Passager { get; set; }
+        [NotMapped] public string? Trajet { get; set; }
+        [NotMapped] public string? Telephone { get; set; }
+        [NotMapped] public string? Sexe { get; set; }
+        [NotMapped] public int Nb_Bagages { get; set; }
+        [NotMapped] public decimal? Poids_Total_Bagages { get; set; }
+        [NotMapped] public decimal? Montant_Bagages { get; set; }
     }
 }

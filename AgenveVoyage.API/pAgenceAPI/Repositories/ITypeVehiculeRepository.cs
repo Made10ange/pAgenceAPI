@@ -1,10 +1,11 @@
-﻿using pAgenceAPI.Models;
+using pAgenceAPI.Models;
 
 namespace pAgenceAPI.Repositories
 {
     public interface ITypeVehiculeRepository
     {
-        Task<List<TypeVehiculeModel>> GetAllAsync();
+        Task<List<TypeVehiculeModel>> GetAllAsync(int? idAgence = null);
+        Task<List<TypeVehiculeModel>> SearchAsync(string motCle, int? idAgence = null);
         Task<TypeVehiculeModel?> GetByIdAsync(int id);
         Task<string> AddAsync(TypeVehiculeModel type);
         Task<string> UpdateAsync(TypeVehiculeModel type);

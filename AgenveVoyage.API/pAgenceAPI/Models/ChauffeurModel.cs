@@ -1,4 +1,4 @@
-﻿#nullable disable
+﻿#nullable enable
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace pAgenceAPI.Models
@@ -6,6 +6,7 @@ namespace pAgenceAPI.Models
     public class ChauffeurModel
     {
         public int Id_Chauffeur { get; set; }
+        public int? Id_Agence { get; set; }
         public string Nom { get; set; } = string.Empty;
         public string Prenom { get; set; } = string.Empty;
         public string Type_Piece { get; set; }

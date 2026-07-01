@@ -6,6 +6,7 @@ F:\Application\AgenceV\AgenveVoyage.API\pAgenceAPI\bin\Debug\net8.0\pAgenceAPI.d
 F:\Application\AgenceV\AgenveVoyage.API\pAgenceAPI\bin\Debug\net8.0\pAgenceAPI.runtimeconfig.json
 F:\Application\AgenceV\AgenveVoyage.API\pAgenceAPI\bin\Debug\net8.0\pAgenceAPI.dll
 F:\Application\AgenceV\AgenveVoyage.API\pAgenceAPI\bin\Debug\net8.0\pAgenceAPI.pdb
+F:\Application\AgenceV\AgenveVoyage.API\pAgenceAPI\bin\Debug\net8.0\BCrypt.Net-Next.dll
 F:\Application\AgenceV\AgenveVoyage.API\pAgenceAPI\bin\Debug\net8.0\Dapper.dll
 F:\Application\AgenceV\AgenveVoyage.API\pAgenceAPI\bin\Debug\net8.0\Humanizer.dll
 F:\Application\AgenceV\AgenveVoyage.API\pAgenceAPI\bin\Debug\net8.0\Microsoft.Bcl.AsyncInterfaces.dll
@@ -100,10 +101,10 @@ F:\Application\AgenceV\AgenveVoyage.API\pAgenceAPI\obj\Debug\net8.0\staticwebass
 F:\Application\AgenceV\AgenveVoyage.API\pAgenceAPI\obj\Debug\net8.0\staticwebassets.build.json.cache
 F:\Application\AgenceV\AgenveVoyage.API\pAgenceAPI\obj\Debug\net8.0\staticwebassets.development.json
 F:\Application\AgenceV\AgenveVoyage.API\pAgenceAPI\obj\Debug\net8.0\staticwebassets.build.endpoints.json
-F:\Application\AgenceV\AgenveVoyage.API\pAgenceAPI\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt
 F:\Application\AgenceV\AgenveVoyage.API\pAgenceAPI\obj\Debug\net8.0\pAgenceAPI.csproj.Up2Date
 F:\Application\AgenceV\AgenveVoyage.API\pAgenceAPI\obj\Debug\net8.0\pAgenceAPI.dll
 F:\Application\AgenceV\AgenveVoyage.API\pAgenceAPI\obj\Debug\net8.0\refint\pAgenceAPI.dll
 F:\Application\AgenceV\AgenveVoyage.API\pAgenceAPI\obj\Debug\net8.0\pAgenceAPI.pdb
 F:\Application\AgenceV\AgenveVoyage.API\pAgenceAPI\obj\Debug\net8.0\pAgenceAPI.genruntimeconfig.cache
 F:\Application\AgenceV\AgenveVoyage.API\pAgenceAPI\obj\Debug\net8.0\ref\pAgenceAPI.dll
+F:\Application\AgenceV\AgenveVoyage.API\pAgenceAPI\obj\Debug\net8.0\staticwebassets.upToDateCheck.txt

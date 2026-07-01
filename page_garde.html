@@ -1,0 +1,334 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="utf-8"/>
+<title>Page de Garde — Rapport de Stage</title>
+<style>
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    background: #888;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    font-family: 'Times New Roman', Times, serif;
+  }
+
+  .no-print {
+    margin-bottom: 14px;
+    display: flex; gap: 10px;
+  }
+  .btn-pdf {
+    padding: 10px 26px; background: #1a3c8f; color: #fff;
+    border: none; border-radius: 8px; font-size: 14px;
+    cursor: pointer; font-weight: bold; letter-spacing:.03em;
+  }
+
+  /* ══ PAGE A4 avec double bordure ══ */
+  .page {
+    width: 210mm;
+    min-height: 297mm;
+    background: #fff;
+    position: relative;
+    /* bordure extérieure fine */
+    border: 3px solid #1a3c8f;
+    /* espace + bordure intérieure */
+    outline: 3px solid #1a3c8f;
+    outline-offset: 6px;
+    padding: 16mm 15mm 12mm 15mm;
+    box-shadow: 0 6px 40px rgba(0,0,0,.45);
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ══ EN-TÊTE BILINGUE ══ */
+  .entete {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    text-align: center;
+    font-size: 8.2pt;
+    line-height: 1.55;
+    margin-bottom: 10px;
+  }
+  .entete-col { padding: 0 6px; }
+  .tiret { color: #444; font-size: 7pt; }
+
+  /* ══ LOGOS ══ */
+  .logos {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    align-items: center;
+    justify-items: center;
+    margin-bottom: 12px;
+    gap: 20px;
+  }
+  .logos img {
+    max-height: 70px;
+    max-width: 140px;
+    object-fit: contain;
+  }
+  .logo-ph {
+    height: 68px; width: 130px;
+    border: 2px solid #1a3c8f;
+    border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11pt; color: #1a3c8f; font-weight: bold;
+    background: linear-gradient(135deg,#e8eeff,#f5f7ff);
+    letter-spacing: .06em;
+  }
+
+  /* ══ PARCHEMIN / BANDEAU TITRE ══ */
+  .scroll-wrap {
+    position: relative;
+    margin: 0 10px 14px 10px;
+  }
+  /* Les rouleaux gauche/droit */
+  .scroll-wrap::before,
+  .scroll-wrap::after {
+    content: '';
+    position: absolute;
+    top: 50%; transform: translateY(-50%);
+    width: 22px;
+    height: calc(100% - 10px);
+    background: linear-gradient(to bottom,
+      #0a1f6e 0%, #1a3c8f 20%, #2456b8 50%, #1a3c8f 80%, #0a1f6e 100%);
+    border-radius: 4px;
+    box-shadow: inset 2px 0 4px rgba(255,255,255,.15),
+                inset -2px 0 4px rgba(0,0,0,.3),
+                2px 0 6px rgba(0,0,0,.3);
+    z-index: 2;
+  }
+  .scroll-wrap::before { left: -10px; }
+  .scroll-wrap::after  { right: -10px; }
+
+  .scroll-body {
+    background: linear-gradient(160deg, #2456b8 0%, #1a3c8f 40%, #152f78 100%);
+    padding: 16px 28px;
+    text-align: center;
+    border-radius: 3px;
+    box-shadow: 0 5px 18px rgba(10,31,110,.5),
+                inset 0 1px 0 rgba(255,255,255,.18),
+                inset 0 -1px 0 rgba(0,0,0,.25);
+    position: relative;
+    z-index: 1;
+  }
+  /* Lignes décoratives haut/bas du parchemin */
+  .scroll-body::before {
+    content: '';
+    position: absolute; top: 5px; left: 20px; right: 20px;
+    height: 1px; background: rgba(255,255,255,.18);
+  }
+  .scroll-body::after {
+    content: '';
+    position: absolute; bottom: 5px; left: 20px; right: 20px;
+    height: 1px; background: rgba(255,255,255,.18);
+  }
+
+  .scroll-title {
+    font-size: 17.5pt;
+    font-weight: bold;
+    font-style: italic;
+    color: #D4620A;
+    line-height: 1.4;
+    text-shadow: 1px 1px 3px rgba(0,0,0,.55);
+    font-family: 'Times New Roman', serif;
+  }
+
+  /* ══ SECTION CENTRALE ══ */
+  .centre { text-align: center; }
+
+  .duree {
+    font-size: 11pt;
+    font-weight: bold;
+    margin-bottom: 6px;
+  }
+
+  .sep-ligne {
+    color: #333;
+    font-size: 8pt;
+    letter-spacing: 3px;
+    margin: 5px 0;
+    text-align: center;
+  }
+
+  .diplome {
+    font-size: 10.5pt;
+    text-align: center;
+    line-height: 1.7;
+    margin: 6px 0;
+  }
+  .diplome strong { color: #C0500A; }
+
+  .redige-par {
+    font-size: 10.5pt;
+    font-style: italic;
+    text-align: center;
+    margin-top: 8px;
+    margin-bottom: 2px;
+  }
+  .sep-tiret {
+    text-align: center;
+    color: #444;
+    font-size: 8pt;
+    margin: 1px 0 4px;
+    letter-spacing: 1px;
+  }
+  .nom {
+    font-size: 13.5pt;
+    font-weight: bold;
+    text-align: center;
+    letter-spacing: .05em;
+    margin-bottom: 3px;
+  }
+  .niveau {
+    font-size: 10.5pt;
+    text-align: center;
+    margin-bottom: 14px;
+  }
+
+  /* ══ ENCADREURS ══ */
+  .encadreurs {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    margin-top: 4px;
+    margin-bottom: 14px;
+  }
+  .enc { text-align: center; font-size: 10pt; line-height: 1.6; }
+  .enc-nom  { font-weight: bold; font-size: 10.5pt; }
+  .enc-role { font-style: italic; font-size: 9.5pt; }
+  .enc-info { font-size: 9.5pt; }
+
+  /* ══ PIED — ANNÉE ACADÉMIQUE ══ */
+  .footer-annee {
+    margin-top: auto;
+    display: flex;
+    justify-content: center;
+  }
+  .annee-box {
+    background: linear-gradient(135deg, #1a3c8f 0%, #2d5cbf 100%);
+    color: #fff;
+    font-size: 11.5pt;
+    font-weight: bold;
+    font-family: 'Times New Roman', serif;
+    padding: 9px 50px;
+    border-radius: 6px;
+    text-align: center;
+    box-shadow: 0 4px 12px rgba(10,31,110,.4),
+                inset 0 1px 0 rgba(255,255,255,.2);
+    line-height: 1.5;
+  }
+
+  /* ══ IMPRESSION ══ */
+  @media print {
+    body { background: #fff; padding: 0; margin: 0; }
+    .no-print { display: none !important; }
+    .page {
+      width: 100%; min-height: 100vh; height: 100vh;
+      margin: 0; padding: 14mm 14mm 12mm 14mm;
+      box-shadow: none;
+      border: 3px solid #1a3c8f;
+      outline: 3px solid #1a3c8f;
+      outline-offset: 6px;
+    }
+    * { -webkit-print-color-adjust: exact !important; print-color-adjust: exact !important; }
+  }
+  @page { size: A4 portrait; margin: 0; }
+</style>
+</head>
+<body>
+
+<div class="no-print">
+  <button class="btn-pdf" onclick="window.print()">🖨️ &nbsp;Imprimer / Enregistrer en PDF</button>
+</div>
+
+<div class="page">
+
+  <!-- ══ EN-TÊTE BILINGUE ══ -->
+  <div class="entete">
+    <div class="entete-col">
+      REPUBLIQUE DU CAMEROUN<br>
+      <em>Paix-Travail-Patrie</em><br>
+      <span class="tiret">————————</span><br>
+      MINISTERE DE<br>
+      L'ENSEIGNEMENT SUPERIEUR<br>
+      <span class="tiret">————————</span><br>
+      INSTITUT SUPERIEUR DE<br>
+      TECHNOLOGIE APPLIQUEE<br>
+      ET DE GESTION
+    </div>
+    <div class="entete-col">
+      REPUBLIC OF CAMEROON<br>
+      <em>Peace-Work-Fatherland</em><br>
+      <span class="tiret">————————</span><br>
+      MINISTRY OF HIGHER<br>
+      EDUCATION<br>
+      <span class="tiret">————————</span><br>
+      HIGHER INSTITUTE OF APPLIED<br>
+      TECHNOLOGY AND<br>
+      MANAGEMENT
+    </div>
+  </div>
+
+  <!-- ══ LOGOS ══ -->
+  <div class="logos">
+    <div class="logo-ph">ISTAG</div>
+    <div class="logo-ph">IU DES TROPIQUES</div>
+  </div>
+
+  <!-- ══ PARCHEMIN TITRE ══ -->
+  <div class="scroll-wrap">
+    <div class="scroll-body">
+      <div class="scroll-title">
+        Développement d'une Application de<br>
+        Gestion de Voyages :<br>
+        Cas de FIRESOFTWARE
+      </div>
+    </div>
+  </div>
+
+  <!-- ══ INFOS STAGE ══ -->
+  <div class="centre">
+    <div class="duree">Stage effectué du 12 Janvier au 12 Juin 2026</div>
+    <div class="sep-ligne">— — — — — — — — — — — — — — — —</div>
+  </div>
+
+  <div class="diplome">
+    En vue de l'obtention de la <strong>Licence Professionnelle (LP)</strong> en<br>
+    <strong>Informatique de Gestion (IG)</strong>
+  </div>
+
+  <div class="sep-ligne">— — — — — — — — — — — — — — — —</div>
+
+  <div class="redige-par">Rédigé et présenté par</div>
+  <div class="sep-tiret">————————</div>
+  <div class="nom">YOUMBI FLORIDA</div>
+  <div class="niveau">Étudiante en Licence Professionnelle</div>
+
+  <!-- ══ ENCADREURS ══ -->
+  <div class="encadreurs">
+    <div class="enc">
+      <div class="enc-nom">M. YAMSI CHRISTIAN</div>
+      <div class="enc-role">Encadreur Professionnel</div>
+      <div class="enc-info">Directeur Général de</div>
+      <div class="enc-info"><strong>FIRESOFTWARE</strong></div>
+    </div>
+    <div class="enc">
+      <div class="enc-nom">M. MBEKECK MARTIN ROLAND</div>
+      <div class="enc-role">Encadreur Académique</div>
+      <div class="enc-info">&nbsp;</div>
+      <div class="enc-info">Enseignant à l'ISTAG</div>
+    </div>
+  </div>
+
+  <!-- ══ ANNÉE ACADÉMIQUE ══ -->
+  <div class="footer-annee">
+    <div class="annee-box">
+      Année Académique<br>2025 / 2026
+    </div>
+  </div>
+
+</div>
+
+</body>
+</html>

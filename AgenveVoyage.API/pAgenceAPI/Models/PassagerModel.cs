@@ -78,5 +78,7 @@ namespace pAgenceAPI.Models
                     Photo_Base64 = Convert.ToBase64String(value);
             }
         }
+
+        public int? Id_Agence { get; set; }
     }
 }

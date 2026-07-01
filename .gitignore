@@ -1,0 +1,19 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+.vs/
+*.log
+
+## Données sensibles
+appsettings.Development.json
+backups/
+Backups/
+
+## Node / npm
+node_modules/
+
+## OS
+.DS_Store
+Thumbs.db

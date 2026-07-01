@@ -1,78 +1,119 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using pAgenceAPI.Models;
 using pAgenceAPI.Repositories;
-using System;
-using System.Linq;
 
 namespace pAgenceAPI.Controllers.parametres
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TypeVoyagesController : ControllerBase
+    public class TypeVoyagesController : AgenceControllerBase
     {
         private readonly ITypeVoyageRepository _repository;
+        private readonly ILogger<TypeVoyagesController> _logger;
 
-        public TypeVoyagesController(ITypeVoyageRepository repository)
+        public TypeVoyagesController(ITypeVoyageRepository repository, ILogger<TypeVoyagesController> logger)
         {
             _repository = repository;
+            _logger = logger;
         }
 
-        // ✅ GET: api/TypeVoyages/liste
+        [HttpGet]
         [HttpGet("liste")]
         public async Task<ActionResult<List<TypeVoyageModel>>> GetAll()
         {
-            var types = await _repository.GetAllAsync();
-            return Ok(types);
+            try
+            {
+                return Ok(await _repository.GetAllAsync(AgenceId));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur GetAll type voyages");
+                return Problem(detail: ex.Message, statusCode: 500, title: "Erreur lors du chargement");
+            }
         }
 
-        // ✅ GET: api/TypeVoyages/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<TypeVoyageModel>> GetById(int id)
         {
-            var type = await _repository.GetByIdAsync(id);
-            if (type == null) return NotFound();
-            return Ok(type);
+            try
+            {
+                var type = await _repository.GetByIdAsync(id);
+                if (type == null) return NotFound();
+                return Ok(type);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur GetById type voyage id={Id}", id);
+                return Problem(detail: ex.Message, statusCode: 500, title: "Erreur lors de la récupération");
+            }
         }
 
-        // ✅ POST: api/TypeVoyages/ajouter
-        [HttpPost("ajouter")]
-        public async Task<ActionResult<string>> Create([FromBody] TypeVoyageModel type)
-        {
-            var message = await _repository.AddAsync(type);
-            return Ok(new { message });
-        }
-
-        // ✅ PUT: api/TypeVoyages/modifier/{id}
-        [HttpPut("modifier/{id}")]
-        public async Task<ActionResult<string>> Update(int id, [FromBody] TypeVoyageModel type)
-        {
-            if (id != type.Id_Type_Voyage) return BadRequest("ID incohérent");
-            var message = await _repository.UpdateAsync(type);
-            return Ok(new { message });
-        }
-
-        // ✅ DELETE: api/TypeVoyages/supprimer/{id}
-        [HttpDelete("supprimer/{id}")]
-        public async Task<ActionResult<string>> Delete(int id)
-        {
-            var message = await _repository.DeleteAsync(id);
-            return Ok(new { message });
-        }
-
-        // ✅ GET: api/TypeVoyages/rechercher?motCle=xxx
         [HttpGet("rechercher")]
         public async Task<ActionResult<List<TypeVoyageModel>>> Search([FromQuery] string motCle)
         {
-            var types = await _repository.GetAllAsync();
-
-            if (!string.IsNullOrEmpty(motCle))
+            try
             {
-                types = types.Where(t =>
-                    t.Libelle_Type_Voyage.Contains(motCle, StringComparison.OrdinalIgnoreCase)
-                ).ToList();
+                var types = string.IsNullOrWhiteSpace(motCle)
+                    ? await _repository.GetAllAsync(AgenceId)
+                    : await _repository.SearchAsync(motCle, AgenceId);
+                return Ok(types);
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur Search type voyages");
+                return Problem(detail: ex.Message, statusCode: 500, title: "Erreur lors de la recherche");
+            }
+        }
 
-            return Ok(types);
+        [HttpPost("ajouter")]
+        public async Task<ActionResult<string>> Create([FromBody] TypeVoyageModel type)
+        {
+            try
+            {
+                type.Id_Agence = AgenceId;
+                var message = await _repository.AddAsync(type);
+                return Ok(new { message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur Create type voyage");
+                return Problem(detail: ex.Message, statusCode: 500, title: "Erreur lors de l'ajout");
+            }
+        }
+
+        [HttpPut("modifier/{id}")]
+        public async Task<ActionResult<string>> Update(int id, [FromBody] TypeVoyageModel type)
+        {
+            try
+            {
+                if (id != type.Id_Type_Voyage) return BadRequest("ID incohérent");
+                var existing = await _repository.GetByIdAsync(id);
+                if (existing == null) return NotFound(new { message = $"Type voyage ID {id} non trouvé" });
+                var message = await _repository.UpdateAsync(type);
+                return Ok(new { message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur Update type voyage id={Id}", id);
+                return Problem(detail: ex.Message, statusCode: 500, title: "Erreur lors de la modification");
+            }
+        }
+
+        [HttpDelete("supprimer/{id}")]
+        public async Task<ActionResult<string>> Delete(int id)
+        {
+            try
+            {
+                var existing = await _repository.GetByIdAsync(id);
+                if (existing == null) return NotFound(new { message = $"Type voyage ID {id} non trouvé" });
+                var message = await _repository.DeleteAsync(id);
+                return Ok(new { message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur Delete type voyage id={Id}", id);
+                return Problem(detail: ex.Message, statusCode: 500, title: "Erreur lors de la suppression");
+            }
         }
     }
 }

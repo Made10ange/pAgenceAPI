@@ -540,6 +540,44 @@
         }
       }
     },
+    "/api/Agences": {
+      "get": {
+        "tags": [
+          "Agences"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AgenceModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AgenceModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AgenceModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Agences/{id}": {
       "get": {
         "tags": [
@@ -573,6 +611,53 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/AgenceModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Agences/rechercher": {
+      "get": {
+        "tags": [
+          "Agences"
+        ],
+        "parameters": [
+          {
+            "name": "motCle",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AgenceModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AgenceModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/AgenceModel"
+                  }
                 }
               }
             }
@@ -727,49 +812,24 @@
         }
       }
     },
-    "/api/Agences/rechercher": {
+    "/api/Analytique/resume": {
       "get": {
         "tags": [
-          "Agences"
+          "Analytique"
         ],
         "parameters": [
           {
-            "name": "motCle",
+            "name": "annee",
             "in": "query",
             "schema": {
-              "type": "string"
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AgenceModel"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AgenceModel"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/AgenceModel"
-                  }
-                }
-              }
-            }
+            "description": "OK"
           }
         }
       }
@@ -993,7 +1053,1623 @@
         }
       }
     },
+    "/api/Auth/login": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/LoginRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/LoginResponse"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Backup/lancer": {
+      "post": {
+        "tags": [
+          "Backup"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Backup/liste": {
+      "get": {
+        "tags": [
+          "Backup"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Backup/telecharger/{nom}": {
+      "get": {
+        "tags": [
+          "Backup"
+        ],
+        "parameters": [
+          {
+            "name": "nom",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Bagages/liste": {
+      "get": {
+        "tags": [
+          "Bagages"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BagageModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BagageModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BagageModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Bagages": {
+      "get": {
+        "tags": [
+          "Bagages"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BagageModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BagageModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BagageModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Bagages/{id}": {
+      "get": {
+        "tags": [
+          "Bagages"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/BagageModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BagageModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/BagageModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Bagages/par-passager/{idPassager}": {
+      "get": {
+        "tags": [
+          "Bagages"
+        ],
+        "parameters": [
+          {
+            "name": "idPassager",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BagageModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BagageModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BagageModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Bagages/par-voyage/{idVoyage}": {
+      "get": {
+        "tags": [
+          "Bagages"
+        ],
+        "parameters": [
+          {
+            "name": "idVoyage",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BagageModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BagageModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BagageModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Bagages/rechercher": {
+      "get": {
+        "tags": [
+          "Bagages"
+        ],
+        "parameters": [
+          {
+            "name": "motCle",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BagageModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BagageModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BagageModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Bagages/ajouter": {
+      "post": {
+        "tags": [
+          "Bagages"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BagageModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BagageModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/BagageModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Bagages/modifier": {
+      "put": {
+        "tags": [
+          "Bagages"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BagageModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BagageModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/BagageModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Bagages/statut/{id}": {
+      "patch": {
+        "tags": [
+          "Bagages"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "statut",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Bagages/supprimer/{id}": {
+      "delete": {
+        "tags": [
+          "Bagages"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Bagages/enregistrer-par-passager": {
+      "post": {
+        "tags": [
+          "Bagages"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BagageParPassagerRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BagageParPassagerRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/BagageParPassagerRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Bagages/par-voyage-passagers/{idVoyage}": {
+      "get": {
+        "tags": [
+          "Bagages"
+        ],
+        "parameters": [
+          {
+            "name": "idVoyage",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PassagerAvecBagagesDto"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PassagerAvecBagagesDto"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PassagerAvecBagagesDto"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Bagages/par-passager-voyage/{idPassager}/{idVoyage}": {
+      "get": {
+        "tags": [
+          "Bagages"
+        ],
+        "parameters": [
+          {
+            "name": "idPassager",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "idVoyage",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BagageModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BagageModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BagageModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Bagages/en-attente": {
+      "get": {
+        "tags": [
+          "Bagages"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BagageModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BagageModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BagageModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Bagages/assigner-voyage/{idBagage}": {
+      "patch": {
+        "tags": [
+          "Bagages"
+        ],
+        "parameters": [
+          {
+            "name": "idBagage",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "idVoyage",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Bagages/archives": {
+      "get": {
+        "tags": [
+          "Bagages"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BagageModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BagageModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/BagageModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Balance/generale": {
+      "get": {
+        "tags": [
+          "Balance"
+        ],
+        "parameters": [
+          {
+            "name": "dateDebut",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "dateFin",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Billets/liste": {
+      "get": {
+        "tags": [
+          "Billets"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Billets/{id}": {
+      "get": {
+        "tags": [
+          "Billets"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Billets/numero/{numero}": {
+      "get": {
+        "tags": [
+          "Billets"
+        ],
+        "parameters": [
+          {
+            "name": "numero",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Billets/passager/{idPassager}": {
+      "get": {
+        "tags": [
+          "Billets"
+        ],
+        "parameters": [
+          {
+            "name": "idPassager",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Billets/par-voyage/{idVoyage}": {
+      "get": {
+        "tags": [
+          "Billets"
+        ],
+        "parameters": [
+          {
+            "name": "idVoyage",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Billets/par-voyage-etendu/{idVoyage}": {
+      "get": {
+        "tags": [
+          "Billets"
+        ],
+        "parameters": [
+          {
+            "name": "idVoyage",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Billets/pour-embarquement/{idVoyage}": {
+      "get": {
+        "tags": [
+          "Billets"
+        ],
+        "parameters": [
+          {
+            "name": "idVoyage",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Billets/sieges-occupes/{idVoyage}": {
+      "get": {
+        "tags": [
+          "Billets"
+        ],
+        "parameters": [
+          {
+            "name": "idVoyage",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Billets/rechercher": {
+      "get": {
+        "tags": [
+          "Billets"
+        ],
+        "parameters": [
+          {
+            "name": "keyword",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "statut",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dateDebut",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "dateFin",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Billets/vendre": {
+      "post": {
+        "tags": [
+          "Billets"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BilletModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/BilletModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/BilletModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Billets/{id}/utiliser": {
+      "put": {
+        "tags": [
+          "Billets"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "idVoyage",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Billets/{id}/reporter": {
+      "put": {
+        "tags": [
+          "Billets"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "idNouveauVoyage",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Billets/{id}/changer-type": {
+      "put": {
+        "tags": [
+          "Billets"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "idTypeVoyage",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "idVoyagePrevu",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "montant",
+            "in": "query",
+            "schema": {
+              "type": "number",
+              "format": "double"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Billets/expirer": {
+      "post": {
+        "tags": [
+          "Billets"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Caisses/liste": {
+      "get": {
+        "tags": [
+          "Caisses"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Caisses/{id}": {
+      "get": {
+        "tags": [
+          "Caisses"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Caisses/ajouter": {
+      "post": {
+        "tags": [
+          "Caisses"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaisseModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaisseModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaisseModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Caisses/modifier": {
+      "put": {
+        "tags": [
+          "Caisses"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaisseModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaisseModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaisseModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Caisses/supprimer/{id}": {
+      "delete": {
+        "tags": [
+          "Caisses"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Caisses/affectations": {
+      "get": {
+        "tags": [
+          "Caisses"
+        ],
+        "parameters": [
+          {
+            "name": "idCaisse",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Caisses/affecter": {
+      "post": {
+        "tags": [
+          "Caisses"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AffectationCaissierModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/AffectationCaissierModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/AffectationCaissierModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Caisses/desaffecter/{id}": {
+      "put": {
+        "tags": [
+          "Caisses"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Caissier/liste": {
+      "get": {
+        "tags": [
+          "Caissier"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Caissier/{id}": {
+      "get": {
+        "tags": [
+          "Caissier"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Caissier/ajouter": {
+      "post": {
+        "tags": [
+          "Caissier"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaissierModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaissierModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaissierModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Caissier/modifier": {
+      "put": {
+        "tags": [
+          "Caissier"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaissierModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaissierModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CaissierModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Caissier/toggle/{id}": {
+      "put": {
+        "tags": [
+          "Caissier"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Caissier/supprimer/{id}": {
+      "delete": {
+        "tags": [
+          "Caissier"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Chauffeurs/liste": {
+      "get": {
+        "tags": [
+          "Chauffeurs"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ChauffeurModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ChauffeurModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ChauffeurModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Chauffeurs": {
+      "get": {
+        "tags": [
+          "Chauffeurs"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ChauffeurModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ChauffeurModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ChauffeurModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Chauffeurs/disponibles": {
       "get": {
         "tags": [
           "Chauffeurs"
@@ -1064,6 +2740,53 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/ChauffeurModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Chauffeurs/rechercher": {
+      "get": {
+        "tags": [
+          "Chauffeurs"
+        ],
+        "parameters": [
+          {
+            "name": "motCle",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ChauffeurModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ChauffeurModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ChauffeurModel"
+                  }
                 }
               }
             }
@@ -1218,10 +2941,261 @@
         }
       }
     },
-    "/api/Chauffeurs/rechercher": {
+    "/api/Colis/liste": {
       "get": {
         "tags": [
-          "Chauffeurs"
+          "Colis"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ColisModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ColisModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ColisModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Colis": {
+      "get": {
+        "tags": [
+          "Colis"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ColisModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ColisModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ColisModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Colis/{id}": {
+      "get": {
+        "tags": [
+          "Colis"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ColisModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ColisModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ColisModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Colis/par-reference/{reference}": {
+      "get": {
+        "tags": [
+          "Colis"
+        ],
+        "parameters": [
+          {
+            "name": "reference",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/ColisModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ColisModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/ColisModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Colis/par-voyage/{idVoyage}": {
+      "get": {
+        "tags": [
+          "Colis"
+        ],
+        "parameters": [
+          {
+            "name": "idVoyage",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ColisModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ColisModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ColisModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Colis/par-statut": {
+      "get": {
+        "tags": [
+          "Colis"
+        ],
+        "parameters": [
+          {
+            "name": "statut",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ColisModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ColisModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/ColisModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Colis/rechercher": {
+      "get": {
+        "tags": [
+          "Colis"
         ],
         "parameters": [
           {
@@ -1240,7 +3214,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ChauffeurModel"
+                    "$ref": "#/components/schemas/ColisModel"
                   }
                 }
               },
@@ -1248,7 +3222,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ChauffeurModel"
+                    "$ref": "#/components/schemas/ColisModel"
                   }
                 }
               },
@@ -1256,7 +3230,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/ChauffeurModel"
+                    "$ref": "#/components/schemas/ColisModel"
                   }
                 }
               }
@@ -1265,7 +3239,547 @@
         }
       }
     },
+    "/api/Colis/generer-reference": {
+      "get": {
+        "tags": [
+          "Colis"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Colis/ajouter": {
+      "post": {
+        "tags": [
+          "Colis"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ColisModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ColisModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ColisModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "integer",
+                  "format": "int32"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Colis/modifier": {
+      "put": {
+        "tags": [
+          "Colis"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ColisModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ColisModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ColisModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Colis/statut/{id}": {
+      "patch": {
+        "tags": [
+          "Colis"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "statut",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Colis/supprimer/{id}": {
+      "delete": {
+        "tags": [
+          "Colis"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Comptes/liste": {
+      "get": {
+        "tags": [
+          "Comptes"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Comptes/{numcompte}": {
+      "get": {
+        "tags": [
+          "Comptes"
+        ],
+        "parameters": [
+          {
+            "name": "numcompte",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Comptes/ajouter": {
+      "post": {
+        "tags": [
+          "Comptes"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompteModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompteModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompteModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Comptes/modifier": {
+      "put": {
+        "tags": [
+          "Comptes"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompteModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompteModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/CompteModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Comptes/supprimer/{numcompte}": {
+      "delete": {
+        "tags": [
+          "Comptes"
+        ],
+        "parameters": [
+          {
+            "name": "numcompte",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Ecritures/du-jour": {
+      "get": {
+        "tags": [
+          "Ecritures"
+        ],
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Ecritures/brouillard": {
+      "get": {
+        "tags": [
+          "Ecritures"
+        ],
+        "parameters": [
+          {
+            "name": "dateDebut",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "dateFin",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "idCaisse",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Ecritures/journee-ouverte": {
+      "get": {
+        "tags": [
+          "Ecritures"
+        ],
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Ecritures/prochaine-journee": {
+      "get": {
+        "tags": [
+          "Ecritures"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Ecritures/ouvrir-journee": {
+      "post": {
+        "tags": [
+          "Ecritures"
+        ],
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Ecritures/cloturer-journee": {
+      "post": {
+        "tags": [
+          "Ecritures"
+        ],
+        "parameters": [
+          {
+            "name": "date",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Ecritures/enregistrer": {
+      "post": {
+        "tags": [
+          "Ecritures"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EcritureComptableModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EcritureComptableModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/EcritureComptableModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Embarquements/liste": {
+      "get": {
+        "tags": [
+          "Embarquements"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Embarquements": {
       "get": {
         "tags": [
           "Embarquements"
@@ -1336,153 +3850,6 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/Embarquements/ajouter": {
-      "post": {
-        "tags": [
-          "Embarquements"
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/Embarquements/modifier/{id}": {
-      "put": {
-        "tags": [
-          "Embarquements"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "requestBody": {
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
-              }
-            },
-            "text/json": {
-              "schema": {
-                "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
-              }
-            },
-            "application/*+json": {
-              "schema": {
-                "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/Embarquements/supprimer/{id}": {
-      "delete": {
-        "tags": [
-          "Embarquements"
-        ],
-        "parameters": [
-          {
-            "name": "id",
-            "in": "path",
-            "required": true,
-            "schema": {
-              "type": "integer",
-              "format": "int32"
-            }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "string"
                 }
               }
             }
@@ -1770,7 +4137,1126 @@
         }
       }
     },
+    "/api/Embarquements/ajouter": {
+      "post": {
+        "tags": [
+          "Embarquements"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Embarquements/modifier/{id}": {
+      "put": {
+        "tags": [
+          "Embarquements"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Embarquements/supprimer/{id}": {
+      "delete": {
+        "tags": [
+          "Embarquements"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "string"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "string"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Embarquements/valider-groupe": {
+      "post": {
+        "tags": [
+          "Embarquements"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/EmbarquementVoyagePassagerModel"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/FichePaye/liste": {
+      "get": {
+        "tags": [
+          "FichePaye"
+        ],
+        "parameters": [
+          {
+            "name": "annee",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "mois",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/FichePaye/personnel/{idPersonnel}": {
+      "get": {
+        "tags": [
+          "FichePaye"
+        ],
+        "parameters": [
+          {
+            "name": "idPersonnel",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/FichePaye/{id}": {
+      "get": {
+        "tags": [
+          "FichePaye"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/FichePaye/ajouter": {
+      "post": {
+        "tags": [
+          "FichePaye"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FichePayeModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FichePayeModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/FichePayeModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/FichePaye/modifier": {
+      "put": {
+        "tags": [
+          "FichePaye"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FichePayeModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/FichePayeModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/FichePayeModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/FichePaye/payer/{id}": {
+      "put": {
+        "tags": [
+          "FichePaye"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/FichePaye/supprimer/{id}": {
+      "delete": {
+        "tags": [
+          "FichePaye"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/FichePaye/generer": {
+      "post": {
+        "tags": [
+          "FichePaye"
+        ],
+        "parameters": [
+          {
+            "name": "mois",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "annee",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Groupes/liste": {
+      "get": {
+        "tags": [
+          "Groupes"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Groupes/{id}": {
+      "get": {
+        "tags": [
+          "Groupes"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Groupes/ajouter": {
+      "post": {
+        "tags": [
+          "Groupes"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GroupeModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GroupeModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GroupeModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Groupes/modifier/{id}": {
+      "put": {
+        "tags": [
+          "Groupes"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GroupeModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/GroupeModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/GroupeModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Groupes/supprimer/{id}": {
+      "delete": {
+        "tags": [
+          "Groupes"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Groupes/{id}/agents": {
+      "get": {
+        "tags": [
+          "Groupes"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Groupes/{id}/affecter/{idAgent}": {
+      "post": {
+        "tags": [
+          "Groupes"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "idAgent",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Groupes/{idGroupe}/retirer/{idAgent}": {
+      "delete": {
+        "tags": [
+          "Groupes"
+        ],
+        "parameters": [
+          {
+            "name": "idGroupe",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "idAgent",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/HistoriqueConnexion/liste": {
+      "get": {
+        "tags": [
+          "HistoriqueConnexion"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/HistoriqueConnexion/echecs-recents": {
+      "get": {
+        "tags": [
+          "HistoriqueConnexion"
+        ],
+        "parameters": [
+          {
+            "name": "minutes",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 30
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/HistoriqueConnexion/enregistrer": {
+      "post": {
+        "tags": [
+          "HistoriqueConnexion"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HistoriqueConnexionModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HistoriqueConnexionModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/HistoriqueConnexionModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/JournalAudit/liste": {
+      "get": {
+        "tags": [
+          "JournalAudit"
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32",
+              "default": 50
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/JournalAudit/rechercher": {
+      "get": {
+        "tags": [
+          "JournalAudit"
+        ],
+        "parameters": [
+          {
+            "name": "module",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "login",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "dateDebut",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "dateFin",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/JournalAudit/enregistrer": {
+      "post": {
+        "tags": [
+          "JournalAudit"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JournalAuditModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/JournalAuditModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/JournalAuditModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Paiements/liste": {
+      "get": {
+        "tags": [
+          "Paiements"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Paiements/chiffre-affaire-mensuel": {
+      "get": {
+        "tags": [
+          "Paiements"
+        ],
+        "parameters": [
+          {
+            "name": "annee",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Paiements/{id}": {
+      "get": {
+        "tags": [
+          "Paiements"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Paiements/par-passager/{idPassager}": {
+      "get": {
+        "tags": [
+          "Paiements"
+        ],
+        "parameters": [
+          {
+            "name": "idPassager",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Paiements/par-colis/{idColis}": {
+      "get": {
+        "tags": [
+          "Paiements"
+        ],
+        "parameters": [
+          {
+            "name": "idColis",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Paiements/par-periode": {
+      "get": {
+        "tags": [
+          "Paiements"
+        ],
+        "parameters": [
+          {
+            "name": "dateDebut",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "dateFin",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Paiements/total-periode": {
+      "get": {
+        "tags": [
+          "Paiements"
+        ],
+        "parameters": [
+          {
+            "name": "dateDebut",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "dateFin",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Paiements/rechercher": {
+      "get": {
+        "tags": [
+          "Paiements"
+        ],
+        "parameters": [
+          {
+            "name": "motCle",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Paiements/ajouter": {
+      "post": {
+        "tags": [
+          "Paiements"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaiementModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaiementModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaiementModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Paiements/modifier": {
+      "put": {
+        "tags": [
+          "Paiements"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaiementModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaiementModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PaiementModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Paiements/supprimer/{id}": {
+      "delete": {
+        "tags": [
+          "Paiements"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/Passagers/liste": {
+      "get": {
+        "tags": [
+          "Passagers"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PassagerModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PassagerModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PassagerModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Passagers": {
       "get": {
         "tags": [
           "Passagers"
@@ -1848,6 +5334,53 @@
         }
       }
     },
+    "/api/Passagers/rechercher": {
+      "get": {
+        "tags": [
+          "Passagers"
+        ],
+        "parameters": [
+          {
+            "name": "motCle",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PassagerModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PassagerModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/PassagerModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Passagers/ajouter": {
       "post": {
         "tags": [
@@ -1874,24 +5407,7 @@
         },
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "string"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "string"
-                }
-              }
-            }
+            "description": "OK"
           }
         }
       }
@@ -1995,14 +5511,328 @@
         }
       }
     },
-    "/api/Passagers/rechercher": {
+    "/api/Personnel/liste": {
       "get": {
         "tags": [
-          "Passagers"
+          "Personnel"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Personnel/{id}": {
+      "get": {
+        "tags": [
+          "Personnel"
         ],
         "parameters": [
           {
-            "name": "motCle",
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Personnel/ajouter": {
+      "post": {
+        "tags": [
+          "Personnel"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonnelModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonnelModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonnelModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Personnel/modifier": {
+      "put": {
+        "tags": [
+          "Personnel"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonnelModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonnelModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PersonnelModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Personnel/supprimer/{id}": {
+      "delete": {
+        "tags": [
+          "Personnel"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Postes/liste": {
+      "get": {
+        "tags": [
+          "Postes"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Postes/{id}": {
+      "get": {
+        "tags": [
+          "Postes"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Postes/ajouter": {
+      "post": {
+        "tags": [
+          "Postes"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PosteModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PosteModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PosteModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Postes/modifier": {
+      "put": {
+        "tags": [
+          "Postes"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PosteModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/PosteModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/PosteModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Postes/supprimer/{id}": {
+      "delete": {
+        "tags": [
+          "Postes"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Privileges/par-groupe/{id}": {
+      "get": {
+        "tags": [
+          "Privileges"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Privileges/sauvegarder/{id}": {
+      "post": {
+        "tags": [
+          "Privileges"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/PrivilegeModel"
+                }
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/PrivilegeModel"
+                }
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "array",
+                "items": {
+                  "$ref": "#/components/schemas/PrivilegeModel"
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Reservations/liste": {
+      "get": {
+        "tags": [
+          "Reservations"
+        ],
+        "parameters": [
+          {
+            "name": "recherche",
             "in": "query",
             "schema": {
               "type": "string"
@@ -2011,33 +5841,387 @@
         ],
         "responses": {
           "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PassagerModel"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PassagerModel"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/PassagerModel"
-                  }
-                }
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Reservations/{id}": {
+      "get": {
+        "tags": [
+          "Reservations"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Reservations/reference/{reference}": {
+      "get": {
+        "tags": [
+          "Reservations"
+        ],
+        "parameters": [
+          {
+            "name": "reference",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Reservations/voyage/{idVoyage}": {
+      "get": {
+        "tags": [
+          "Reservations"
+        ],
+        "parameters": [
+          {
+            "name": "idVoyage",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Reservations/creer": {
+      "post": {
+        "tags": [
+          "Reservations"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReservationModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReservationModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ReservationModel"
               }
             }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Reservations/confirmer-paiement/{id}": {
+      "put": {
+        "tags": [
+          "Reservations"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfirmerPaiementDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfirmerPaiementDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConfirmerPaiementDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Reservations/valider/{id}": {
+      "put": {
+        "tags": [
+          "Reservations"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValiderDto"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValiderDto"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ValiderDto"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Reservations/supprimer/{id}": {
+      "delete": {
+        "tags": [
+          "Reservations"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Tarifs/liste": {
+      "get": {
+        "tags": [
+          "Tarifs"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Tarifs/{id}": {
+      "get": {
+        "tags": [
+          "Tarifs"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Tarifs/rechercher": {
+      "get": {
+        "tags": [
+          "Tarifs"
+        ],
+        "parameters": [
+          {
+            "name": "idTypeVoyage",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          },
+          {
+            "name": "depart",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "arrivee",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "typePassager",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Tarifs/ajouter": {
+      "post": {
+        "tags": [
+          "Tarifs"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TarifModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TarifModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TarifModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Tarifs/modifier/{id}": {
+      "put": {
+        "tags": [
+          "Tarifs"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TarifModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TarifModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TarifModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Tarifs/supprimer/{id}": {
+      "delete": {
+        "tags": [
+          "Tarifs"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -2109,7 +6293,187 @@
         }
       }
     },
+    "/api/TransfertsCaisse/en-attente": {
+      "get": {
+        "tags": [
+          "TransfertsCaisse"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/TransfertsCaisse/historique": {
+      "get": {
+        "tags": [
+          "TransfertsCaisse"
+        ],
+        "parameters": [
+          {
+            "name": "dateDebut",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          },
+          {
+            "name": "dateFin",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "format": "date-time"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/TransfertsCaisse/{id}": {
+      "get": {
+        "tags": [
+          "TransfertsCaisse"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/TransfertsCaisse/initier": {
+      "post": {
+        "tags": [
+          "TransfertsCaisse"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransfertCaisseModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransfertCaisseModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/TransfertCaisseModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/TransfertsCaisse/{id}/valider": {
+      "post": {
+        "tags": [
+          "TransfertsCaisse"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/TransfertsCaisse/{id}/annuler": {
+      "post": {
+        "tags": [
+          "TransfertsCaisse"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
     "/api/TypeVehicules/liste": {
+      "get": {
+        "tags": [
+          "TypeVehicules"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TypeVehiculeModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TypeVehiculeModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TypeVehiculeModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/TypeVehicules": {
       "get": {
         "tags": [
           "TypeVehicules"
@@ -2180,6 +6544,53 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TypeVehiculeModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/TypeVehicules/rechercher": {
+      "get": {
+        "tags": [
+          "TypeVehicules"
+        ],
+        "parameters": [
+          {
+            "name": "motCle",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TypeVehiculeModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TypeVehiculeModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TypeVehiculeModel"
+                  }
                 }
               }
             }
@@ -2334,19 +6745,10 @@
         }
       }
     },
-    "/api/TypeVehicules/rechercher": {
+    "/api/TypeVoyages/liste": {
       "get": {
         "tags": [
-          "TypeVehicules"
-        ],
-        "parameters": [
-          {
-            "name": "motCle",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
+          "TypeVoyages"
         ],
         "responses": {
           "200": {
@@ -2356,7 +6758,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/TypeVehiculeModel"
+                    "$ref": "#/components/schemas/TypeVoyageModel"
                   }
                 }
               },
@@ -2364,7 +6766,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/TypeVehiculeModel"
+                    "$ref": "#/components/schemas/TypeVoyageModel"
                   }
                 }
               },
@@ -2372,7 +6774,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/TypeVehiculeModel"
+                    "$ref": "#/components/schemas/TypeVoyageModel"
                   }
                 }
               }
@@ -2381,7 +6783,7 @@
         }
       }
     },
-    "/api/TypeVoyages/liste": {
+    "/api/TypeVoyages": {
       "get": {
         "tags": [
           "TypeVoyages"
@@ -2452,6 +6854,53 @@
               "text/json": {
                 "schema": {
                   "$ref": "#/components/schemas/TypeVoyageModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/TypeVoyages/rechercher": {
+      "get": {
+        "tags": [
+          "TypeVoyages"
+        ],
+        "parameters": [
+          {
+            "name": "motCle",
+            "in": "query",
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TypeVoyageModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TypeVoyageModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/TypeVoyageModel"
+                  }
                 }
               }
             }
@@ -2606,19 +7055,10 @@
         }
       }
     },
-    "/api/TypeVoyages/rechercher": {
+    "/api/Utilisateurs/liste": {
       "get": {
         "tags": [
-          "TypeVoyages"
-        ],
-        "parameters": [
-          {
-            "name": "motCle",
-            "in": "query",
-            "schema": {
-              "type": "string"
-            }
-          }
+          "Utilisateurs"
         ],
         "responses": {
           "200": {
@@ -2628,7 +7068,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/TypeVoyageModel"
+                    "$ref": "#/components/schemas/UtilisateurModel"
                   }
                 }
               },
@@ -2636,7 +7076,7 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/TypeVoyageModel"
+                    "$ref": "#/components/schemas/UtilisateurModel"
                   }
                 }
               },
@@ -2644,11 +7084,189 @@
                 "schema": {
                   "type": "array",
                   "items": {
-                    "$ref": "#/components/schemas/TypeVoyageModel"
+                    "$ref": "#/components/schemas/UtilisateurModel"
                   }
                 }
               }
             }
+          }
+        }
+      }
+    },
+    "/api/Utilisateurs/{id}": {
+      "get": {
+        "tags": [
+          "Utilisateurs"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/UtilisateurModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UtilisateurModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/UtilisateurModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Utilisateurs/ajouter": {
+      "post": {
+        "tags": [
+          "Utilisateurs"
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UtilisateurModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UtilisateurModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UtilisateurModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Utilisateurs/modifier/{id}": {
+      "put": {
+        "tags": [
+          "Utilisateurs"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UtilisateurModel"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/UtilisateurModel"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/UtilisateurModel"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Utilisateurs/modifier-mdp/{id}": {
+      "put": {
+        "tags": [
+          "Utilisateurs"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangerMotDePasseRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangerMotDePasseRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangerMotDePasseRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Utilisateurs/supprimer/{id}": {
+      "delete": {
+        "tags": [
+          "Utilisateurs"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK"
           }
         }
       }
@@ -2925,6 +7543,97 @@
         }
       }
     },
+    "/api/Vehicules/changer-etat/{id}": {
+      "post": {
+        "tags": [
+          "Vehicules"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangerEtatRequest"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangerEtatRequest"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "$ref": "#/components/schemas/ChangerEtatRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/api/Vehicules/historique/{id}": {
+      "get": {
+        "tags": [
+          "Vehicules"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HistoriqueEtatVehiculeModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HistoriqueEtatVehiculeModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/HistoriqueEtatVehiculeModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Vehicules/rechercher": {
       "get": {
         "tags": [
@@ -3010,6 +7719,44 @@
         }
       }
     },
+    "/api/Voyages": {
+      "get": {
+        "tags": [
+          "Voyages"
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VoyageModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VoyageModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VoyageModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
     "/api/Voyages/rechercher": {
       "get": {
         "tags": [
@@ -3021,6 +7768,143 @@
             "in": "query",
             "schema": {
               "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VoyageModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VoyageModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VoyageModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Voyages/{id}": {
+      "get": {
+        "tags": [
+          "Voyages"
+        ],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "$ref": "#/components/schemas/VoyageModel"
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VoyageModel"
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/VoyageModel"
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Voyages/par-statut/{statut}": {
+      "get": {
+        "tags": [
+          "Voyages"
+        ],
+        "parameters": [
+          {
+            "name": "statut",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "OK",
+            "content": {
+              "text/plain": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VoyageModel"
+                  }
+                }
+              },
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VoyageModel"
+                  }
+                }
+              },
+              "text/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "$ref": "#/components/schemas/VoyageModel"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/api/Voyages/par-vehicule/{idVehicule}": {
+      "get": {
+        "tags": [
+          "Voyages"
+        ],
+        "parameters": [
+          {
+            "name": "idVehicule",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer",
+              "format": "int32"
             }
           }
         ],
@@ -3204,46 +8088,8 @@
         }
       }
     },
-    "/api/Voyages": {
-      "get": {
-        "tags": [
-          "Voyages"
-        ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/VoyageModel"
-                  }
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/VoyageModel"
-                  }
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/VoyageModel"
-                  }
-                }
-              }
-            }
-          }
-        }
-      }
-    },
-    "/api/Voyages/{id}": {
-      "get": {
+    "/api/Voyages/modifier-statut/{id}": {
+      "patch": {
         "tags": [
           "Voyages"
         ],
@@ -3258,62 +8104,42 @@
             }
           }
         ],
-        "responses": {
-          "200": {
-            "description": "OK",
-            "content": {
-              "text/plain": {
-                "schema": {
-                  "$ref": "#/components/schemas/VoyageModel"
-                }
-              },
-              "application/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VoyageModel"
-                }
-              },
-              "text/json": {
-                "schema": {
-                  "$ref": "#/components/schemas/VoyageModel"
-                }
+        "requestBody": {
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "text/json": {
+              "schema": {
+                "type": "string"
+              }
+            },
+            "application/*+json": {
+              "schema": {
+                "type": "string"
               }
             }
           }
-        }
-      }
-    },
-    "/WeatherForecast": {
-      "get": {
-        "tags": [
-          "WeatherForecast"
-        ],
-        "operationId": "GetWeatherForecast",
+        },
         "responses": {
           "200": {
             "description": "OK",
             "content": {
               "text/plain": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
-                  }
+                  "type": "string"
                 }
               },
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
-                  }
+                  "type": "string"
                 }
               },
               "text/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "$ref": "#/components/schemas/WeatherForecast"
-                  }
+                  "type": "string"
                 }
               }
             }
@@ -3324,6 +8150,62 @@
   },
   "components": {
     "schemas": {
+      "AffectationCaissierModel": {
+        "type": "object",
+        "properties": {
+          "id_affectation": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "id_caisse": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "id_utilisateur": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "date_debut": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "date_fin": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "statut": {
+            "type": "string",
+            "nullable": true
+          },
+          "id_utilisateur_createur": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "date_creation": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "libelle_caisse": {
+            "type": "string",
+            "nullable": true
+          },
+          "nom_caissier": {
+            "type": "string",
+            "nullable": true
+          },
+          "prenom_caissier": {
+            "type": "string",
+            "nullable": true
+          },
+          "login_caissier": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "AffectationChauffeurAgenceModel": {
         "type": "object",
         "properties": {
@@ -3503,12 +8385,472 @@
         },
         "additionalProperties": false
       },
+      "BagageLigneRequest": {
+        "type": "object",
+        "properties": {
+          "Description": {
+            "type": "string",
+            "nullable": true
+          },
+          "Poids": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "Id_Voyage_Bagage": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "BagageModel": {
+        "required": [
+          "Id_Passager"
+        ],
+        "type": "object",
+        "properties": {
+          "Id_Bagage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Id_Passager": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Id_Voyage_Passager": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Id_Voyage_Bagage": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Description": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Poids": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "Statut": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Date_Enregistrement": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "Montant_Total": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "Numero_Ordre": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Total_Bagages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Nom_Passager": {
+            "type": "string",
+            "nullable": true
+          },
+          "Trajet_Passager": {
+            "type": "string",
+            "nullable": true
+          },
+          "Trajet_Bagage": {
+            "type": "string",
+            "nullable": true
+          },
+          "Immatriculation_Bagage": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "BagageParPassagerRequest": {
+        "type": "object",
+        "properties": {
+          "Id_Passager": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Id_Voyage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Montant_Total": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "Bagages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BagageLigneRequest"
+            },
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "BilletModel": {
+        "required": [
+          "Id_Passager",
+          "Point_Arrivee",
+          "Point_Depart"
+        ],
+        "type": "object",
+        "properties": {
+          "Id_Billet": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Numero_Billet": {
+            "type": "string",
+            "nullable": true
+          },
+          "Id_Passager": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Point_Depart": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "Point_Arrivee": {
+            "minLength": 1,
+            "type": "string"
+          },
+          "Id_Type_Voyage": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Montant": {
+            "type": "number",
+            "format": "double"
+          },
+          "Date_Achat": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "Date_Validite": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "Statut": {
+            "type": "string",
+            "nullable": true
+          },
+          "Id_Voyage_Prevu": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Id_Voyage_Utilise": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Numero_Siege": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Mode_Paiement": {
+            "type": "string",
+            "nullable": true
+          },
+          "Vendu_Par": {
+            "type": "string",
+            "nullable": true
+          },
+          "Date_Creation": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "Date_Modification": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "Nom_Passager": {
+            "type": "string",
+            "nullable": true
+          },
+          "Prenom_Passager": {
+            "type": "string",
+            "nullable": true
+          },
+          "Telephone_Passager": {
+            "type": "string",
+            "nullable": true
+          },
+          "Libelle_Type_Voyage": {
+            "type": "string",
+            "nullable": true
+          },
+          "Libelle_Voyage_Prevu": {
+            "type": "string",
+            "nullable": true
+          },
+          "Libelle_Voyage_Utilise": {
+            "type": "string",
+            "nullable": true
+          },
+          "NomCompletPassager": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          },
+          "EstExpire": {
+            "type": "boolean",
+            "readOnly": true
+          },
+          "JoursRestants": {
+            "type": "integer",
+            "format": "int32",
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CaisseModel": {
+        "type": "object",
+        "properties": {
+          "id_caisse": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "code_caisse": {
+            "type": "string",
+            "nullable": true
+          },
+          "numcompte": {
+            "type": "string",
+            "nullable": true
+          },
+          "libelle": {
+            "type": "string",
+            "nullable": true
+          },
+          "est_principale": {
+            "type": "boolean"
+          },
+          "code_agence": {
+            "type": "string",
+            "nullable": true
+          },
+          "statut": {
+            "type": "string",
+            "nullable": true
+          },
+          "date_creation": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "nom_agence": {
+            "type": "string",
+            "nullable": true
+          },
+          "libelle_compte": {
+            "type": "string",
+            "nullable": true
+          },
+          "solde_actuel": {
+            "type": "number",
+            "format": "double"
+          }
+        },
+        "additionalProperties": false
+      },
+      "CaissierModel": {
+        "type": "object",
+        "properties": {
+          "Id_Utilisateur": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Nom": {
+            "type": "string",
+            "nullable": true
+          },
+          "Prenom": {
+            "type": "string",
+            "nullable": true
+          },
+          "Sexe": {
+            "type": "string",
+            "nullable": true
+          },
+          "Telephone": {
+            "type": "string",
+            "nullable": true
+          },
+          "Email": {
+            "type": "string",
+            "nullable": true
+          },
+          "Date_Naissance": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "Lieu_Naissance": {
+            "type": "string",
+            "nullable": true
+          },
+          "Nationalite": {
+            "type": "string",
+            "nullable": true
+          },
+          "Profession": {
+            "type": "string",
+            "nullable": true
+          },
+          "Type_Piece": {
+            "type": "string",
+            "nullable": true
+          },
+          "Numero_Piece": {
+            "type": "string",
+            "nullable": true
+          },
+          "Date_Delivrance": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "Lieu_Delivrance": {
+            "type": "string",
+            "nullable": true
+          },
+          "Signataire": {
+            "type": "string",
+            "nullable": true
+          },
+          "Date_Expiration": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "Login": {
+            "type": "string",
+            "nullable": true
+          },
+          "MotDePasse": {
+            "type": "string",
+            "nullable": true
+          },
+          "Role": {
+            "type": "string",
+            "nullable": true
+          },
+          "Actif": {
+            "type": "boolean"
+          },
+          "Date_Creation": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "Id_Agence": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Id_Groupe": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Photo_Base64": {
+            "type": "string",
+            "nullable": true
+          },
+          "Photo": {
+            "type": "string",
+            "format": "byte",
+            "nullable": true
+          },
+          "Nom_Agence": {
+            "type": "string",
+            "nullable": true
+          },
+          "Nom_Groupe": {
+            "type": "string",
+            "nullable": true
+          },
+          "nb_caisses_actives": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "NomComplet": {
+            "type": "string",
+            "nullable": true,
+            "readOnly": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ChangerEtatRequest": {
+        "type": "object",
+        "properties": {
+          "Nouvel_Etat": {
+            "type": "string",
+            "nullable": true
+          },
+          "Nouveau_Type": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Motif": {
+            "type": "string",
+            "nullable": true
+          },
+          "Modifie_Par": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ChangerMotDePasseRequest": {
+        "type": "object",
+        "properties": {
+          "NouveauMotDePasse": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
       "ChauffeurModel": {
         "type": "object",
         "properties": {
           "Id_Chauffeur": {
             "type": "integer",
             "format": "int32"
+          },
+          "Id_Agence": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           },
           "Nom": {
             "type": "string",
@@ -3585,6 +8927,271 @@
         },
         "additionalProperties": false
       },
+      "ColisModel": {
+        "required": [
+          "Nom_Destinataire",
+          "Nom_Expediteur",
+          "Ville_Arrivee",
+          "Ville_Depart"
+        ],
+        "type": "object",
+        "properties": {
+          "Id_Colis": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Reference_Colis": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Id_Voyage": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Id_Agence": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Nom_Expediteur": {
+            "maxLength": 150,
+            "minLength": 0,
+            "type": "string"
+          },
+          "Tel_Expediteur": {
+            "maxLength": 20,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Nom_Destinataire": {
+            "maxLength": 150,
+            "minLength": 0,
+            "type": "string"
+          },
+          "Tel_Destinataire": {
+            "maxLength": 20,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Ville_Depart": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
+          },
+          "Ville_Arrivee": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
+          },
+          "Description": {
+            "maxLength": 255,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Poids": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "Valeur_Declaree": {
+            "type": "number",
+            "format": "double"
+          },
+          "Prix_Transport": {
+            "type": "number",
+            "format": "double"
+          },
+          "Mode_Paiement": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Statut": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Date_Envoi": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "Date_Livraison_Prevue": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "Date_Livraison_Effective": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "Trajet_Voyage": {
+            "type": "string",
+            "nullable": true
+          },
+          "Nom_Agence": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "CompteModel": {
+        "required": [
+          "libelle_compte",
+          "numcompte"
+        ],
+        "type": "object",
+        "properties": {
+          "numcompte": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string"
+          },
+          "numcompte_pere": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "libelle_compte": {
+            "maxLength": 150,
+            "minLength": 0,
+            "type": "string"
+          },
+          "solde": {
+            "type": "number",
+            "format": "double"
+          },
+          "cumul_credit": {
+            "type": "number",
+            "format": "double"
+          },
+          "cumul_debit": {
+            "type": "number",
+            "format": "double"
+          },
+          "type_compte": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "sens": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "statut": {
+            "maxLength": 10,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "devise": {
+            "maxLength": 20,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "ferme": {
+            "maxLength": 5,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "date_creation": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "libelle_parent": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ConfirmerPaiementDto": {
+        "type": "object",
+        "properties": {
+          "StatutPaiement": {
+            "type": "string",
+            "nullable": true
+          },
+          "ReferencePaiement": {
+            "type": "string",
+            "nullable": true
+          },
+          "Provider": {
+            "type": "string",
+            "nullable": true
+          },
+          "PayloadBrut": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "EcritureComptableModel": {
+        "required": [
+          "date_ecriture",
+          "Lignes",
+          "num_transaction"
+        ],
+        "type": "object",
+        "properties": {
+          "num_transaction": {
+            "maxLength": 20,
+            "minLength": 0,
+            "type": "string"
+          },
+          "date_ecriture": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "libelle": {
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "code_journal": {
+            "type": "string",
+            "nullable": true
+          },
+          "type_saisie": {
+            "type": "string",
+            "nullable": true
+          },
+          "id_agence": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "id_utilisateur": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Lignes": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/LigneEcritureModel"
+            }
+          }
+        },
+        "additionalProperties": false
+      },
       "EmbarquementVoyagePassagerModel": {
         "type": "object",
         "properties": {
@@ -3626,6 +9233,477 @@
           },
           "Trajet": {
             "type": "string",
+            "nullable": true
+          },
+          "Telephone": {
+            "type": "string",
+            "nullable": true
+          },
+          "Sexe": {
+            "type": "string",
+            "nullable": true
+          },
+          "Nb_Bagages": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Poids_Total_Bagages": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          },
+          "Montant_Bagages": {
+            "type": "number",
+            "format": "double",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "FichePayeModel": {
+        "type": "object",
+        "properties": {
+          "ID_FICHE": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "ID_PERSONNEL": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "NomPersonnel": {
+            "type": "string",
+            "nullable": true
+          },
+          "PrenomPersonnel": {
+            "type": "string",
+            "nullable": true
+          },
+          "LibellePoste": {
+            "type": "string",
+            "nullable": true
+          },
+          "Mois": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Annee": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Salaire_Base": {
+            "type": "number",
+            "format": "double"
+          },
+          "Primes": {
+            "type": "number",
+            "format": "double"
+          },
+          "Deductions": {
+            "type": "number",
+            "format": "double"
+          },
+          "Net_A_Payer": {
+            "type": "number",
+            "format": "double"
+          },
+          "Statut": {
+            "type": "string",
+            "nullable": true
+          },
+          "Date_Paiement": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "Note": {
+            "type": "string",
+            "nullable": true
+          },
+          "Date_Creation": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "GroupeModel": {
+        "type": "object",
+        "properties": {
+          "Id_Groupe": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Libelle": {
+            "type": "string",
+            "nullable": true
+          },
+          "Description": {
+            "type": "string",
+            "nullable": true
+          },
+          "Couleur": {
+            "type": "string",
+            "nullable": true
+          },
+          "Actif": {
+            "type": "boolean"
+          },
+          "Date_Creation": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "Nb_Agents": {
+            "type": "integer",
+            "format": "int32"
+          }
+        },
+        "additionalProperties": false
+      },
+      "HistoriqueConnexionModel": {
+        "type": "object",
+        "properties": {
+          "Id_Connexion": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Id_Utilisateur": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Login_Tente": {
+            "type": "string",
+            "nullable": true
+          },
+          "Nom_Agent": {
+            "type": "string",
+            "nullable": true
+          },
+          "Statut": {
+            "type": "string",
+            "nullable": true
+          },
+          "Motif_Echec": {
+            "type": "string",
+            "nullable": true
+          },
+          "IP_Address": {
+            "type": "string",
+            "nullable": true
+          },
+          "User_Agent": {
+            "type": "string",
+            "nullable": true
+          },
+          "Date_Connexion": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "HistoriqueEtatVehiculeModel": {
+        "type": "object",
+        "properties": {
+          "Id_Historique": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Id_Vehicule": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Ancien_Etat": {
+            "type": "string",
+            "nullable": true
+          },
+          "Nouvel_Etat": {
+            "type": "string",
+            "nullable": true
+          },
+          "Ancien_Type": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Nouveau_Type": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Motif": {
+            "type": "string",
+            "nullable": true
+          },
+          "Date_Changement": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "Modifie_Par": {
+            "type": "string",
+            "nullable": true
+          },
+          "Immatriculation": {
+            "type": "string",
+            "nullable": true
+          },
+          "Libelle_Ancien_Type": {
+            "type": "string",
+            "nullable": true
+          },
+          "Libelle_Nouveau_Type": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "JournalAuditModel": {
+        "type": "object",
+        "properties": {
+          "Id_Journal": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Id_Utilisateur": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Login_Agent": {
+            "type": "string",
+            "nullable": true
+          },
+          "Nom_Agent": {
+            "type": "string",
+            "nullable": true
+          },
+          "Module": {
+            "type": "string",
+            "nullable": true
+          },
+          "Action": {
+            "type": "string",
+            "nullable": true
+          },
+          "Details": {
+            "type": "string",
+            "nullable": true
+          },
+          "Ancienne_Valeur": {
+            "type": "string",
+            "nullable": true
+          },
+          "Nouvelle_Valeur": {
+            "type": "string",
+            "nullable": true
+          },
+          "IP_Address": {
+            "type": "string",
+            "nullable": true
+          },
+          "User_Agent": {
+            "type": "string",
+            "nullable": true
+          },
+          "Statut": {
+            "type": "string",
+            "nullable": true
+          },
+          "Date_Action": {
+            "type": "string",
+            "format": "date-time"
+          }
+        },
+        "additionalProperties": false
+      },
+      "LigneEcritureModel": {
+        "required": [
+          "numcompte"
+        ],
+        "type": "object",
+        "properties": {
+          "numcompte": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string"
+          },
+          "debit": {
+            "type": "number",
+            "format": "double"
+          },
+          "credit": {
+            "type": "number",
+            "format": "double"
+          },
+          "libelle_ligne": {
+            "maxLength": 200,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoginRequest": {
+        "type": "object",
+        "properties": {
+          "Login": {
+            "type": "string",
+            "nullable": true
+          },
+          "MotDePasse": {
+            "type": "string",
+            "nullable": true
+          },
+          "Id_Agence": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "LoginResponse": {
+        "type": "object",
+        "properties": {
+          "Succes": {
+            "type": "boolean"
+          },
+          "Message": {
+            "type": "string",
+            "nullable": true
+          },
+          "Id_Utilisateur": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Nom": {
+            "type": "string",
+            "nullable": true
+          },
+          "Prenom": {
+            "type": "string",
+            "nullable": true
+          },
+          "Role": {
+            "type": "string",
+            "nullable": true
+          },
+          "Id_Agence": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Nom_Agence": {
+            "type": "string",
+            "nullable": true
+          },
+          "Ville_Agence": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PaiementModel": {
+        "required": [
+          "Mode_Paiement",
+          "Montant",
+          "Type_Paiement"
+        ],
+        "type": "object",
+        "properties": {
+          "Id_Paiement": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Type_Paiement": {
+            "maxLength": 20,
+            "minLength": 0,
+            "type": "string"
+          },
+          "Id_Passager": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Id_Colis": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Id_Voyage": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Montant": {
+            "type": "number",
+            "format": "double"
+          },
+          "Mode_Paiement": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string"
+          },
+          "Statut": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Date_Paiement": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "Notes": {
+            "maxLength": 500,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Nom_Passager": {
+            "type": "string",
+            "nullable": true
+          },
+          "Reference_Colis": {
+            "type": "string",
+            "nullable": true
+          },
+          "Trajet_Voyage": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PassagerAvecBagagesDto": {
+        "type": "object",
+        "properties": {
+          "Id_Passager": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Nom": {
+            "type": "string",
+            "nullable": true
+          },
+          "Prenom": {
+            "type": "string",
+            "nullable": true
+          },
+          "Telephone": {
+            "type": "string",
+            "nullable": true
+          },
+          "Bagages": {
+            "type": "array",
+            "items": {
+              "$ref": "#/components/schemas/BagageModel"
+            },
             "nullable": true
           }
         },
@@ -3721,6 +9799,409 @@
             "type": "string",
             "format": "byte",
             "nullable": true
+          },
+          "Id_Agence": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PersonnelModel": {
+        "type": "object",
+        "properties": {
+          "ID_PERSONNEL": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Nom": {
+            "type": "string",
+            "nullable": true
+          },
+          "Prenom": {
+            "type": "string",
+            "nullable": true
+          },
+          "Telephone": {
+            "type": "string",
+            "nullable": true
+          },
+          "Email": {
+            "type": "string",
+            "nullable": true
+          },
+          "ID_POSTE": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "LibellePoste": {
+            "type": "string",
+            "nullable": true
+          },
+          "Type_Contrat": {
+            "type": "string",
+            "nullable": true
+          },
+          "Salaire_Base": {
+            "type": "number",
+            "format": "double"
+          },
+          "Date_Embauche": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "Statut": {
+            "type": "string",
+            "nullable": true
+          },
+          "Notes": {
+            "type": "string",
+            "nullable": true
+          },
+          "Date_Creation": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "ID_CHAUFFEUR": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "ID_UTILISATEUR": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Id_Agence": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Nom_Agence": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PosteModel": {
+        "type": "object",
+        "properties": {
+          "ID_POSTE": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Libelle": {
+            "type": "string",
+            "nullable": true
+          },
+          "Description": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "PrivilegeModel": {
+        "type": "object",
+        "properties": {
+          "Id_Privilege": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Id_Groupe": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Module": {
+            "type": "string",
+            "nullable": true
+          },
+          "Action": {
+            "type": "string",
+            "nullable": true
+          },
+          "Autorise": {
+            "type": "boolean"
+          },
+          "Libelle_Groupe": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ReservationModel": {
+        "required": [
+          "Id_Voyage",
+          "Montant",
+          "Nom_Client",
+          "Numero_Cni_Client",
+          "Prenom_Client",
+          "Telephone_Client"
+        ],
+        "type": "object",
+        "properties": {
+          "Id_Reservation": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Reference": {
+            "type": "string",
+            "nullable": true
+          },
+          "Id_Voyage": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Id_Passager": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Nom_Client": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
+          },
+          "Prenom_Client": {
+            "maxLength": 100,
+            "minLength": 0,
+            "type": "string"
+          },
+          "Telephone_Client": {
+            "maxLength": 20,
+            "minLength": 0,
+            "type": "string"
+          },
+          "Numero_Cni_Client": {
+            "maxLength": 30,
+            "minLength": 0,
+            "type": "string"
+          },
+          "Email_Client": {
+            "maxLength": 150,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Numero_Siege": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Montant": {
+            "type": "number",
+            "format": "double"
+          },
+          "Statut_Paiement": {
+            "type": "string",
+            "nullable": true
+          },
+          "Provider_Paiement": {
+            "type": "string",
+            "nullable": true
+          },
+          "Reference_Paiement": {
+            "type": "string",
+            "nullable": true
+          },
+          "Date_Paiement": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "Statut_Reservation": {
+            "type": "string",
+            "nullable": true
+          },
+          "Validee_Par": {
+            "type": "string",
+            "nullable": true
+          },
+          "Date_Validation": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "Date_Creation": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "Point_Depart": {
+            "type": "string",
+            "nullable": true
+          },
+          "Point_Arrivee": {
+            "type": "string",
+            "nullable": true
+          },
+          "Date_Depart": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "Heure_Depart": {
+            "type": "string",
+            "format": "date-span",
+            "nullable": true
+          },
+          "Immatriculation": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TarifModel": {
+        "required": [
+          "Libelle",
+          "Prix",
+          "Type_Passager"
+        ],
+        "type": "object",
+        "properties": {
+          "Id_Tarif": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Libelle": {
+            "maxLength": 150,
+            "minLength": 0,
+            "type": "string"
+          },
+          "Id_Type_Voyage": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Point_Depart": {
+            "maxLength": 150,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Point_Arrivee": {
+            "maxLength": 150,
+            "minLength": 0,
+            "type": "string",
+            "nullable": true
+          },
+          "Type_Passager": {
+            "maxLength": 50,
+            "minLength": 0,
+            "type": "string"
+          },
+          "Prix": {
+            "minimum": 0,
+            "type": "number",
+            "format": "double"
+          },
+          "Date_Debut": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "Date_Fin": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "Actif": {
+            "type": "boolean"
+          },
+          "Date_Creation": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "Libelle_Type_Voyage": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "TransfertCaisseModel": {
+        "required": [
+          "id_caisse_depart",
+          "id_caisse_dest",
+          "montant"
+        ],
+        "type": "object",
+        "properties": {
+          "id_transfert": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "id_caisse_depart": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "id_caisse_dest": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "montant": {
+            "minimum": 1,
+            "type": "number",
+            "format": "double"
+          },
+          "date_transfert": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "num_piece": {
+            "type": "string",
+            "nullable": true
+          },
+          "motif": {
+            "type": "string",
+            "nullable": true
+          },
+          "statut": {
+            "type": "string",
+            "nullable": true
+          },
+          "code_user_init": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "code_user_valid": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "date_init": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "date_validation": {
+            "type": "string",
+            "format": "date-time",
+            "nullable": true
+          },
+          "num_transaction_cpt": {
+            "type": "integer",
+            "format": "int64",
+            "nullable": true
+          },
+          "libelle_caisse_depart": {
+            "type": "string",
+            "nullable": true
+          },
+          "libelle_caisse_dest": {
+            "type": "string",
+            "nullable": true
+          },
+          "numcompte_depart": {
+            "type": "string",
+            "nullable": true
+          },
+          "numcompte_dest": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3747,6 +10228,20 @@
           "Nombre_Place": {
             "type": "integer",
             "format": "int32"
+          },
+          "Id_Type_Voyage": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Id_Agence": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Libelle_Type_Voyage": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3762,9 +10257,82 @@
             "type": "string",
             "nullable": true
           },
+          "Point_Depart": {
+            "type": "string",
+            "nullable": true
+          },
+          "Point_Arrivee": {
+            "type": "string",
+            "nullable": true
+          },
           "Prix": {
             "type": "number",
             "format": "double"
+          },
+          "Id_Agence": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "UtilisateurModel": {
+        "type": "object",
+        "properties": {
+          "Id_Utilisateur": {
+            "type": "integer",
+            "format": "int32"
+          },
+          "Nom": {
+            "type": "string",
+            "nullable": true
+          },
+          "Prenom": {
+            "type": "string",
+            "nullable": true
+          },
+          "Login": {
+            "type": "string",
+            "nullable": true
+          },
+          "MotDePasse": {
+            "type": "string",
+            "nullable": true
+          },
+          "Role": {
+            "type": "string",
+            "nullable": true
+          },
+          "Actif": {
+            "type": "boolean"
+          },
+          "Date_Creation": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "Id_Agence": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Nom_Agence": {
+            "type": "string",
+            "nullable": true
+          },
+          "Ville_Agence": {
+            "type": "string",
+            "nullable": true
+          }
+        },
+        "additionalProperties": false
+      },
+      "ValiderDto": {
+        "type": "object",
+        "properties": {
+          "ValideePar": {
+            "type": "string",
+            "nullable": true
           }
         },
         "additionalProperties": false
@@ -3788,6 +10356,10 @@
             "type": "string",
             "nullable": true
           },
+          "Etat": {
+            "type": "string",
+            "nullable": true
+          },
           "Libelle_Type": {
             "type": "string",
             "nullable": true
@@ -3800,11 +10372,29 @@
             "type": "integer",
             "format": "int32",
             "nullable": true
+          },
+          "Id_Type_Voyage": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Libelle_Type_Voyage": {
+            "type": "string",
+            "nullable": true
+          },
+          "Id_Agence": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
           }
         },
         "additionalProperties": false
       },
       "VoyageModel": {
+        "required": [
+          "Date_Depart",
+          "Id_Vehicule"
+        ],
         "type": "object",
         "properties": {
           "Id_Voyage": {
@@ -3812,6 +10402,8 @@
             "format": "int32"
           },
           "Id_Vehicule": {
+            "maximum": 2147483647,
+            "minimum": 1,
             "type": "integer",
             "format": "int32"
           },
@@ -3821,10 +10413,14 @@
             "nullable": true
           },
           "Point_Depart": {
+            "maxLength": 150,
+            "minLength": 0,
             "type": "string",
             "nullable": true
           },
           "Point_Arrivee": {
+            "maxLength": 150,
+            "minLength": 0,
             "type": "string",
             "nullable": true
           },
@@ -3834,15 +10430,18 @@
           },
           "Date_Arrivee": {
             "type": "string",
-            "format": "date-time"
+            "format": "date-time",
+            "nullable": true
           },
           "Heure_Depart": {
             "type": "string",
-            "format": "date-span"
+            "format": "date-span",
+            "nullable": true
           },
           "Heure_Arrivee": {
             "type": "string",
-            "format": "date-span"
+            "format": "date-span",
+            "nullable": true
           },
           "Duree": {
             "type": "string",
@@ -3851,6 +10450,21 @@
           },
           "Statut": {
             "type": "string",
+            "nullable": true
+          },
+          "Id_Agence": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Numero_Journalier": {
+            "type": "integer",
+            "format": "int32",
+            "nullable": true
+          },
+          "Id_Chauffeur": {
+            "type": "integer",
+            "format": "int32",
             "nullable": true
           },
           "Immatriculation": {
@@ -3864,27 +10478,16 @@
           "Prix": {
             "type": "number",
             "format": "double"
-          }
-        },
-        "additionalProperties": false
-      },
-      "WeatherForecast": {
-        "type": "object",
-        "properties": {
-          "Date": {
-            "type": "string",
-            "format": "date"
           },
-          "TemperatureC": {
+          "Nombre_Place": {
             "type": "integer",
             "format": "int32"
           },
-          "TemperatureF": {
-            "type": "integer",
-            "format": "int32",
-            "readOnly": true
+          "Nom_Chauffeur": {
+            "type": "string",
+            "nullable": true
           },
-          "Summary": {
+          "Nom_Agence": {
             "type": "string",
             "nullable": true
           }

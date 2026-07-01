@@ -1,81 +1,119 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using pAgenceAPI.Models;
 using pAgenceAPI.Repositories;
-using System;
-using System.Linq;
 
 namespace pAgenceAPI.Controllers.parametres
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class PassagersController : ControllerBase
+    public class PassagersController : AgenceControllerBase
     {
         private readonly IPassagerRepository _repository;
+        private readonly ILogger<PassagersController> _logger;
 
-        public PassagersController(IPassagerRepository repository)
+        public PassagersController(IPassagerRepository repository, ILogger<PassagersController> logger)
         {
             _repository = repository;
+            _logger = logger;
         }
 
-        // ✅ GET: api/Passagers/liste
+        [HttpGet]
         [HttpGet("liste")]
         public async Task<ActionResult<List<PassagerModel>>> GetAll()
         {
-            var passagers = await _repository.GetAllAsync();
-            return Ok(passagers);
+            try
+            {
+                return Ok(await _repository.GetAllAsync(AgenceId));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur GetAll passagers");
+                return Problem(detail: ex.Message, statusCode: 500, title: "Erreur lors du chargement des passagers");
+            }
         }
 
-        // ✅ GET: api/Passagers/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<PassagerModel>> GetById(int id)
         {
-            var passager = await _repository.GetByIdAsync(id);
-            if (passager == null) return NotFound();
-            return Ok(passager);
+            try
+            {
+                var passager = await _repository.GetByIdAsync(id);
+                if (passager == null) return NotFound();
+                return Ok(passager);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur GetById passager id={Id}", id);
+                return Problem(detail: ex.Message, statusCode: 500, title: "Erreur lors de la récupération");
+            }
         }
 
-        // ✅ POST: api/Passagers/ajouter (avec photo en base64)
-        [HttpPost("ajouter")]
-        public async Task<ActionResult<string>> Create([FromBody] PassagerModel passager)
-        {
-            var message = await _repository.AddAsync(passager);
-            return Ok(new { message });
-        }
-
-        // ✅ PUT: api/Passagers/modifier/{id}
-        [HttpPut("modifier/{id}")]
-        public async Task<ActionResult<string>> Update(int id, [FromBody] PassagerModel passager)
-        {
-            if (id != passager.Id_Passager) return BadRequest("ID incohérent");
-            var message = await _repository.UpdateAsync(passager);
-            return Ok(new { message });
-        }
-
-        // ✅ DELETE: api/Passagers/supprimer/{id}
-        [HttpDelete("supprimer/{id}")]
-        public async Task<ActionResult<string>> Delete(int id)
-        {
-            var message = await _repository.DeleteAsync(id);
-            return Ok(new { message });
-        }
-
-        // ✅ GET: api/Passagers/rechercher?motCle=xxx
         [HttpGet("rechercher")]
         public async Task<ActionResult<List<PassagerModel>>> Search([FromQuery] string motCle)
         {
-            var passagers = await _repository.GetAllAsync();
-
-            if (!string.IsNullOrEmpty(motCle))
+            try
             {
-                passagers = passagers.Where(p =>
-                    p.Nom.Contains(motCle, StringComparison.OrdinalIgnoreCase) ||
-                    p.Prenom.Contains(motCle, StringComparison.OrdinalIgnoreCase) ||
-                    p.Numero_Piece.Contains(motCle, StringComparison.OrdinalIgnoreCase) ||
-                    p.Telephone.Contains(motCle, StringComparison.OrdinalIgnoreCase)
-                ).ToList();
+                var passagers = string.IsNullOrWhiteSpace(motCle)
+                    ? await _repository.GetAllAsync(AgenceId)
+                    : await _repository.SearchAsync(motCle, AgenceId);
+                return Ok(passagers);
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur Search passagers");
+                return Problem(detail: ex.Message, statusCode: 500, title: "Erreur lors de la recherche");
+            }
+        }
 
-            return Ok(passagers);
+        [HttpPost("ajouter")]
+        public async Task<ActionResult> Create([FromBody] PassagerModel passager)
+        {
+            try
+            {
+                passager.Id_Agence = AgenceId;
+                var id = await _repository.AddAsync(passager);
+                return Ok(new { id, message = "Passager ajouté avec succès !" });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur Create passager");
+                return Problem(detail: ex.Message, statusCode: 500, title: "Erreur lors de l'ajout");
+            }
+        }
+
+        [HttpPut("modifier/{id}")]
+        public async Task<ActionResult<string>> Update(int id, [FromBody] PassagerModel passager)
+        {
+            try
+            {
+                if (id != passager.Id_Passager) return BadRequest("ID incohérent");
+                var existing = await _repository.GetByIdAsync(id);
+                if (existing == null) return NotFound(new { message = $"Passager ID {id} non trouvé" });
+                var message = await _repository.UpdateAsync(passager);
+                return Ok(new { message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur Update passager id={Id}", id);
+                return Problem(detail: ex.Message, statusCode: 500, title: "Erreur lors de la modification");
+            }
+        }
+
+        [HttpDelete("supprimer/{id}")]
+        public async Task<ActionResult<string>> Delete(int id)
+        {
+            try
+            {
+                var existing = await _repository.GetByIdAsync(id);
+                if (existing == null) return NotFound(new { message = $"Passager ID {id} non trouvé" });
+                var message = await _repository.DeleteAsync(id);
+                return Ok(new { message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur Delete passager id={Id}", id);
+                return Problem(detail: ex.Message, statusCode: 500, title: "Erreur lors de la suppression");
+            }
         }
     }
 }

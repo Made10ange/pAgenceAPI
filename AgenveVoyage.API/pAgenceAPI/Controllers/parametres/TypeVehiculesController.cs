@@ -1,78 +1,119 @@
-﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc;
 using pAgenceAPI.Models;
 using pAgenceAPI.Repositories;
-using System;
-using System.Linq;
 
 namespace pAgenceAPI.Controllers.parametres
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class TypeVehiculesController : ControllerBase
+    public class TypeVehiculesController : AgenceControllerBase
     {
         private readonly ITypeVehiculeRepository _repository;
+        private readonly ILogger<TypeVehiculesController> _logger;
 
-        public TypeVehiculesController(ITypeVehiculeRepository repository)
+        public TypeVehiculesController(ITypeVehiculeRepository repository, ILogger<TypeVehiculesController> logger)
         {
             _repository = repository;
+            _logger = logger;
         }
 
-        // ✅ GET: api/TypeVehicules/liste
+        [HttpGet]
         [HttpGet("liste")]
         public async Task<ActionResult<List<TypeVehiculeModel>>> GetAll()
         {
-            var types = await _repository.GetAllAsync();
-            return Ok(types);
+            try
+            {
+                return Ok(await _repository.GetAllAsync(AgenceId));
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur GetAll type véhicules");
+                return Problem(detail: ex.Message, statusCode: 500, title: "Erreur lors du chargement");
+            }
         }
 
-        // ✅ GET: api/TypeVehicules/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<TypeVehiculeModel>> GetById(int id)
         {
-            var type = await _repository.GetByIdAsync(id);
-            if (type == null) return NotFound();
-            return Ok(type);
+            try
+            {
+                var type = await _repository.GetByIdAsync(id);
+                if (type == null) return NotFound();
+                return Ok(type);
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur GetById type véhicule id={Id}", id);
+                return Problem(detail: ex.Message, statusCode: 500, title: "Erreur lors de la récupération");
+            }
         }
 
-        // ✅ POST: api/TypeVehicules/ajouter
-        [HttpPost("ajouter")]
-        public async Task<ActionResult<string>> Create([FromBody] TypeVehiculeModel type)
-        {
-            var message = await _repository.AddAsync(type);
-            return Ok(new { message });
-        }
-
-        // ✅ PUT: api/TypeVehicules/modifier/{id}
-        [HttpPut("modifier/{id}")]
-        public async Task<ActionResult<string>> Update(int id, [FromBody] TypeVehiculeModel type)
-        {
-            if (id != type.Id_Type) return BadRequest("ID incohérent");
-            var message = await _repository.UpdateAsync(type);
-            return Ok(new { message });
-        }
-
-        // ✅ DELETE: api/TypeVehicules/supprimer/{id}
-        [HttpDelete("supprimer/{id}")]
-        public async Task<ActionResult<string>> Delete(int id)
-        {
-            var message = await _repository.DeleteAsync(id);
-            return Ok(new { message });
-        }
-
-        // ✅ GET: api/TypeVehicules/rechercher?motCle=xxx
         [HttpGet("rechercher")]
         public async Task<ActionResult<List<TypeVehiculeModel>>> Search([FromQuery] string motCle)
         {
-            var types = await _repository.GetAllAsync();
-
-            if (!string.IsNullOrEmpty(motCle))
+            try
             {
-                types = types.Where(t =>
-                    t.Libelle_Type.Contains(motCle, StringComparison.OrdinalIgnoreCase)
-                ).ToList();
+                var types = string.IsNullOrWhiteSpace(motCle)
+                    ? await _repository.GetAllAsync(AgenceId)
+                    : await _repository.SearchAsync(motCle, AgenceId);
+                return Ok(types);
             }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur Search type véhicules");
+                return Problem(detail: ex.Message, statusCode: 500, title: "Erreur lors de la recherche");
+            }
+        }
 
-            return Ok(types);
+        [HttpPost("ajouter")]
+        public async Task<ActionResult<string>> Create([FromBody] TypeVehiculeModel type)
+        {
+            try
+            {
+                type.Id_Agence = AgenceId;
+                var message = await _repository.AddAsync(type);
+                return Ok(new { message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur Create type véhicule");
+                return Problem(detail: ex.Message, statusCode: 500, title: "Erreur lors de l'ajout");
+            }
+        }
+
+        [HttpPut("modifier/{id}")]
+        public async Task<ActionResult<string>> Update(int id, [FromBody] TypeVehiculeModel type)
+        {
+            try
+            {
+                if (id != type.Id_Type) return BadRequest("ID incohérent");
+                var existing = await _repository.GetByIdAsync(id);
+                if (existing == null) return NotFound(new { message = $"Type véhicule ID {id} non trouvé" });
+                var message = await _repository.UpdateAsync(type);
+                return Ok(new { message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur Update type véhicule id={Id}", id);
+                return Problem(detail: ex.Message, statusCode: 500, title: "Erreur lors de la modification");
+            }
+        }
+
+        [HttpDelete("supprimer/{id}")]
+        public async Task<ActionResult<string>> Delete(int id)
+        {
+            try
+            {
+                var existing = await _repository.GetByIdAsync(id);
+                if (existing == null) return NotFound(new { message = $"Type véhicule ID {id} non trouvé" });
+                var message = await _repository.DeleteAsync(id);
+                return Ok(new { message });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur Delete type véhicule id={Id}", id);
+                return Problem(detail: ex.Message, statusCode: 500, title: "Erreur lors de la suppression");
+            }
         }
     }
 }

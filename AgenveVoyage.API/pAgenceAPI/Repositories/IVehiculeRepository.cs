@@ -1,10 +1,11 @@
+#nullable enable
 ﻿using pAgenceAPI.Models;
 
 namespace pAgenceAPI.Repositories
 {
     public interface IVehiculeRepository
     {
-        Task<List<VehiculeModel>> GetAllAsync();
+        Task<List<VehiculeModel>> GetAllAsync(int? idAgence = null);
         Task<VehiculeModel?> GetByIdAsync(int id);
         Task<string> AddAsync(VehiculeModel vehicule);
         Task<string> UpdateAsync(VehiculeModel vehicule);
