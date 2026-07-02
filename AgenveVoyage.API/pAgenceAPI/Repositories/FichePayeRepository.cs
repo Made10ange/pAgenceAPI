@@ -54,7 +54,7 @@ public class FichePayeRepository : IFichePayeRepository
             INSERT INTO fiche_paie (ID_personnel, Mois, Annee, Salaire_Base, Primes, Deductions, Net_A_Payer, Statut, Note)
             VALUES (@ID_personnel, @Mois, @Annee, @Salaire_Base, @Primes, @Deductions, @Net_A_Payer, @Statut, @Note);
             SELECT LAST_INSERT_ID();",
-            new { fiche.ID_personnel, fiche.Mois, fiche.Annee, fiche.Salaire_Base,
+            new { fiche.ID_PERSONNEL, fiche.Mois, fiche.Annee, fiche.Salaire_Base,
                   fiche.Primes, fiche.Deductions, fiche.Net_A_Payer, fiche.Statut, fiche.Note });
     }
 
