@@ -1,4 +1,4 @@
-using Dapper;
+﻿using Dapper;
 using Microsoft.Extensions.Configuration;
 using MySqlConnector;
 using pAgenceAPI.Models;
@@ -38,9 +38,9 @@ namespace pAgenceAPI.Repositories
                         FROM chauffeur c
                         WHERE c.Id_Agence = @IdAgence
                           AND c.Id_Chauffeur NOT IN (
-                            SELECT acv.ID_CHAUFFEUR
-                            FROM ASSIGNATION_CHAUFFEUR_VOYAGE acv
-                            JOIN VOYAGE v ON v.ID_VOYAGE = acv.ID_VOYAGE
+                            SELECT acv.ID_chauffeur
+                            FROM assignation_chauffeur_voyage acv
+                            JOIN voyage v ON v.ID_voyage = acv.ID_voyage
                             WHERE v.STATUT NOT IN ('Terminé', 'Annulé')
                         )
                         ORDER BY c.Nom, c.Prenom"
@@ -48,9 +48,9 @@ namespace pAgenceAPI.Repositories
                         SELECT c.Id_Chauffeur, c.Nom, c.Prenom, c.Telephone, c.Email
                         FROM chauffeur c
                         WHERE c.Id_Chauffeur NOT IN (
-                            SELECT acv.ID_CHAUFFEUR
-                            FROM ASSIGNATION_CHAUFFEUR_VOYAGE acv
-                            JOIN VOYAGE v ON v.ID_VOYAGE = acv.ID_VOYAGE
+                            SELECT acv.ID_chauffeur
+                            FROM assignation_chauffeur_voyage acv
+                            JOIN voyage v ON v.ID_voyage = acv.ID_voyage
                             WHERE v.STATUT NOT IN ('Terminé', 'Annulé')
                         )
                         ORDER BY c.Nom, c.Prenom";
@@ -166,7 +166,7 @@ namespace pAgenceAPI.Repositories
 
                 // Crée automatiquement la fiche RH correspondante (poste "Chauffeur")
                 await connection.ExecuteAsync(
-                    @"INSERT INTO personnel (Nom, Prenom, Telephone, Email, ID_POSTE, Type_Contrat, Salaire_Base, Date_Embauche, Statut, ID_CHAUFFEUR)
+                    @"INSERT INTO personnel (Nom, Prenom, Telephone, Email, ID_poste, Type_Contrat, Salaire_Base, Date_Embauche, Statut, ID_chauffeur)
                       VALUES (@Nom, @Prenom, @Telephone, @Email, 1, 'CDI', 0, CURDATE(), 'Actif', @IdChauffeur)",
                     new
                     {
@@ -231,7 +231,7 @@ namespace pAgenceAPI.Repositories
                 // Synchronise la fiche RH liée (si elle existe)
                 await connection.ExecuteAsync(
                     @"UPDATE personnel SET Nom=@Nom, Prenom=@Prenom, Telephone=@Telephone, Email=@Email
-                      WHERE ID_CHAUFFEUR=@Id",
+                      WHERE ID_chauffeur=@Id",
                     new
                     {
                         Id = chauffeur.Id_Chauffeur,

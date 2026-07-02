@@ -1,4 +1,4 @@
-using Dapper;
+﻿using Dapper;
 using Microsoft.Extensions.Configuration;
 using MySqlConnector;
 using pAgenceAPI.Models;
@@ -11,9 +11,9 @@ namespace pAgenceAPI.Repositories
         private readonly ILogger<AgenceRepository> _logger;
 
         private const string BaseSelectSql =
-            @"SELECT ID_AGENCE AS Id_Agence, NOM_AGENCE AS Nom_Agence, VILLE, ADRESSE,
+            @"SELECT ID_agence AS Id_Agence, NOM_agence AS Nom_Agence, VILLE, ADRESSE,
                      TELEPHONE, DATE_CREATION AS Date_Creation
-              FROM AGENCE";
+              FROM agence";
 
         public AgenceRepository(IConfiguration configuration, ILogger<AgenceRepository> logger)
         {
@@ -27,7 +27,7 @@ namespace pAgenceAPI.Repositories
             try
             {
                 using var connection = new MySqlConnection(_connectionString);
-                return (await connection.QueryAsync<AgenceModel>(BaseSelectSql + " ORDER BY NOM_AGENCE")).ToList();
+                return (await connection.QueryAsync<AgenceModel>(BaseSelectSql + " ORDER BY NOM_agence")).ToList();
             }
             catch (Exception ex)
             {
@@ -44,10 +44,10 @@ namespace pAgenceAPI.Repositories
                 var pattern = $"%{motCle.Trim()}%";
                 return (await connection.QueryAsync<AgenceModel>(
                     BaseSelectSql + @"
-                      WHERE NOM_AGENCE LIKE @Pattern
+                      WHERE NOM_agence LIKE @Pattern
                          OR VILLE LIKE @Pattern
                          OR ADRESSE LIKE @Pattern
-                      ORDER BY NOM_AGENCE",
+                      ORDER BY NOM_agence",
                     new { Pattern = pattern }
                 )).ToList();
             }
@@ -64,7 +64,7 @@ namespace pAgenceAPI.Repositories
             {
                 using var connection = new MySqlConnection(_connectionString);
                 return await connection.QueryFirstOrDefaultAsync<AgenceModel>(
-                    BaseSelectSql + " WHERE ID_AGENCE = @Id",
+                    BaseSelectSql + " WHERE ID_agence = @Id",
                     new { Id = id });
             }
             catch (Exception ex)
@@ -80,7 +80,7 @@ namespace pAgenceAPI.Repositories
             {
                 using var connection = new MySqlConnection(_connectionString);
                 await connection.ExecuteAsync(
-                    @"INSERT INTO AGENCE (NOM_AGENCE, VILLE, ADRESSE, TELEPHONE, DATE_CREATION)
+                    @"INSERT INTO agence (NOM_agence, VILLE, ADRESSE, TELEPHONE, DATE_CREATION)
                       VALUES (@Nom_Agence, @Ville, @Adresse, @Telephone, @Date_Creation)",
                     new
                     {
@@ -105,10 +105,10 @@ namespace pAgenceAPI.Repositories
             {
                 using var connection = new MySqlConnection(_connectionString);
                 await connection.ExecuteAsync(
-                    @"UPDATE AGENCE
-                      SET NOM_AGENCE = @Nom_Agence, VILLE = @Ville, ADRESSE = @Adresse,
+                    @"UPDATE agence
+                      SET NOM_agence = @Nom_Agence, VILLE = @Ville, ADRESSE = @Adresse,
                           TELEPHONE = @Telephone, DATE_CREATION = @Date_Creation
-                      WHERE ID_AGENCE = @Id_Agence",
+                      WHERE ID_agence = @Id_Agence",
                     new
                     {
                         agence.Id_Agence,
@@ -133,7 +133,7 @@ namespace pAgenceAPI.Repositories
             {
                 using var connection = new MySqlConnection(_connectionString);
                 await connection.ExecuteAsync(
-                    "DELETE FROM AGENCE WHERE ID_AGENCE = @Id",
+                    "DELETE FROM agence WHERE ID_agence = @Id",
                     new { Id = id });
                 return "Agence supprimée avec succès !";
             }

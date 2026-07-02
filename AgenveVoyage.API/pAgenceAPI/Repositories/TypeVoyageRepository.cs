@@ -1,4 +1,4 @@
-using Dapper;
+﻿using Dapper;
 using Microsoft.Extensions.Configuration;
 using MySqlConnector;
 using pAgenceAPI.Models;
@@ -24,7 +24,7 @@ namespace pAgenceAPI.Repositories
                 using var connection = new MySqlConnection(_connectionString);
                 var where = idAgence.HasValue ? " WHERE Id_Agence = @IdAgence" : "";
                 return (await connection.QueryAsync<TypeVoyageModel>(
-                    "SELECT * FROM TYPE_VOYAGE" + where + " ORDER BY LIBELLE_TYPE_VOYAGE",
+                    "SELECT * FROM type_voyage" + where + " ORDER BY LIBELLE_type_voyage",
                     new { IdAgence = idAgence }
                 )).ToList();
             }
@@ -43,9 +43,9 @@ namespace pAgenceAPI.Repositories
                 var pattern = $"%{motCle.Trim()}%";
                 var where = idAgence.HasValue ? " AND Id_Agence = @IdAgence" : "";
                 return (await connection.QueryAsync<TypeVoyageModel>(
-                    @"SELECT * FROM TYPE_VOYAGE
-                      WHERE LIBELLE_TYPE_VOYAGE LIKE @Pattern" + where + @"
-                      ORDER BY LIBELLE_TYPE_VOYAGE",
+                    @"SELECT * FROM type_voyage
+                      WHERE LIBELLE_type_voyage LIKE @Pattern" + where + @"
+                      ORDER BY LIBELLE_type_voyage",
                     new { Pattern = pattern, IdAgence = idAgence }
                 )).ToList();
             }
@@ -62,7 +62,7 @@ namespace pAgenceAPI.Repositories
             {
                 using var connection = new MySqlConnection(_connectionString);
                 return await connection.QueryFirstOrDefaultAsync<TypeVoyageModel>(
-                    "SELECT * FROM TYPE_VOYAGE WHERE ID_TYPE_VOYAGE = @Id",
+                    "SELECT * FROM type_voyage WHERE ID_type_voyage = @Id",
                     new { Id = id }
                 );
             }
@@ -79,7 +79,7 @@ namespace pAgenceAPI.Repositories
             {
                 using var connection = new MySqlConnection(_connectionString);
                 await connection.ExecuteAsync(
-                    @"INSERT INTO TYPE_VOYAGE (LIBELLE_TYPE_VOYAGE, POINT_DEPART, POINT_ARRIVEE, PRIX, Id_Agence)
+                    @"INSERT INTO type_voyage (LIBELLE_type_voyage, POINT_DEPART, POINT_ARRIVEE, PRIX, Id_Agence)
                       VALUES (@Libelle, @Depart, @Arrivee, @Prix, @IdAgence)",
                     new { Libelle = type.Libelle_Type_Voyage, Depart = type.Point_Depart, Arrivee = type.Point_Arrivee, Prix = type.Prix, IdAgence = type.Id_Agence }
                 );
@@ -98,9 +98,9 @@ namespace pAgenceAPI.Repositories
             {
                 using var connection = new MySqlConnection(_connectionString);
                 await connection.ExecuteAsync(
-                    @"UPDATE TYPE_VOYAGE
-                      SET LIBELLE_TYPE_VOYAGE = @Libelle, POINT_DEPART = @Depart, POINT_ARRIVEE = @Arrivee, PRIX = @Prix
-                      WHERE ID_TYPE_VOYAGE = @Id",
+                    @"UPDATE type_voyage
+                      SET LIBELLE_type_voyage = @Libelle, POINT_DEPART = @Depart, POINT_ARRIVEE = @Arrivee, PRIX = @Prix
+                      WHERE ID_type_voyage = @Id",
                     new { Id = type.Id_Type_Voyage, Libelle = type.Libelle_Type_Voyage, Depart = type.Point_Depart, Arrivee = type.Point_Arrivee, Prix = type.Prix }
                 );
                 return "Type de voyage modifié avec succès !";
@@ -118,7 +118,7 @@ namespace pAgenceAPI.Repositories
             {
                 using var connection = new MySqlConnection(_connectionString);
                 await connection.ExecuteAsync(
-                    "DELETE FROM TYPE_VOYAGE WHERE ID_TYPE_VOYAGE = @Id",
+                    "DELETE FROM type_voyage WHERE ID_type_voyage = @Id",
                     new { Id = id }
                 );
                 return "Type de voyage supprimé avec succès !";

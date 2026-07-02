@@ -16,7 +16,7 @@ public class HistoriqueConnexionRepository : IHistoriqueConnexionRepository
         return await c.QueryAsync<HistoriqueConnexionModel>(@"
             SELECT ID_CONNEXION AS Id_Connexion, Id_Utilisateur AS Id_Utilisateur, Login_Tente,
                    Nom_Agent, Statut, Motif_Echec, IP_Address, User_Agent, Date_Connexion
-            FROM HISTORIQUE_CONNEXION
+            FROM historique_connexion
             ORDER BY Date_Connexion DESC
             LIMIT @PageSize OFFSET @Offset",
             new { PageSize = pageSize, Offset = (page - 1) * pageSize });
@@ -28,7 +28,7 @@ public class HistoriqueConnexionRepository : IHistoriqueConnexionRepository
         return await c.QueryAsync<HistoriqueConnexionModel>(@"
             SELECT ID_CONNEXION AS Id_Connexion, Id_Utilisateur AS Id_Utilisateur, Login_Tente,
                    Nom_Agent, Statut, Motif_Echec, IP_Address, User_Agent, Date_Connexion
-            FROM HISTORIQUE_CONNEXION
+            FROM historique_connexion
             WHERE Statut = 'Échec'
               AND Date_Connexion >= DATE_SUB(NOW(), INTERVAL @Minutes MINUTE)
             ORDER BY Date_Connexion DESC",
@@ -39,7 +39,7 @@ public class HistoriqueConnexionRepository : IHistoriqueConnexionRepository
     {
         using var c = new MySqlConnection(_cs);
         await c.ExecuteAsync(@"
-            INSERT INTO HISTORIQUE_CONNEXION
+            INSERT INTO historique_connexion
                 (Id_Utilisateur, Login_Tente, Nom_Agent, Statut, Motif_Echec, IP_Address, User_Agent)
             VALUES
                 (@Id_Utilisateur, @Login_Tente, @Nom_Agent, @Statut, @Motif_Echec, @IP_Address, @User_Agent)",

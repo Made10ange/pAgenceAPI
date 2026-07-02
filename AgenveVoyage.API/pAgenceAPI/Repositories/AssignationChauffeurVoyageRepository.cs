@@ -19,7 +19,7 @@ namespace pAgenceAPI.Repositories
             using (var connection = new MySqlConnection(_connectionString))
             {
                 return (await connection.QueryAsync<AssignationChauffeurVoyageModel>(
-                    "SELECT * FROM ASSIGNATION_CHAUFFEUR_VOYAGE ORDER BY ID_VOYAGE, ORDRE_CONDUITE"
+                    "SELECT * FROM assignation_chauffeur_voyage ORDER BY ID_voyage, ORDRE_CONDUITE"
                 )).ToList();
             }
         }
@@ -29,7 +29,7 @@ namespace pAgenceAPI.Repositories
             using (var connection = new MySqlConnection(_connectionString))
             {
                 return await connection.QueryFirstOrDefaultAsync<AssignationChauffeurVoyageModel>(
-                    "SELECT * FROM ASSIGNATION_CHAUFFEUR_VOYAGE WHERE ID_ASSIGNATION = @Id",
+                    "SELECT * FROM assignation_chauffeur_voyage WHERE ID_ASSIGNATION = @Id",
                     new { Id = id }
                 );
             }
@@ -40,7 +40,7 @@ namespace pAgenceAPI.Repositories
             using (var connection = new MySqlConnection(_connectionString))
             {
                 await connection.ExecuteAsync(
-                    @"INSERT INTO ASSIGNATION_CHAUFFEUR_VOYAGE (ID_CHAUFFEUR, ID_VOYAGE, 
+                    @"INSERT INTO assignation_chauffeur_voyage (ID_chauffeur, ID_voyage, 
                                                                   POINT_DEPART_TRONCON, POINT_ARRIVEE_TRONCON, 
                                                                   HEURE_DEBUT, HEURE_FIN, ORDRE_CONDUITE)
                       VALUES (@Id_Chauffeur, @Id_Voyage, 
@@ -66,8 +66,8 @@ namespace pAgenceAPI.Repositories
             using (var connection = new MySqlConnection(_connectionString))
             {
                 await connection.ExecuteAsync(
-                    @"UPDATE ASSIGNATION_CHAUFFEUR_VOYAGE 
-                      SET ID_CHAUFFEUR = @Id_Chauffeur, ID_VOYAGE = @Id_Voyage, 
+                    @"UPDATE assignation_chauffeur_voyage 
+                      SET ID_chauffeur = @Id_Chauffeur, ID_voyage = @Id_Voyage, 
                           POINT_DEPART_TRONCON = @Point_Depart_Troncon, POINT_ARRIVEE_TRONCON = @Point_Arrivee_Troncon, 
                           HEURE_DEBUT = @Heure_Debut, HEURE_FIN = @Heure_Fin, ORDRE_CONDUITE = @Ordre_Conduite
                       WHERE ID_ASSIGNATION = @Id",
@@ -92,7 +92,7 @@ namespace pAgenceAPI.Repositories
             using (var connection = new MySqlConnection(_connectionString))
             {
                 await connection.ExecuteAsync(
-                    "DELETE FROM ASSIGNATION_CHAUFFEUR_VOYAGE WHERE ID_ASSIGNATION = @Id",
+                    "DELETE FROM assignation_chauffeur_voyage WHERE ID_ASSIGNATION = @Id",
                     new { Id = id }
                 );
                 return "Assignation chauffeur-voyage supprimée avec succès !";

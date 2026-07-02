@@ -1,4 +1,4 @@
-using Dapper;
+﻿using Dapper;
 using MySqlConnector;
 using pAgenceAPI.Models;
 
@@ -11,10 +11,10 @@ namespace pAgenceAPI.Repositories
 
         private const string BaseSelect = @"
             SELECT
-                r.ID_RESERVATION    as Id_Reservation,
+                r.ID_reservation    as Id_Reservation,
                 r.REFERENCE         as Reference,
-                r.ID_VOYAGE         as Id_Voyage,
-                r.ID_PASSAGER       as Id_Passager,
+                r.ID_voyage         as Id_Voyage,
+                r.ID_passager       as Id_Passager,
                 r.NOM_CLIENT        as Nom_Client,
                 r.PRENOM_CLIENT     as Prenom_Client,
                 r.TELEPHONE_CLIENT  as Telephone_Client,
@@ -22,11 +22,11 @@ namespace pAgenceAPI.Repositories
                 r.EMAIL_CLIENT      as Email_Client,
                 r.NUMERO_SIEGE      as Numero_Siege,
                 r.MONTANT           as Montant,
-                r.STATUT_PAIEMENT   as Statut_Paiement,
-                r.PROVIDER_PAIEMENT as Provider_Paiement,
-                r.REFERENCE_PAIEMENT as Reference_Paiement,
-                r.DATE_PAIEMENT     as Date_Paiement,
-                r.STATUT_RESERVATION as Statut_Reservation,
+                r.STATUT_paiement   as Statut_Paiement,
+                r.PROVIDER_paiement as Provider_Paiement,
+                r.REFERENCE_paiement as Reference_Paiement,
+                r.DATE_paiement     as Date_Paiement,
+                r.STATUT_reservation as Statut_Reservation,
                 r.VALIDEE_PAR       as Validee_Par,
                 r.DATE_VALIDATION   as Date_Validation,
                 r.DATE_CREATION     as Date_Creation,
@@ -35,10 +35,10 @@ namespace pAgenceAPI.Repositories
                 v.DATE_DEPART       as Date_Depart,
                 v.HEURE_DEPART      as Heure_Depart,
                 vh.IMMATRICULATION  as Immatriculation
-            FROM RESERVATION r
-            LEFT JOIN VOYAGE v       ON r.ID_VOYAGE        = v.ID_VOYAGE
-            LEFT JOIN TYPE_VOYAGE tv ON v.ID_TYPE_VOYAGE   = tv.ID_TYPE_VOYAGE
-            LEFT JOIN VEHICULE vh    ON v.ID_VEHICULE      = vh.ID_VEHICULE";
+            FROM reservation r
+            LEFT JOIN voyage v       ON r.ID_voyage        = v.ID_voyage
+            LEFT JOIN type_voyage tv ON v.ID_type_voyage   = tv.ID_type_voyage
+            LEFT JOIN vehicule vh    ON v.ID_vehicule      = vh.ID_vehicule";
 
         public ReservationRepository(IConfiguration configuration, ILogger<ReservationRepository> logger)
         {
@@ -74,7 +74,7 @@ namespace pAgenceAPI.Repositories
         {
             using var conn = new MySqlConnection(_connectionString);
             return await conn.QueryFirstOrDefaultAsync<ReservationModel>(
-                BaseSelect + " WHERE r.ID_RESERVATION = @Id", new { Id = id });
+                BaseSelect + " WHERE r.ID_reservation = @Id", new { Id = id });
         }
 
         public async Task<ReservationModel?> GetByReferenceAsync(string reference)
@@ -88,7 +88,7 @@ namespace pAgenceAPI.Repositories
         {
             using var conn = new MySqlConnection(_connectionString);
             var result = await conn.QueryAsync<ReservationModel>(
-                BaseSelect + " WHERE r.ID_VOYAGE = @Id ORDER BY r.NUMERO_SIEGE",
+                BaseSelect + " WHERE r.ID_voyage = @Id ORDER BY r.NUMERO_SIEGE",
                 new { Id = idVoyage });
             return result.ToList();
         }
@@ -104,7 +104,7 @@ namespace pAgenceAPI.Repositories
 
             // S'assurer que la référence est unique
             while (await conn.ExecuteScalarAsync<int>(
-                "SELECT COUNT(*) FROM RESERVATION WHERE REFERENCE = @Ref",
+                "SELECT COUNT(*) FROM reservation WHERE REFERENCE = @Ref",
                 new { Ref = r.Reference }) > 0)
             {
                 rand = new Random().Next(1000, 9999);
@@ -112,10 +112,10 @@ namespace pAgenceAPI.Repositories
             }
 
             var sql = @"
-                INSERT INTO RESERVATION
-                    (REFERENCE, ID_VOYAGE, ID_PASSAGER, NOM_CLIENT, PRENOM_CLIENT,
+                INSERT INTO reservation
+                    (REFERENCE, ID_voyage, ID_passager, NOM_CLIENT, PRENOM_CLIENT,
                      TELEPHONE_CLIENT, NUMERO_CNI_CLIENT, EMAIL_CLIENT, NUMERO_SIEGE, MONTANT,
-                     STATUT_PAIEMENT, STATUT_RESERVATION)
+                     STATUT_paiement, STATUT_reservation)
                 VALUES
                     (@Reference, @Id_Voyage, @Id_Passager, @Nom_Client, @Prenom_Client,
                      @Telephone_Client, @Numero_Cni_Client, @Email_Client, @Numero_Siege, @Montant,
@@ -132,13 +132,13 @@ namespace pAgenceAPI.Repositories
             var statutRes = statutPaiement == "Payé" ? "Confirmée" : "En attente";
 
             var rows = await conn.ExecuteAsync(@"
-                UPDATE RESERVATION SET
-                    STATUT_PAIEMENT    = @StatutP,
-                    REFERENCE_PAIEMENT = @RefP,
-                    PROVIDER_PAIEMENT  = @Provider,
-                    DATE_PAIEMENT      = @DateP,
-                    STATUT_RESERVATION = @StatutR
-                WHERE ID_RESERVATION = @Id",
+                UPDATE reservation SET
+                    STATUT_paiement    = @StatutP,
+                    REFERENCE_paiement = @RefP,
+                    PROVIDER_paiement  = @Provider,
+                    DATE_paiement      = @DateP,
+                    STATUT_reservation = @StatutR
+                WHERE ID_reservation = @Id",
                 new { StatutP = statutPaiement, RefP = referencePaiement, Provider = provider,
                       DateP = datePaiement, StatutR = statutRes, Id = id });
             return rows > 0;
@@ -148,7 +148,7 @@ namespace pAgenceAPI.Repositories
         {
             using var conn = new MySqlConnection(_connectionString);
             var rows = await conn.ExecuteAsync(
-                "UPDATE RESERVATION SET ID_PASSAGER = @IdPassager WHERE ID_RESERVATION = @Id",
+                "UPDATE reservation SET ID_passager = @IdPassager WHERE ID_reservation = @Id",
                 new { IdPassager = idPassager, Id = id });
             return rows > 0;
         }
@@ -157,7 +157,7 @@ namespace pAgenceAPI.Repositories
         {
             using var conn = new MySqlConnection(_connectionString);
             var rows = await conn.ExecuteAsync(
-                "UPDATE RESERVATION SET STATUT_RESERVATION = @Statut WHERE ID_RESERVATION = @Id",
+                "UPDATE reservation SET STATUT_reservation = @Statut WHERE ID_reservation = @Id",
                 new { Statut = statut, Id = id });
             return rows > 0;
         }
@@ -166,11 +166,11 @@ namespace pAgenceAPI.Repositories
         {
             using var conn = new MySqlConnection(_connectionString);
             var rows = await conn.ExecuteAsync(@"
-                UPDATE RESERVATION SET
-                    STATUT_RESERVATION = 'Utilisée',
+                UPDATE reservation SET
+                    STATUT_reservation = 'Utilisée',
                     VALIDEE_PAR        = @ValideePar,
                     DATE_VALIDATION    = @Now
-                WHERE ID_RESERVATION = @Id AND STATUT_RESERVATION = 'Confirmée'",
+                WHERE ID_reservation = @Id AND STATUT_reservation = 'Confirmée'",
                 new { ValideePar = valideePar, Now = DateTime.Now, Id = id });
             return rows > 0;
         }
@@ -179,7 +179,7 @@ namespace pAgenceAPI.Repositories
         {
             using var conn = new MySqlConnection(_connectionString);
             var rows = await conn.ExecuteAsync(
-                "DELETE FROM RESERVATION WHERE ID_RESERVATION = @Id", new { Id = id });
+                "DELETE FROM reservation WHERE ID_reservation = @Id", new { Id = id });
             return rows > 0;
         }
 
@@ -187,11 +187,11 @@ namespace pAgenceAPI.Repositories
         {
             using var conn = new MySqlConnection(_connectionString);
             var count = await conn.ExecuteScalarAsync<int>(@"
-                SELECT COUNT(*) FROM RESERVATION
-                WHERE ID_VOYAGE = @IdVoyage
+                SELECT COUNT(*) FROM reservation
+                WHERE ID_voyage = @IdVoyage
                   AND NUMERO_SIEGE = @Siege
-                  AND STATUT_RESERVATION NOT IN ('Annulée')
-                  AND (@ExcludeId IS NULL OR ID_RESERVATION <> @ExcludeId)",
+                  AND STATUT_reservation NOT IN ('Annulée')
+                  AND (@ExcludeId IS NULL OR ID_reservation <> @ExcludeId)",
                 new { IdVoyage = idVoyage, Siege = numeroSiege, ExcludeId = excludeId });
             return count == 0;
         }
@@ -200,8 +200,8 @@ namespace pAgenceAPI.Repositories
         {
             using var conn = new MySqlConnection(_connectionString);
             await conn.ExecuteAsync(@"
-                INSERT INTO PAIEMENT_LOG
-                    (ID_RESERVATION, EVENEMENT, MONTANT, REFERENCE_EXTERNE, PAYLOAD_BRUT)
+                INSERT INTO paiement_log
+                    (ID_reservation, EVENEMENT, MONTANT, REFERENCE_EXTERNE, PAYLOAD_BRUT)
                 VALUES
                     (@Id_Reservation, @Evenement, @Montant, @Reference_Externe, @Payload_Brut)",
                 log);

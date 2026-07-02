@@ -1,4 +1,4 @@
-using Dapper;
+﻿using Dapper;
 using Microsoft.Extensions.Configuration;
 using MySqlConnector;
 using pAgenceAPI.Models;
@@ -20,10 +20,10 @@ namespace pAgenceAPI.Repositories
         private const string BaseSelect = @"
             SELECT tv.ID_TYPE AS Id_Type, tv.LIBELLE_TYPE AS Libelle_Type,
                    tv.MARQUE AS Marque, tv.NOMBRE_PLACE AS Nombre_Place,
-                   tv.ID_TYPE_VOYAGE AS Id_Type_Voyage, tv.Id_Agence AS Id_Agence,
-                   ty.LIBELLE_TYPE_VOYAGE AS Libelle_Type_Voyage
-            FROM TYPE_VEHICULE tv
-            LEFT JOIN TYPE_VOYAGE ty ON ty.ID_TYPE_VOYAGE = tv.ID_TYPE_VOYAGE ";
+                   tv.ID_type_voyage AS Id_Type_Voyage, tv.Id_Agence AS Id_Agence,
+                   ty.LIBELLE_type_voyage AS Libelle_Type_Voyage
+            FROM type_vehicule tv
+            LEFT JOIN type_voyage ty ON ty.ID_type_voyage = tv.ID_type_voyage ";
 
         public async Task<List<TypeVehiculeModel>> GetAllAsync(int? idAgence = null)
         {
@@ -85,7 +85,7 @@ namespace pAgenceAPI.Repositories
             {
                 using var connection = new MySqlConnection(_connectionString);
                 await connection.ExecuteAsync(
-                    @"INSERT INTO TYPE_VEHICULE (LIBELLE_TYPE, MARQUE, NOMBRE_PLACE, ID_TYPE_VOYAGE, Id_Agence)
+                    @"INSERT INTO type_vehicule (LIBELLE_TYPE, MARQUE, NOMBRE_PLACE, ID_type_voyage, Id_Agence)
                       VALUES (@Libelle, @Marque, @Places, @IdTypeVoyage, @IdAgence)",
                     new { Libelle = type.Libelle_Type, Marque = type.Marque,
                           Places = type.Nombre_Place, IdTypeVoyage = type.Id_Type_Voyage, IdAgence = type.Id_Agence }
@@ -105,9 +105,9 @@ namespace pAgenceAPI.Repositories
             {
                 using var connection = new MySqlConnection(_connectionString);
                 await connection.ExecuteAsync(
-                    @"UPDATE TYPE_VEHICULE
+                    @"UPDATE type_vehicule
                       SET LIBELLE_TYPE = @Libelle, MARQUE = @Marque,
-                          NOMBRE_PLACE = @Places, ID_TYPE_VOYAGE = @IdTypeVoyage
+                          NOMBRE_PLACE = @Places, ID_type_voyage = @IdTypeVoyage
                       WHERE ID_TYPE = @Id",
                     new { Id = type.Id_Type, Libelle = type.Libelle_Type, Marque = type.Marque,
                           Places = type.Nombre_Place, IdTypeVoyage = type.Id_Type_Voyage }
@@ -127,7 +127,7 @@ namespace pAgenceAPI.Repositories
             {
                 using var connection = new MySqlConnection(_connectionString);
                 await connection.ExecuteAsync(
-                    "DELETE FROM TYPE_VEHICULE WHERE ID_TYPE = @Id",
+                    "DELETE FROM type_vehicule WHERE ID_TYPE = @Id",
                     new { Id = id }
                 );
                 return "Type de véhicule supprimé avec succès !";

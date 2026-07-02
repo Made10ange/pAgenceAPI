@@ -20,9 +20,9 @@ public class UtilisateurRepository : IUtilisateurRepository
     {
         using var connection = new MySqlConnection(_connectionString);
         var sql = @"
-            SELECT a.*, ag.NOM_AGENCE AS Nom_Agence, ag.VILLE AS Ville_Agence
-            FROM UTILISATEUR a
-            LEFT JOIN AGENCE ag ON ag.ID_AGENCE = a.Id_Agence
+            SELECT a.*, ag.NOM_agence AS Nom_Agence, ag.VILLE AS Ville_Agence
+            FROM utilisateur a
+            LEFT JOIN agence ag ON ag.ID_agence = a.Id_Agence
             WHERE a.Login = @Login AND a.Actif = 1
               AND (@IdAgence IS NULL OR a.Id_Agence = @IdAgence)";
         return await connection.QueryFirstOrDefaultAsync<UtilisateurModel>(sql,
@@ -32,7 +32,7 @@ public class UtilisateurRepository : IUtilisateurRepository
     public async Task<bool> ExisteAsync()
     {
         using var connection = new MySqlConnection(_connectionString);
-        var count = await connection.ExecuteScalarAsync<int>("SELECT COUNT(*) FROM UTILISATEUR");
+        var count = await connection.ExecuteScalarAsync<int>("SELECT COUNT(*) FROM utilisateur");
         return count > 0;
     }
 
@@ -41,7 +41,7 @@ public class UtilisateurRepository : IUtilisateurRepository
         var hash = BCrypt.Net.BCrypt.HashPassword("Admin@2025");
         using var connection = new MySqlConnection(_connectionString);
         await connection.ExecuteAsync(
-            @"INSERT INTO UTILISATEUR (Nom, Prenom, Login, MotDePasse, Role)
+            @"INSERT INTO utilisateur (Nom, Prenom, Login, MotDePasse, Role)
               VALUES ('Administrateur', 'Système', 'admin', @Hash, 'Admin')",
             new { Hash = hash });
     }
@@ -51,9 +51,9 @@ public class UtilisateurRepository : IUtilisateurRepository
         using var connection = new MySqlConnection(_connectionString);
         return await connection.QueryAsync<UtilisateurModel>(@"
             SELECT a.Id_Utilisateur, a.Nom, a.Prenom, a.Login, a.Role, a.Actif, a.Date_Creation,
-                   a.Id_Agence, ag.NOM_AGENCE AS Nom_Agence, ag.VILLE AS Ville_Agence
-            FROM UTILISATEUR a
-            LEFT JOIN AGENCE ag ON ag.ID_AGENCE = a.Id_Agence
+                   a.Id_Agence, ag.NOM_agence AS Nom_Agence, ag.VILLE AS Ville_Agence
+            FROM utilisateur a
+            LEFT JOIN agence ag ON ag.ID_agence = a.Id_Agence
             ORDER BY a.Nom, a.Prenom");
     }
 
@@ -62,9 +62,9 @@ public class UtilisateurRepository : IUtilisateurRepository
         using var connection = new MySqlConnection(_connectionString);
         return await connection.QueryFirstOrDefaultAsync<UtilisateurModel>(@"
             SELECT a.Id_Utilisateur, a.Nom, a.Prenom, a.Login, a.Role, a.Actif, a.Date_Creation,
-                   a.Id_Agence, ag.NOM_AGENCE AS Nom_Agence, ag.VILLE AS Ville_Agence
-            FROM UTILISATEUR a
-            LEFT JOIN AGENCE ag ON ag.ID_AGENCE = a.Id_Agence
+                   a.Id_Agence, ag.NOM_agence AS Nom_Agence, ag.VILLE AS Ville_Agence
+            FROM utilisateur a
+            LEFT JOIN agence ag ON ag.ID_agence = a.Id_Agence
             WHERE a.Id_Utilisateur = @Id", new { Id = id });
     }
 
@@ -73,7 +73,7 @@ public class UtilisateurRepository : IUtilisateurRepository
         var hash = BCrypt.Net.BCrypt.HashPassword(agent.MotDePasse);
         using var connection = new MySqlConnection(_connectionString);
         var id = await connection.ExecuteScalarAsync<int>(
-            @"INSERT INTO UTILISATEUR (Nom, Prenom, Login, MotDePasse, Role, Actif, Id_Agence)
+            @"INSERT INTO utilisateur (Nom, Prenom, Login, MotDePasse, Role, Actif, Id_Agence)
               VALUES (@Nom, @Prenom, @Login, @Hash, @Role, @Actif, @Id_Agence);
               SELECT LAST_INSERT_ID();",
             new { agent.Nom, agent.Prenom, Login = agent.Login.Trim().ToLower(), Hash = hash, agent.Role, agent.Actif, agent.Id_Agence });
@@ -82,7 +82,7 @@ public class UtilisateurRepository : IUtilisateurRepository
         {
             // Crée automatiquement la fiche RH correspondante (poste "Caissière")
             await connection.ExecuteAsync(
-                @"INSERT INTO personnel (Nom, Prenom, ID_POSTE, Type_Contrat, Salaire_Base, Date_Embauche, Statut, ID_UTILISATEUR)
+                @"INSERT INTO personnel (Nom, Prenom, ID_poste, Type_Contrat, Salaire_Base, Date_Embauche, Statut, ID_utilisateur)
                   VALUES (@Nom, @Prenom, 2, 'CDI', 0, CURDATE(), @Statut, @IdUtilisateur)",
                 new { agent.Nom, agent.Prenom, Statut = agent.Actif ? "Actif" : "Inactif", IdUtilisateur = id });
         }
@@ -94,20 +94,20 @@ public class UtilisateurRepository : IUtilisateurRepository
     {
         using var connection = new MySqlConnection(_connectionString);
         var rows = await connection.ExecuteAsync(
-            "UPDATE UTILISATEUR SET Nom=@Nom, Prenom=@Prenom, Login=@Login, Role=@Role, Actif=@Actif, Id_Agence=@Id_Agence WHERE Id_Utilisateur=@Id",
+            "UPDATE utilisateur SET Nom=@Nom, Prenom=@Prenom, Login=@Login, Role=@Role, Actif=@Actif, Id_Agence=@Id_Agence WHERE Id_Utilisateur=@Id",
             new { agent.Nom, agent.Prenom, Login = agent.Login.Trim().ToLower(), agent.Role, agent.Actif, agent.Id_Agence, Id = agent.Id_Utilisateur });
 
         if (agent.Role == "Caissier")
         {
             // Synchronise la fiche RH liée, ou la crée si elle n'existait pas encore
             var updated = await connection.ExecuteAsync(
-                @"UPDATE personnel SET Nom=@Nom, Prenom=@Prenom, Statut=@Statut WHERE ID_UTILISATEUR=@Id",
+                @"UPDATE personnel SET Nom=@Nom, Prenom=@Prenom, Statut=@Statut WHERE ID_utilisateur=@Id",
                 new { agent.Nom, agent.Prenom, Statut = agent.Actif ? "Actif" : "Inactif", Id = agent.Id_Utilisateur });
 
             if (updated == 0)
             {
                 await connection.ExecuteAsync(
-                    @"INSERT INTO personnel (Nom, Prenom, ID_POSTE, Type_Contrat, Salaire_Base, Date_Embauche, Statut, ID_UTILISATEUR)
+                    @"INSERT INTO personnel (Nom, Prenom, ID_poste, Type_Contrat, Salaire_Base, Date_Embauche, Statut, ID_utilisateur)
                       VALUES (@Nom, @Prenom, 2, 'CDI', 0, CURDATE(), @Statut, @IdUtilisateur)",
                     new { agent.Nom, agent.Prenom, Statut = agent.Actif ? "Actif" : "Inactif", IdUtilisateur = agent.Id_Utilisateur });
             }
@@ -120,7 +120,7 @@ public class UtilisateurRepository : IUtilisateurRepository
     {
         using var connection = new MySqlConnection(_connectionString);
         var rows = await connection.ExecuteAsync(
-            "UPDATE UTILISATEUR SET MotDePasse=@Hash WHERE Id_Utilisateur=@Id",
+            "UPDATE utilisateur SET MotDePasse=@Hash WHERE Id_Utilisateur=@Id",
             new { Hash = hashedPassword, Id = id });
         return rows > 0;
     }
@@ -128,7 +128,7 @@ public class UtilisateurRepository : IUtilisateurRepository
     public async Task<bool> DeleteAsync(int id)
     {
         using var connection = new MySqlConnection(_connectionString);
-        var rows = await connection.ExecuteAsync("DELETE FROM UTILISATEUR WHERE Id_Utilisateur=@Id", new { Id = id });
+        var rows = await connection.ExecuteAsync("DELETE FROM utilisateur WHERE Id_Utilisateur=@Id", new { Id = id });
         return rows > 0;
     }
 }

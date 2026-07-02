@@ -1,4 +1,4 @@
-using Dapper;
+﻿using Dapper;
 using MySqlConnector;
 using pAgenceAPI.Models;
 
@@ -13,8 +13,8 @@ namespace pAgenceAPI.Repositories
             @"SELECT
                 c.ID_COLIS                   AS Id_Colis,
                 c.REFERENCE_COLIS            AS Reference_Colis,
-                c.ID_VOYAGE                  AS Id_Voyage,
-                c.ID_AGENCE                  AS Id_Agence,
+                c.ID_voyage                  AS Id_Voyage,
+                c.ID_agence                  AS Id_Agence,
                 c.NOM_EXPEDITEUR             AS Nom_Expediteur,
                 c.TEL_EXPEDITEUR             AS Tel_Expediteur,
                 c.NOM_DESTINATAIRE           AS Nom_Destinataire,
@@ -25,17 +25,17 @@ namespace pAgenceAPI.Repositories
                 c.POIDS                      AS Poids,
                 c.VALEUR_DECLAREE            AS Valeur_Declaree,
                 c.PRIX_TRANSPORT             AS Prix_Transport,
-                c.MODE_PAIEMENT             AS Mode_Paiement,
+                c.MODE_paiement             AS Mode_Paiement,
                 c.STATUT                     AS Statut,
                 c.DATE_ENVOI                 AS Date_Envoi,
                 c.DATE_LIVRAISON_PREVUE      AS Date_Livraison_Prevue,
                 c.DATE_LIVRAISON_EFFECTIVE   AS Date_Livraison_Effective,
                 CONCAT(COALESCE(tv.POINT_DEPART,''), ' → ', COALESCE(tv.POINT_ARRIVEE,'')) AS Trajet_Voyage,
-                a.NOM_AGENCE AS Nom_Agence
+                a.NOM_agence AS Nom_Agence
               FROM COLIS c
-              LEFT JOIN VOYAGE  v  ON c.ID_VOYAGE  = v.ID_VOYAGE
-              LEFT JOIN TYPE_VOYAGE tv ON v.ID_TYPE_VOYAGE = tv.ID_TYPE_VOYAGE
-              LEFT JOIN AGENCE  a  ON c.ID_AGENCE  = a.ID_AGENCE";
+              LEFT JOIN voyage  v  ON c.ID_voyage  = v.ID_voyage
+              LEFT JOIN type_voyage tv ON v.ID_type_voyage = tv.ID_type_voyage
+              LEFT JOIN agence  a  ON c.ID_agence  = a.ID_agence";
 
         public ColisRepository(IConfiguration configuration, ILogger<ColisRepository> logger)
         {
@@ -50,7 +50,7 @@ namespace pAgenceAPI.Repositories
             {
                 using var connection = new MySqlConnection(_connectionString);
                 var sql = idAgence.HasValue
-                    ? BaseSelectSql + " WHERE c.ID_AGENCE = @IdAgence ORDER BY c.DATE_ENVOI DESC"
+                    ? BaseSelectSql + " WHERE c.ID_agence = @IdAgence ORDER BY c.DATE_ENVOI DESC"
                     : BaseSelectSql + " ORDER BY c.DATE_ENVOI DESC";
                 return (await connection.QueryAsync<ColisModel>(sql, new { IdAgence = idAgence })).ToList();
             }
@@ -85,7 +85,7 @@ namespace pAgenceAPI.Repositories
             {
                 using var connection = new MySqlConnection(_connectionString);
                 return (await connection.QueryAsync<ColisModel>(
-                    BaseSelectSql + " WHERE c.ID_VOYAGE = @Id ORDER BY c.DATE_ENVOI DESC",
+                    BaseSelectSql + " WHERE c.ID_voyage = @Id ORDER BY c.DATE_ENVOI DESC",
                     new { Id = idVoyage }
                 )).ToList();
             }
@@ -150,9 +150,9 @@ namespace pAgenceAPI.Repositories
 
                 var newId = await connection.ExecuteScalarAsync<int>(
                     @"INSERT INTO COLIS
-                      (REFERENCE_COLIS, ID_VOYAGE, ID_AGENCE, NOM_EXPEDITEUR, TEL_EXPEDITEUR,
+                      (REFERENCE_COLIS, ID_voyage, ID_agence, NOM_EXPEDITEUR, TEL_EXPEDITEUR,
                        NOM_DESTINATAIRE, TEL_DESTINATAIRE, VILLE_DEPART, VILLE_ARRIVEE,
-                       DESCRIPTION, POIDS, VALEUR_DECLAREE, PRIX_TRANSPORT, MODE_PAIEMENT, STATUT,
+                       DESCRIPTION, POIDS, VALEUR_DECLAREE, PRIX_TRANSPORT, MODE_paiement, STATUT,
                        DATE_ENVOI, DATE_LIVRAISON_PREVUE, DATE_LIVRAISON_EFFECTIVE)
                       VALUES
                       (@Reference_Colis, @Id_Voyage, @Id_Agence, @Nom_Expediteur, @Tel_Expediteur,
@@ -185,8 +185,8 @@ namespace pAgenceAPI.Repositories
                 using var connection = new MySqlConnection(_connectionString);
                 await connection.ExecuteAsync(
                     @"UPDATE COLIS SET
-                        ID_VOYAGE                 = @Id_Voyage,
-                        ID_AGENCE                 = @Id_Agence,
+                        ID_voyage                 = @Id_Voyage,
+                        ID_agence                 = @Id_Agence,
                         NOM_EXPEDITEUR            = @Nom_Expediteur,
                         TEL_EXPEDITEUR            = @Tel_Expediteur,
                         NOM_DESTINATAIRE          = @Nom_Destinataire,
@@ -237,7 +237,7 @@ namespace pAgenceAPI.Repositories
                 using var connection = new MySqlConnection(_connectionString);
                 var extra = nouveauStatut == "Livré" ? ", DATE_LIVRAISON_EFFECTIVE = CURDATE()" : "";
                 return await connection.ExecuteAsync(
-                    $"UPDATE COLIS SET STATUT = @NouveauStatut{extra} WHERE ID_VOYAGE = @IdVoyage AND STATUT = @StatutActuel",
+                    $"UPDATE COLIS SET STATUT = @NouveauStatut{extra} WHERE ID_voyage = @IdVoyage AND STATUT = @StatutActuel",
                     new { IdVoyage = idVoyage, StatutActuel = statutActuel, NouveauStatut = nouveauStatut });
             }
             catch (Exception ex) { _logger.LogError(ex, "Erreur UpdateStatutByVoyageAsync voyage id={Id}", idVoyage); throw; }
@@ -249,7 +249,7 @@ namespace pAgenceAPI.Repositories
             {
                 using var connection = new MySqlConnection(_connectionString);
                 await connection.ExecuteAsync(
-                    "UPDATE COLIS SET STATUT = 'Livré', DATE_LIVRAISON_EFFECTIVE = CURDATE() WHERE ID_VOYAGE = @IdVoyage AND STATUT NOT IN ('Livré','Retourné','Annulé')",
+                    "UPDATE COLIS SET STATUT = 'Livré', DATE_LIVRAISON_EFFECTIVE = CURDATE() WHERE ID_voyage = @IdVoyage AND STATUT NOT IN ('Livré','Retourné','Annulé')",
                     new { IdVoyage = idVoyage });
             }
             catch (Exception ex) { _logger.LogError(ex, "Erreur LivrerParVoyageAsync voyage id={Id}", idVoyage); throw; }

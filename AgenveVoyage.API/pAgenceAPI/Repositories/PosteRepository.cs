@@ -1,4 +1,4 @@
-using Dapper;
+﻿using Dapper;
 using MySqlConnector;
 using pAgenceAPI.Models;
 
@@ -17,21 +17,21 @@ public class PosteRepository : IPosteRepository
     public async Task<IEnumerable<PosteModel>> GetAllAsync()
     {
         using var connection = new MySqlConnection(_connectionString);
-        return await connection.QueryAsync<PosteModel>("SELECT * FROM POSTE ORDER BY Libelle");
+        return await connection.QueryAsync<PosteModel>("SELECT * FROM poste ORDER BY Libelle");
     }
 
     public async Task<PosteModel?> GetByIdAsync(int id)
     {
         using var connection = new MySqlConnection(_connectionString);
         return await connection.QueryFirstOrDefaultAsync<PosteModel>(
-            "SELECT * FROM POSTE WHERE ID_POSTE = @Id", new { Id = id });
+            "SELECT * FROM poste WHERE ID_poste = @Id", new { Id = id });
     }
 
     public async Task<int> AddAsync(PosteModel poste)
     {
         using var connection = new MySqlConnection(_connectionString);
         return await connection.ExecuteScalarAsync<int>(
-            "INSERT INTO POSTE (Libelle, Description) VALUES (@Libelle, @Description); SELECT LAST_INSERT_ID();",
+            "INSERT INTO poste (Libelle, Description) VALUES (@Libelle, @Description); SELECT LAST_INSERT_ID();",
             new { poste.Libelle, poste.Description });
     }
 
@@ -39,15 +39,15 @@ public class PosteRepository : IPosteRepository
     {
         using var connection = new MySqlConnection(_connectionString);
         var rows = await connection.ExecuteAsync(
-            "UPDATE POSTE SET Libelle=@Libelle, Description=@Description WHERE ID_POSTE=@ID_POSTE",
-            new { poste.Libelle, poste.Description, poste.ID_POSTE });
+            "UPDATE poste SET Libelle=@Libelle, Description=@Description WHERE ID_poste=@ID_poste",
+            new { poste.Libelle, poste.Description, poste.ID_poste });
         return rows > 0;
     }
 
     public async Task<bool> DeleteAsync(int id)
     {
         using var connection = new MySqlConnection(_connectionString);
-        var rows = await connection.ExecuteAsync("DELETE FROM POSTE WHERE ID_POSTE=@Id", new { Id = id });
+        var rows = await connection.ExecuteAsync("DELETE FROM poste WHERE ID_poste=@Id", new { Id = id });
         return rows > 0;
     }
 }

@@ -14,29 +14,29 @@ public class GroupeRepository : IGroupeRepository
     {
         using var c = new MySqlConnection(_cs);
         return await c.QueryAsync<GroupeModel>(@"
-            SELECT g.ID_GROUPE AS Id_Groupe, g.Libelle, g.Description, g.Couleur, g.Actif, g.Date_Creation,
+            SELECT g.ID_groupe AS Id_Groupe, g.Libelle, g.Description, g.Couleur, g.Actif, g.Date_Creation,
                    COUNT(ag.Id_Utilisateur) AS Nb_Agents
-            FROM GROUPE g
-            LEFT JOIN UTILISATEUR_GROUPE ag ON g.ID_GROUPE = ag.ID_GROUPE
-            GROUP BY g.ID_GROUPE ORDER BY g.Libelle");
+            FROM groupe g
+            LEFT JOIN utilisateur_groupe ag ON g.ID_groupe = ag.ID_groupe
+            GROUP BY g.ID_groupe ORDER BY g.Libelle");
     }
 
     public async Task<GroupeModel?> GetByIdAsync(int id)
     {
         using var c = new MySqlConnection(_cs);
         return await c.QueryFirstOrDefaultAsync<GroupeModel>(@"
-            SELECT g.ID_GROUPE AS Id_Groupe, g.Libelle, g.Description, g.Couleur, g.Actif, g.Date_Creation,
+            SELECT g.ID_groupe AS Id_Groupe, g.Libelle, g.Description, g.Couleur, g.Actif, g.Date_Creation,
                    COUNT(ag.Id_Utilisateur) AS Nb_Agents
-            FROM GROUPE g
-            LEFT JOIN UTILISATEUR_GROUPE ag ON g.ID_GROUPE = ag.ID_GROUPE
-            WHERE g.ID_GROUPE = @Id GROUP BY g.ID_GROUPE", new { Id = id });
+            FROM groupe g
+            LEFT JOIN utilisateur_groupe ag ON g.ID_groupe = ag.ID_groupe
+            WHERE g.ID_groupe = @Id GROUP BY g.ID_groupe", new { Id = id });
     }
 
     public async Task<int> AddAsync(GroupeModel groupe)
     {
         using var c = new MySqlConnection(_cs);
         return await c.ExecuteScalarAsync<int>(@"
-            INSERT INTO GROUPE (Libelle, Description, Couleur, Actif)
+            INSERT INTO groupe (Libelle, Description, Couleur, Actif)
             VALUES (@Libelle, @Description, @Couleur, @Actif);
             SELECT LAST_INSERT_ID();",
             new { groupe.Libelle, groupe.Description, groupe.Couleur, groupe.Actif });
@@ -46,8 +46,8 @@ public class GroupeRepository : IGroupeRepository
     {
         using var c = new MySqlConnection(_cs);
         var rows = await c.ExecuteAsync(@"
-            UPDATE GROUPE SET Libelle=@Libelle, Description=@Description,
-            Couleur=@Couleur, Actif=@Actif WHERE ID_GROUPE=@Id",
+            UPDATE groupe SET Libelle=@Libelle, Description=@Description,
+            Couleur=@Couleur, Actif=@Actif WHERE ID_groupe=@Id",
             new { groupe.Libelle, groupe.Description, groupe.Couleur, groupe.Actif, Id = id });
         return rows > 0;
     }
@@ -55,7 +55,7 @@ public class GroupeRepository : IGroupeRepository
     public async Task<bool> DeleteAsync(int id)
     {
         using var c = new MySqlConnection(_cs);
-        var rows = await c.ExecuteAsync("DELETE FROM GROUPE WHERE ID_GROUPE=@Id", new { Id = id });
+        var rows = await c.ExecuteAsync("DELETE FROM groupe WHERE ID_groupe=@Id", new { Id = id });
         return rows > 0;
     }
 
@@ -74,7 +74,7 @@ public class GroupeRepository : IGroupeRepository
     {
         using var c = new MySqlConnection(_cs);
         var rows = await c.ExecuteAsync(@"
-            INSERT IGNORE INTO UTILISATEUR_GROUPE (Id_Utilisateur, ID_GROUPE) VALUES (@IdAgent, @IdGroupe)",
+            INSERT IGNORE INTO utilisateur_groupe (Id_Utilisateur, ID_groupe) VALUES (@IdAgent, @IdGroupe)",
             new { IdAgent = idAgent, IdGroupe = idGroupe });
         return rows > 0;
     }
@@ -83,7 +83,7 @@ public class GroupeRepository : IGroupeRepository
     {
         using var c = new MySqlConnection(_cs);
         var rows = await c.ExecuteAsync(@"
-            DELETE FROM UTILISATEUR_GROUPE WHERE Id_Utilisateur=@IdAgent AND ID_GROUPE=@IdGroupe",
+            DELETE FROM utilisateur_groupe WHERE Id_Utilisateur=@IdAgent AND ID_groupe=@IdGroupe",
             new { IdAgent = idAgent, IdGroupe = idGroupe });
         return rows > 0;
     }

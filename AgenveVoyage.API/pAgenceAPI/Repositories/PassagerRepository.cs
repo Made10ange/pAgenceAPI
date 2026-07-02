@@ -1,4 +1,4 @@
-using Dapper;
+﻿using Dapper;
 using Microsoft.Extensions.Configuration;
 using MySqlConnector;
 using pAgenceAPI.Models;
@@ -24,7 +24,7 @@ namespace pAgenceAPI.Repositories
                 using var connection = new MySqlConnection(_connectionString);
                 var where = idAgence.HasValue ? " WHERE Id_Agence = @IdAgence" : "";
                 return (await connection.QueryAsync<PassagerModel>(
-                    "SELECT * FROM PASSAGER" + where + " ORDER BY NOM",
+                    "SELECT * FROM passager" + where + " ORDER BY NOM",
                     new { IdAgence = idAgence }
                 )).ToList();
             }
@@ -43,7 +43,7 @@ namespace pAgenceAPI.Repositories
                 var pattern = $"%{motCle.Trim()}%";
                 var agenceFilter = idAgence.HasValue ? " AND Id_Agence = @IdAgence" : "";
                 return (await connection.QueryAsync<PassagerModel>(
-                    @"SELECT * FROM PASSAGER
+                    @"SELECT * FROM passager
                       WHERE (NOM LIKE @Pattern
                          OR PRENOM LIKE @Pattern
                          OR NUMERO_PIECE LIKE @Pattern
@@ -65,7 +65,7 @@ namespace pAgenceAPI.Repositories
             {
                 using var connection = new MySqlConnection(_connectionString);
                 return await connection.QueryFirstOrDefaultAsync<PassagerModel>(
-                    "SELECT * FROM PASSAGER WHERE ID_PASSAGER = @Id",
+                    "SELECT * FROM passager WHERE ID_passager = @Id",
                     new { Id = id }
                 );
             }
@@ -82,7 +82,7 @@ namespace pAgenceAPI.Repositories
             {
                 using var connection = new MySqlConnection(_connectionString);
                 return await connection.ExecuteScalarAsync<int>(
-                    @"INSERT INTO PASSAGER (NOM, PRENOM, TYPE_PIECE, TELEPHONE, EMAIL,
+                    @"INSERT INTO passager (NOM, PRENOM, TYPE_PIECE, TELEPHONE, EMAIL,
                                             DATE_NAISSANCE, LIEU_NAISSANCE, NUMERO_PIECE,
                                             DATE_DELIVRANCE, LIEU_DELIVRANCE, SIGNATAIRE,
                                             PROFESSION, DATE_EXPIRATION, NATIONALITE, SEXE, PHOTO, Id_Agence)
@@ -126,13 +126,13 @@ namespace pAgenceAPI.Repositories
             {
                 using var connection = new MySqlConnection(_connectionString);
                 await connection.ExecuteAsync(
-                    @"UPDATE PASSAGER
+                    @"UPDATE passager
                       SET NOM = @Nom, PRENOM = @Prenom, TYPE_PIECE = @Type_Piece, TELEPHONE = @Telephone, EMAIL = @Email,
                           DATE_NAISSANCE = @Date_Naissance, LIEU_NAISSANCE = @Lieu_Naissance, NUMERO_PIECE = @Numero_Piece,
                           DATE_DELIVRANCE = @Date_Delivrance, LIEU_DELIVRANCE = @Lieu_Delivrance, SIGNATAIRE = @Signataire,
                           PROFESSION = @Profession, DATE_EXPIRATION = @Date_Expiration, NATIONALITE = @Nationalite,
                           SEXE = @Sexe, PHOTO = @Photo
-                      WHERE ID_PASSAGER = @Id",
+                      WHERE ID_passager = @Id",
                     new
                     {
                         Id = passager.Id_Passager,
@@ -169,7 +169,7 @@ namespace pAgenceAPI.Repositories
             {
                 using var connection = new MySqlConnection(_connectionString);
                 await connection.ExecuteAsync(
-                    "DELETE FROM PASSAGER WHERE ID_PASSAGER = @Id",
+                    "DELETE FROM passager WHERE ID_passager = @Id",
                     new { Id = id }
                 );
                 return "Passager supprimé avec succès !";

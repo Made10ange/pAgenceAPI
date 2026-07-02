@@ -16,13 +16,13 @@ namespace pAgenceAPI.Repositories
         }
 
         private const string BaseSql =
-            @"SELECT V.ID_VEHICULE, V.ID_TYPE, V.IMMATRICULATION, V.STATUT, V.ETAT,
+            @"SELECT V.ID_vehicule, V.ID_TYPE, V.IMMATRICULATION, V.STATUT, V.ETAT,
                      TV.LIBELLE_TYPE as Libelle_Type, TV.MARQUE as Marque,
-                     TV.NOMBRE_PLACE as Nombre_Place, TV.ID_TYPE_VOYAGE as Id_Type_Voyage,
-                     TY.LIBELLE_TYPE_VOYAGE as Libelle_Type_Voyage
-              FROM VEHICULE V
-              LEFT JOIN TYPE_VEHICULE TV ON V.ID_TYPE = TV.ID_TYPE
-              LEFT JOIN TYPE_VOYAGE TY ON TY.ID_TYPE_VOYAGE = TV.ID_TYPE_VOYAGE";
+                     TV.NOMBRE_PLACE as Nombre_Place, TV.ID_type_voyage as Id_Type_Voyage,
+                     TY.LIBELLE_type_voyage as Libelle_Type_Voyage
+              FROM vehicule V
+              LEFT JOIN type_vehicule TV ON V.ID_TYPE = TV.ID_TYPE
+              LEFT JOIN type_voyage TY ON TY.ID_type_voyage = TV.ID_type_voyage";
 
         public async Task<List<VehiculeModel>> GetAllAsync(int? idAgence = null)
         {
@@ -38,7 +38,7 @@ namespace pAgenceAPI.Repositories
         {
             using var connection = new MySqlConnection(_connectionString);
             return await connection.QueryFirstOrDefaultAsync<VehiculeModel>(
-                BaseSql + " WHERE V.ID_VEHICULE = @Id",
+                BaseSql + " WHERE V.ID_vehicule = @Id",
                 new { Id = id }
             );
         }
@@ -47,7 +47,7 @@ namespace pAgenceAPI.Repositories
         {
             using var connection = new MySqlConnection(_connectionString);
             await connection.ExecuteAsync(
-                "INSERT INTO VEHICULE (ID_TYPE, IMMATRICULATION, STATUT, ETAT, Id_Agence) VALUES (@Id_Type, @Immatriculation, @Statut, @Etat, @Id_Agence)",
+                "INSERT INTO vehicule (ID_TYPE, IMMATRICULATION, STATUT, ETAT, Id_Agence) VALUES (@Id_Type, @Immatriculation, @Statut, @Etat, @Id_Agence)",
                 new
                 {
                     vehicule.Id_Type,
@@ -64,7 +64,7 @@ namespace pAgenceAPI.Repositories
         {
             using var connection = new MySqlConnection(_connectionString);
             await connection.ExecuteAsync(
-                "UPDATE VEHICULE SET ID_TYPE = @Id_Type, IMMATRICULATION = @Immatriculation, STATUT = @Statut, ETAT = @Etat WHERE ID_VEHICULE = @Id",
+                "UPDATE vehicule SET ID_TYPE = @Id_Type, IMMATRICULATION = @Immatriculation, STATUT = @Statut, ETAT = @Etat WHERE ID_vehicule = @Id",
                 new
                 {
                     Id     = vehicule.Id_Vehicule,
@@ -82,7 +82,7 @@ namespace pAgenceAPI.Repositories
             using (var connection = new MySqlConnection(_connectionString))
             {
                 await connection.ExecuteAsync(
-                    "DELETE FROM VEHICULE WHERE ID_VEHICULE = @Id",
+                    "DELETE FROM vehicule WHERE ID_vehicule = @Id",
                     new { Id = id }
                 );
                 return "Véhicule supprimé avec succès !";

@@ -14,10 +14,10 @@ public class JournalAuditRepository : IJournalAuditRepository
     {
         using var c = new MySqlConnection(_cs);
         return await c.QueryAsync<JournalAuditModel>(@"
-            SELECT ID_JOURNAL AS Id_Journal, Id_Utilisateur AS Id_Utilisateur, Login_Agent, Nom_Agent,
+            SELECT ID_journal AS Id_Journal, Id_Utilisateur AS Id_Utilisateur, Login_Agent, Nom_Agent,
                    Module, Action, Details, Ancienne_Valeur, Nouvelle_Valeur,
                    IP_Address, User_Agent, Statut, Date_Action
-            FROM JOURNAL_AUDIT
+            FROM journal_audit
             ORDER BY Date_Action DESC
             LIMIT @PageSize OFFSET @Offset",
             new { PageSize = pageSize, Offset = (page - 1) * pageSize });
@@ -33,9 +33,9 @@ public class JournalAuditRepository : IJournalAuditRepository
         if (dateDebut.HasValue) where.Add("DATE(Date_Action) >= @DateDebut");
         if (dateFin.HasValue)   where.Add("DATE(Date_Action) <= @DateFin");
 
-        var sql = "SELECT ID_JOURNAL AS Id_Journal, Id_Utilisateur AS Id_Utilisateur, Login_Agent, Nom_Agent, " +
+        var sql = "SELECT ID_journal AS Id_Journal, Id_Utilisateur AS Id_Utilisateur, Login_Agent, Nom_Agent, " +
                   "Module, Action, Details, Ancienne_Valeur, Nouvelle_Valeur, " +
-                  "IP_Address, User_Agent, Statut, Date_Action FROM JOURNAL_AUDIT" +
+                  "IP_Address, User_Agent, Statut, Date_Action FROM journal_audit" +
                   (where.Count > 0 ? " WHERE " + string.Join(" AND ", where) : "") +
                   " ORDER BY Date_Action DESC LIMIT 500";
 
@@ -52,7 +52,7 @@ public class JournalAuditRepository : IJournalAuditRepository
     {
         using var c = new MySqlConnection(_cs);
         await c.ExecuteAsync(@"
-            INSERT INTO JOURNAL_AUDIT
+            INSERT INTO journal_audit
                 (Id_Utilisateur, Login_Agent, Nom_Agent, Module, Action, Details,
                  Ancienne_Valeur, Nouvelle_Valeur, IP_Address, User_Agent, Statut)
             VALUES

@@ -1,4 +1,4 @@
-using Dapper;
+﻿using Dapper;
 using Microsoft.Extensions.Configuration;
 using MySqlConnector;
 using pAgenceAPI.Models;
@@ -13,8 +13,8 @@ namespace pAgenceAPI.Repositories
         private const string BaseSelectSql =
             @"SELECT
                 evp.ID_EMBARQUEMENT     AS Id_Embarquement,
-                evp.ID_VOYAGE           AS Id_Voyage,
-                evp.ID_PASSAGER         AS Id_Passager,
+                evp.ID_voyage           AS Id_Voyage,
+                evp.ID_passager         AS Id_Passager,
                 evp.STATUT_EMBARQUEMENT AS Statut_Embarquement,
                 evp.NUMERO_SIEGE        AS Numero_Siege,
                 evp.DATE_ENREGISTREMENT AS Date_Enregistrement,
@@ -27,17 +27,17 @@ namespace pAgenceAPI.Repositories
                 bag.Poids_Total_Bagages            AS Poids_Total_Bagages,
                 bag.Montant_Bagages                AS Montant_Bagages
               FROM embarquement_voyage_passager evp
-              LEFT JOIN passager p    ON evp.ID_PASSAGER   = p.ID_PASSAGER
-              LEFT JOIN voyage v      ON evp.ID_VOYAGE     = v.ID_VOYAGE
-              LEFT JOIN type_voyage tv ON v.ID_TYPE_VOYAGE = tv.ID_TYPE_VOYAGE
+              LEFT JOIN passager p    ON evp.ID_passager   = p.ID_passager
+              LEFT JOIN voyage v      ON evp.ID_voyage     = v.ID_voyage
+              LEFT JOIN type_voyage tv ON v.ID_type_voyage = tv.ID_type_voyage
               LEFT JOIN (
-                SELECT ID_PASSAGER, ID_VOYAGE_PASSAGER,
+                SELECT ID_passager, ID_voyage_passager,
                        COUNT(*)           AS Nb_Bagages,
                        SUM(POIDS)         AS Poids_Total_Bagages,
                        MAX(MONTANT_TOTAL) AS Montant_Bagages
-                FROM BAGAGE
-                GROUP BY ID_PASSAGER, ID_VOYAGE_PASSAGER
-              ) bag ON bag.ID_PASSAGER = evp.ID_PASSAGER AND bag.ID_VOYAGE_PASSAGER = evp.ID_VOYAGE";
+                FROM bagage
+                GROUP BY ID_passager, ID_voyage_passager
+              ) bag ON bag.ID_passager = evp.ID_passager AND bag.ID_voyage_passager = evp.ID_voyage";
 
         public EmbarquementRepository(IConfiguration configuration, ILogger<EmbarquementRepository> logger)
         {
@@ -91,7 +91,7 @@ namespace pAgenceAPI.Repositories
             {
                 using var connection = new MySqlConnection(_connectionString);
                 return (await connection.QueryAsync<EmbarquementVoyagePassagerModel>(
-                    BaseSelectSql + " WHERE evp.ID_VOYAGE = @IdVoyage ORDER BY evp.NUMERO_SIEGE",
+                    BaseSelectSql + " WHERE evp.ID_voyage = @IdVoyage ORDER BY evp.NUMERO_SIEGE",
                     new { IdVoyage = idVoyage }
                 )).ToList();
             }
@@ -108,7 +108,7 @@ namespace pAgenceAPI.Repositories
             {
                 using var connection = new MySqlConnection(_connectionString);
                 return (await connection.QueryAsync<EmbarquementVoyagePassagerModel>(
-                    BaseSelectSql + " WHERE evp.ID_PASSAGER = @IdPassager ORDER BY evp.ID_EMBARQUEMENT DESC",
+                    BaseSelectSql + " WHERE evp.ID_passager = @IdPassager ORDER BY evp.ID_EMBARQUEMENT DESC",
                     new { IdPassager = idPassager }
                 )).ToList();
             }
@@ -159,8 +159,8 @@ namespace pAgenceAPI.Repositories
             {
                 using var connection = new MySqlConnection(_connectionString);
                 await connection.ExecuteAsync(
-                    @"INSERT INTO EMBARQUEMENT_VOYAGE_PASSAGER
-                      (ID_VOYAGE, ID_PASSAGER, STATUT_EMBARQUEMENT, NUMERO_SIEGE, DATE_ENREGISTREMENT)
+                    @"INSERT INTO embarquement_voyage_passager
+                      (ID_voyage, ID_passager, STATUT_EMBARQUEMENT, NUMERO_SIEGE, DATE_ENREGISTREMENT)
                       VALUES (@Id_Voyage, @Id_Passager, @Statut_Embarquement, @Numero_Siege, @Date_Enregistrement)",
                     new
                     {
@@ -185,8 +185,8 @@ namespace pAgenceAPI.Repositories
             {
                 using var connection = new MySqlConnection(_connectionString);
                 await connection.ExecuteAsync(
-                    @"UPDATE EMBARQUEMENT_VOYAGE_PASSAGER
-                      SET ID_VOYAGE = @Id_Voyage, ID_PASSAGER = @Id_Passager,
+                    @"UPDATE embarquement_voyage_passager
+                      SET ID_voyage = @Id_Voyage, ID_passager = @Id_Passager,
                           STATUT_EMBARQUEMENT = @Statut_Embarquement,
                           NUMERO_SIEGE = @Numero_Siege,
                           DATE_ENREGISTREMENT = @Date_Enregistrement
@@ -215,7 +215,7 @@ namespace pAgenceAPI.Repositories
             {
                 using var connection = new MySqlConnection(_connectionString);
                 await connection.ExecuteAsync(
-                    "DELETE FROM EMBARQUEMENT_VOYAGE_PASSAGER WHERE ID_EMBARQUEMENT = @Id",
+                    "DELETE FROM embarquement_voyage_passager WHERE ID_EMBARQUEMENT = @Id",
                     new { Id = id }
                 );
                 return "Embarquement supprimé avec succès !";

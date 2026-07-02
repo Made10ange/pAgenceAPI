@@ -1,4 +1,4 @@
-using Dapper;
+﻿using Dapper;
 using MySqlConnector;
 using pAgenceAPI.Models;
 
@@ -11,24 +11,24 @@ namespace pAgenceAPI.Repositories
 
         private const string BaseSelectSql =
             @"SELECT
-                v.ID_VOYAGE, v.ID_VEHICULE, v.ID_TYPE_VOYAGE,
+                v.ID_voyage, v.ID_vehicule, v.ID_type_voyage,
                 tv.POINT_DEPART, tv.POINT_ARRIVEE,
                 v.DATE_DEPART, v.DATE_ARRIVEE, v.HEURE_DEPART, v.HEURE_ARRIVEE, v.DUREE, v.STATUT,
                 v.Numero_Journalier,
                 COALESCE(vh.IMMATRICULATION, '') as Immatriculation,
-                COALESCE(tv.LIBELLE_TYPE_VOYAGE, '') as Libelle_Type_Voyage,
+                COALESCE(tv.LIBELLE_type_voyage, '') as Libelle_Type_Voyage,
                 COALESCE(tv.PRIX, 0) as Prix,
                 COALESCE(tpv.NOMBRE_PLACE, 0) as Nombre_Place,
-                acv.ID_CHAUFFEUR,
-                CASE WHEN c.ID_CHAUFFEUR IS NOT NULL THEN CONCAT(c.NOM, ' ', c.PRENOM) ELSE NULL END as Nom_Chauffeur,
-                ag.NOM_AGENCE as Nom_Agence
-              FROM VOYAGE v
-              LEFT JOIN VEHICULE vh ON v.ID_VEHICULE = vh.ID_VEHICULE
-              LEFT JOIN TYPE_VEHICULE tpv ON vh.ID_TYPE = tpv.ID_TYPE
-              LEFT JOIN TYPE_VOYAGE tv ON v.ID_TYPE_VOYAGE = tv.ID_TYPE_VOYAGE
-              LEFT JOIN ASSIGNATION_CHAUFFEUR_VOYAGE acv ON v.ID_VOYAGE = acv.ID_VOYAGE
-              LEFT JOIN CHAUFFEUR c ON acv.ID_CHAUFFEUR = c.ID_CHAUFFEUR
-              LEFT JOIN AGENCE ag ON v.Id_Agence = ag.ID_AGENCE";
+                acv.ID_chauffeur,
+                CASE WHEN c.ID_chauffeur IS NOT NULL THEN CONCAT(c.NOM, ' ', c.PRENOM) ELSE NULL END as Nom_Chauffeur,
+                ag.NOM_agence as Nom_Agence
+              FROM voyage v
+              LEFT JOIN vehicule vh ON v.ID_vehicule = vh.ID_vehicule
+              LEFT JOIN type_vehicule tpv ON vh.ID_TYPE = tpv.ID_TYPE
+              LEFT JOIN type_voyage tv ON v.ID_type_voyage = tv.ID_type_voyage
+              LEFT JOIN assignation_chauffeur_voyage acv ON v.ID_voyage = acv.ID_voyage
+              LEFT JOIN chauffeur c ON acv.ID_chauffeur = c.ID_chauffeur
+              LEFT JOIN agence ag ON v.Id_Agence = ag.ID_agence";
 
         public VoyageRepository(IConfiguration configuration, ILogger<VoyageRepository> logger)
         {
@@ -80,7 +80,7 @@ namespace pAgenceAPI.Repositories
             try
             {
                 return (await connection.QueryAsync<VoyageModel>(
-                    BaseSelectSql + " WHERE v.ID_VEHICULE = @IdVehicule ORDER BY v.DATE_DEPART DESC, v.HEURE_DEPART DESC",
+                    BaseSelectSql + " WHERE v.ID_vehicule = @IdVehicule ORDER BY v.DATE_DEPART DESC, v.HEURE_DEPART DESC",
                     new { IdVehicule = idVehicule }
                 )).ToList();
             }
@@ -100,12 +100,12 @@ namespace pAgenceAPI.Repositories
                 var agenceFilter = idAgence.HasValue ? " AND v.Id_Agence = @IdAgence" : "";
                 return (await connection.QueryAsync<VoyageModel>(
                     BaseSelectSql + @"
-                      WHERE (CAST(v.ID_VOYAGE AS CHAR) LIKE @Pattern
+                      WHERE (CAST(v.ID_voyage AS CHAR) LIKE @Pattern
                          OR tv.POINT_DEPART LIKE @Pattern
                          OR tv.POINT_ARRIVEE LIKE @Pattern
                          OR v.STATUT LIKE @Pattern
                          OR vh.IMMATRICULATION LIKE @Pattern
-                         OR tv.LIBELLE_TYPE_VOYAGE LIKE @Pattern)" + agenceFilter + @"
+                         OR tv.LIBELLE_type_voyage LIKE @Pattern)" + agenceFilter + @"
                       ORDER BY v.DATE_DEPART DESC",
                     new { Pattern = pattern, IdAgence = idAgence }
                 )).ToList();
@@ -123,7 +123,7 @@ namespace pAgenceAPI.Repositories
             try
             {
                 return await connection.QueryFirstOrDefaultAsync<VoyageModel>(
-                    BaseSelectSql + " WHERE v.ID_VOYAGE = @Id",
+                    BaseSelectSql + " WHERE v.ID_voyage = @Id",
                     new { Id = id }
                 );
             }
@@ -148,8 +148,8 @@ namespace pAgenceAPI.Repositories
                 // Calculer le prochain numéro journalier pour ce type de voyage ce jour-là
                 var numeroJournalier = await connection.ExecuteScalarAsync<int>(
                     @"SELECT COALESCE(MAX(Numero_Journalier), 0) + 1
-                      FROM VOYAGE
-                      WHERE ID_TYPE_VOYAGE = @IdType
+                      FROM voyage
+                      WHERE ID_type_voyage = @IdType
                         AND DATE(DATE_DEPART) = DATE(@DateDepart)",
                     new { IdType = voyage.Id_Type_Voyage, DateDepart = voyage.Date_Depart },
                     transaction
@@ -157,7 +157,7 @@ namespace pAgenceAPI.Repositories
                 voyage.Numero_Journalier = numeroJournalier;
 
                 var rowsAffected = await connection.ExecuteAsync(
-                    @"INSERT INTO VOYAGE (ID_VEHICULE, ID_TYPE_VOYAGE,
+                    @"INSERT INTO voyage (ID_vehicule, ID_type_voyage,
                                           DATE_DEPART, DATE_ARRIVEE, HEURE_DEPART, HEURE_ARRIVEE, DUREE, STATUT, Id_Agence, Numero_Journalier)
                       VALUES (@Id_Vehicule, @Id_Type_Voyage,
                               @Date_Depart, @Date_Arrivee, @Heure_Depart, @Heure_Arrivee, @Duree, @Statut, @Id_Agence, @Numero_Journalier)",
@@ -183,9 +183,9 @@ namespace pAgenceAPI.Repositories
 
                     // Vérifier que le chauffeur n'est pas déjà sur un autre voyage au même moment
                     var conflit = await connection.ExecuteScalarAsync<int>(
-                        @"SELECT COUNT(1) FROM ASSIGNATION_CHAUFFEUR_VOYAGE acv
-                          JOIN VOYAGE v2 ON v2.ID_VOYAGE = acv.ID_VOYAGE
-                          WHERE acv.ID_CHAUFFEUR = @IdChauffeur
+                        @"SELECT COUNT(1) FROM assignation_chauffeur_voyage acv
+                          JOIN voyage v2 ON v2.ID_voyage = acv.ID_voyage
+                          WHERE acv.ID_chauffeur = @IdChauffeur
                             AND TIMESTAMP(v2.DATE_DEPART, v2.HEURE_DEPART)  < @Fin
                             AND TIMESTAMP(v2.DATE_ARRIVEE, COALESCE(v2.HEURE_ARRIVEE,'23:59:59')) > @Debut",
                         new
@@ -200,7 +200,7 @@ namespace pAgenceAPI.Repositories
                         throw new InvalidOperationException("Ce chauffeur est déjà assigné à un autre voyage sur ce créneau horaire.");
 
                     await connection.ExecuteAsync(
-                        @"INSERT INTO ASSIGNATION_CHAUFFEUR_VOYAGE (ID_CHAUFFEUR, ID_VOYAGE)
+                        @"INSERT INTO assignation_chauffeur_voyage (ID_chauffeur, ID_voyage)
                           VALUES (@Id_Chauffeur, @Id_Voyage)",
                         new { Id_Chauffeur = voyage.Id_Chauffeur.Value, Id_Voyage = newId },
                         transaction
@@ -226,12 +226,12 @@ namespace pAgenceAPI.Repositories
                 using var transaction = await connection.BeginTransactionAsync();
 
                 var rowsAffected = await connection.ExecuteAsync(
-                    @"UPDATE VOYAGE
-                      SET ID_VEHICULE = @Id_Vehicule, ID_TYPE_VOYAGE = @Id_Type_Voyage,
+                    @"UPDATE voyage
+                      SET ID_vehicule = @Id_Vehicule, ID_type_voyage = @Id_Type_Voyage,
                           DATE_DEPART = @Date_Depart, DATE_ARRIVEE = @Date_Arrivee,
                           HEURE_DEPART = @Heure_Depart, HEURE_ARRIVEE = @Heure_Arrivee,
                           DUREE = @Duree, STATUT = @Statut
-                      WHERE ID_VOYAGE = @Id",
+                      WHERE ID_voyage = @Id",
                     new
                     {
                         Id = voyage.Id_Voyage,
@@ -249,7 +249,7 @@ namespace pAgenceAPI.Repositories
 
                 // Mettre à jour l'assignation chauffeur
                 await connection.ExecuteAsync(
-                    "DELETE FROM ASSIGNATION_CHAUFFEUR_VOYAGE WHERE ID_VOYAGE = @Id_Voyage",
+                    "DELETE FROM assignation_chauffeur_voyage WHERE ID_voyage = @Id_Voyage",
                     new { Id_Voyage = voyage.Id_Voyage },
                     transaction
                 );
@@ -258,10 +258,10 @@ namespace pAgenceAPI.Repositories
                 {
                     // Vérifier conflit chauffeur (exclure ce voyage)
                     var conflit = await connection.ExecuteScalarAsync<int>(
-                        @"SELECT COUNT(1) FROM ASSIGNATION_CHAUFFEUR_VOYAGE acv
-                          JOIN VOYAGE v2 ON v2.ID_VOYAGE = acv.ID_VOYAGE
-                          WHERE acv.ID_CHAUFFEUR = @IdChauffeur
-                            AND acv.ID_VOYAGE <> @IdVoyage
+                        @"SELECT COUNT(1) FROM assignation_chauffeur_voyage acv
+                          JOIN voyage v2 ON v2.ID_voyage = acv.ID_voyage
+                          WHERE acv.ID_chauffeur = @IdChauffeur
+                            AND acv.ID_voyage <> @IdVoyage
                             AND TIMESTAMP(v2.DATE_DEPART, v2.HEURE_DEPART)  < @Fin
                             AND TIMESTAMP(v2.DATE_ARRIVEE, COALESCE(v2.HEURE_ARRIVEE,'23:59:59')) > @Debut",
                         new
@@ -277,7 +277,7 @@ namespace pAgenceAPI.Repositories
                         throw new InvalidOperationException("Ce chauffeur est déjà assigné à un autre voyage sur ce créneau horaire.");
 
                     await connection.ExecuteAsync(
-                        @"INSERT INTO ASSIGNATION_CHAUFFEUR_VOYAGE (ID_CHAUFFEUR, ID_VOYAGE)
+                        @"INSERT INTO assignation_chauffeur_voyage (ID_chauffeur, ID_voyage)
                           VALUES (@Id_Chauffeur, @Id_Voyage)",
                         new { Id_Chauffeur = voyage.Id_Chauffeur.Value, Id_Voyage = voyage.Id_Voyage },
                         transaction
@@ -303,15 +303,15 @@ namespace pAgenceAPI.Repositories
             {
                 // Nettoyer les enregistrements opérationnels liés au voyage avant suppression
                 await connection.ExecuteAsync(
-                    "DELETE FROM ASSIGNATION_CHAUFFEUR_VOYAGE WHERE ID_VOYAGE = @Id",
+                    "DELETE FROM assignation_chauffeur_voyage WHERE ID_voyage = @Id",
                     new { Id = id }, transaction);
 
                 await connection.ExecuteAsync(
-                    "DELETE FROM EMBARQUEMENT_VOYAGE_PASSAGER WHERE ID_VOYAGE = @Id",
+                    "DELETE FROM embarquement_voyage_passager WHERE ID_voyage = @Id",
                     new { Id = id }, transaction);
 
                 var rowsAffected = await connection.ExecuteAsync(
-                    "DELETE FROM VOYAGE WHERE ID_VOYAGE = @Id",
+                    "DELETE FROM voyage WHERE ID_voyage = @Id",
                     new { Id = id }, transaction);
 
                 await transaction.CommitAsync();
@@ -333,7 +333,7 @@ namespace pAgenceAPI.Repositories
                 await connection.OpenAsync();
 
                 var rowsAffected = await connection.ExecuteAsync(
-                    "UPDATE VOYAGE SET STATUT = @Statut WHERE ID_VOYAGE = @Id",
+                    "UPDATE voyage SET STATUT = @Statut WHERE ID_voyage = @Id",
                     new { Id = id, Statut = statut }
                 );
 
@@ -362,9 +362,9 @@ namespace pAgenceAPI.Repositories
 
             var count = await connection.ExecuteScalarAsync<int>(
                 @"SELECT COUNT(1)
-                  FROM VOYAGE
-                  WHERE ID_VEHICULE = @IdVehicule
-                    AND (@ExcludeVoyageId IS NULL OR ID_VOYAGE <> @ExcludeVoyageId)
+                  FROM voyage
+                  WHERE ID_vehicule = @IdVehicule
+                    AND (@ExcludeVoyageId IS NULL OR ID_voyage <> @ExcludeVoyageId)
                     AND TIMESTAMP(DATE_DEPART, HEURE_DEPART) < @ProposedEnd
                     AND TIMESTAMP(DATE_ARRIVEE, COALESCE(HEURE_ARRIVEE, '23:59:59')) > @ProposedStart",
                 new

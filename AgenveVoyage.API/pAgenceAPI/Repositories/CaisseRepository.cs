@@ -1,4 +1,4 @@
-using System.Data;
+﻿using System.Data;
 using Dapper;
 using MySqlConnector;
 using pAgenceAPI.Models;
@@ -18,7 +18,7 @@ public class CaisseRepository : ICaisseRepository
     public async Task<List<CaisseModel>> GetAllAsync(int? idAgence = null)
     {
         using var db = new MySqlConnection(_cs);
-        var result = (await db.QueryAsync<CaisseModel>("CALL SP_LISTE_CAISSES()")).ToList();
+        var result = (await db.QueryAsync<CaisseModel>("CALL SP_LISTE_caisseS()")).ToList();
 
         // Une caisse non encore rattachée à une agence (code_agence NULL) reste visible
         // partout jusqu'à ce qu'elle soit affectée manuellement.
@@ -35,7 +35,7 @@ public class CaisseRepository : ICaisseRepository
     {
         using var db = new MySqlConnection(_cs);
         return await db.QueryFirstOrDefaultAsync<CaisseModel>(
-            "CALL SP_GET_CAISSE(@p_id)", new { p_id = id });
+            "CALL SP_GET_caisse(@p_id)", new { p_id = id });
     }
 
     public async Task<int> AjouterAsync(CaisseModel model)
@@ -51,7 +51,7 @@ public class CaisseRepository : ICaisseRepository
         p.Add("p_id", dbType: System.Data.DbType.Int32,
               direction: System.Data.ParameterDirection.Output);
 
-        await db.ExecuteAsync("SP_AJOUTER_CAISSE", p, commandType: CommandType.StoredProcedure);
+        await db.ExecuteAsync("SP_AJOUTER_caisse", p, commandType: CommandType.StoredProcedure);
         return p.Get<int>("p_id");
     }
 
@@ -59,7 +59,7 @@ public class CaisseRepository : ICaisseRepository
     {
         using var db = new MySqlConnection(_cs);
         await db.ExecuteAsync(
-            "CALL SP_MODIFIER_CAISSE(@p_id,@p_numcompte,@p_libelle,@p_est_principale,@p_code_agence,@p_statut)",
+            "CALL SP_MODIFIER_caisse(@p_id,@p_numcompte,@p_libelle,@p_est_principale,@p_code_agence,@p_statut)",
             new
             {
                 p_id            = model.id_caisse,
@@ -80,7 +80,7 @@ public class CaisseRepository : ICaisseRepository
         p.Add("p_ok", dbType: System.Data.DbType.Boolean,
               direction: System.Data.ParameterDirection.Output);
 
-        await db.ExecuteAsync("SP_SUPPRIMER_CAISSE", p, commandType: CommandType.StoredProcedure);
+        await db.ExecuteAsync("SP_SUPPRIMER_caisse", p, commandType: CommandType.StoredProcedure);
         return p.Get<bool>("p_ok");
     }
 

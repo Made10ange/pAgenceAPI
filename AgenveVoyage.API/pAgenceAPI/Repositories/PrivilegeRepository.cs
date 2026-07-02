@@ -1,4 +1,4 @@
-using Dapper;
+﻿using Dapper;
 using MySqlConnector;
 using pAgenceAPI.Models;
 
@@ -14,18 +14,18 @@ public class PrivilegeRepository : IPrivilegeRepository
     {
         using var c = new MySqlConnection(_cs);
         return await c.QueryAsync<PrivilegeModel>(@"
-            SELECT ID_PRIVILEGE AS Id_Privilege, ID_GROUPE AS Id_Groupe, Module, Action, Autorise
-            FROM PRIVILEGE WHERE ID_GROUPE = @Id ORDER BY Module, Action", new { Id = idGroupe });
+            SELECT ID_privilege AS Id_Privilege, ID_groupe AS Id_Groupe, Module, Action, Autorise
+            FROM privilege WHERE ID_groupe = @Id ORDER BY Module, Action", new { Id = idGroupe });
     }
 
     public async Task SauvegarderAsync(int idGroupe, IEnumerable<PrivilegeModel> privileges)
     {
         using var c = new MySqlConnection(_cs);
-        await c.ExecuteAsync("DELETE FROM PRIVILEGE WHERE ID_GROUPE = @Id", new { Id = idGroupe });
+        await c.ExecuteAsync("DELETE FROM privilege WHERE ID_groupe = @Id", new { Id = idGroupe });
         foreach (var p in privileges.Where(p => p.Autorise))
         {
             await c.ExecuteAsync(@"
-                INSERT INTO PRIVILEGE (ID_GROUPE, Module, Action, Autorise)
+                INSERT INTO privilege (ID_groupe, Module, Action, Autorise)
                 VALUES (@IdGroupe, @Module, @Action, 1)",
                 new { IdGroupe = idGroupe, p.Module, p.Action });
         }
