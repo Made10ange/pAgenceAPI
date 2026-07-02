@@ -23,7 +23,7 @@ namespace pAgenceAPI.Models
         // ✅ CHAMPS DE LA TABLE
         [Column("STATUT_EMBARQUEMENT")]
         [StringLength(50)]
-        public string Statut_Embarquement { get; set; }
+        public string Statut_Embarquement { get; set; } = string.Empty;
 
         [Column("NUMERO_SIEGE")]
         public int? Numero_Siege { get; set; }  // ✅ CORRIGÉ : int? au lieu de int

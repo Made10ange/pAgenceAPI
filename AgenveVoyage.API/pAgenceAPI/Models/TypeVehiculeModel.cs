@@ -13,11 +13,11 @@ namespace pAgenceAPI.Models
 
         [Column("LIBELLE_TYPE")]
         [StringLength(100)]
-        public string Libelle_Type { get; set; }
+        public string Libelle_Type { get; set; } = string.Empty;
 
         [Column("MARQUE")]
         [StringLength(100)]
-        public string Marque { get; set; }
+        public string? Marque { get; set; }
 
         [Column("NOMBRE_PLACE")]
         public int Nombre_Place { get; set; }
