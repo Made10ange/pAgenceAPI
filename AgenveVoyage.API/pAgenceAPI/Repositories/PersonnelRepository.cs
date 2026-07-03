@@ -45,7 +45,7 @@ public class PersonnelRepository : IPersonnelRepository
             VALUES (@Nom, @Prenom, @Telephone, @Email, @ID_poste, @Type_Contrat, @Salaire_Base, @Date_Embauche, @Statut, @Notes, @Id_Agence);
             SELECT LAST_INSERT_ID();",
             new { personnel.Nom, personnel.Prenom, personnel.Telephone, personnel.Email,
-                  personnel.ID_poste, personnel.Type_Contrat, personnel.Salaire_Base,
+                  ID_poste = personnel.ID_POSTE, personnel.Type_Contrat, personnel.Salaire_Base,
                   personnel.Date_Embauche, personnel.Statut, personnel.Notes, personnel.Id_Agence });
     }
 
@@ -58,8 +58,8 @@ public class PersonnelRepository : IPersonnelRepository
             Date_Embauche=@Date_Embauche, Statut=@Statut, Notes=@Notes, Id_Agence=@Id_Agence
             WHERE ID_personnel=@ID_personnel",
             new { personnel.Nom, personnel.Prenom, personnel.Telephone, personnel.Email,
-                  personnel.ID_poste, personnel.Type_Contrat, personnel.Salaire_Base,
-                  personnel.Date_Embauche, personnel.Statut, personnel.Notes, personnel.Id_Agence, personnel.ID_personnel });
+                  ID_poste = personnel.ID_POSTE, personnel.Type_Contrat, personnel.Salaire_Base,
+                  personnel.Date_Embauche, personnel.Statut, personnel.Notes, personnel.Id_Agence, ID_personnel = personnel.ID_PERSONNEL });
         return rows > 0;
     }
 

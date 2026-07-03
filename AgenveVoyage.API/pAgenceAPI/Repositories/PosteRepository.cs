@@ -40,7 +40,7 @@ public class PosteRepository : IPosteRepository
         using var connection = new MySqlConnection(_connectionString);
         var rows = await connection.ExecuteAsync(
             "UPDATE poste SET Libelle=@Libelle, Description=@Description WHERE ID_poste=@ID_poste",
-            new { poste.Libelle, poste.Description, poste.ID_poste });
+            new { poste.Libelle, poste.Description, ID_poste = poste.ID_POSTE });
         return rows > 0;
     }
 
