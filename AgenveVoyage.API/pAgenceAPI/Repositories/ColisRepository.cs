@@ -32,7 +32,7 @@ namespace pAgenceAPI.Repositories
                 c.DATE_LIVRAISON_EFFECTIVE   AS Date_Livraison_Effective,
                 CONCAT(COALESCE(tv.POINT_DEPART,''), ' → ', COALESCE(tv.POINT_ARRIVEE,'')) AS Trajet_Voyage,
                 a.NOM_agence AS Nom_Agence
-              FROM COLIS c
+              FROM colis c
               LEFT JOIN voyage  v  ON c.ID_voyage  = v.ID_voyage
               LEFT JOIN type_voyage tv ON v.ID_type_voyage = tv.ID_type_voyage
               LEFT JOIN agence  a  ON c.ID_agence  = a.ID_agence";
@@ -134,7 +134,7 @@ namespace pAgenceAPI.Repositories
                 using var connection = new MySqlConnection(_connectionString);
                 var today = DateTime.Now.ToString("yyyyMMdd");
                 var count = await connection.ExecuteScalarAsync<int>(
-                    "SELECT COUNT(*) FROM COLIS WHERE DATE(DATE_ENVOI) = CURDATE()");
+                    "SELECT COUNT(*) FROM colis WHERE DATE(DATE_ENVOI) = CURDATE()");
                 return $"COL-{today}-{(count + 1):D4}";
             }
             catch (Exception ex) { _logger.LogError(ex, "Erreur GenererReferenceAsync"); throw; }
@@ -149,7 +149,7 @@ namespace pAgenceAPI.Repositories
                     colis.Reference_Colis = await GenererReferenceAsync();
 
                 var newId = await connection.ExecuteScalarAsync<int>(
-                    @"INSERT INTO COLIS
+                    @"INSERT INTO colis
                       (REFERENCE_COLIS, ID_voyage, ID_agence, NOM_EXPEDITEUR, TEL_EXPEDITEUR,
                        NOM_DESTINATAIRE, TEL_DESTINATAIRE, VILLE_DEPART, VILLE_ARRIVEE,
                        DESCRIPTION, POIDS, VALEUR_DECLAREE, PRIX_TRANSPORT, MODE_paiement, STATUT,
@@ -184,7 +184,7 @@ namespace pAgenceAPI.Repositories
             {
                 using var connection = new MySqlConnection(_connectionString);
                 await connection.ExecuteAsync(
-                    @"UPDATE COLIS SET
+                    @"UPDATE colis SET
                         ID_voyage                 = @Id_Voyage,
                         ID_agence                 = @Id_Agence,
                         NOM_EXPEDITEUR            = @Nom_Expediteur,
@@ -223,7 +223,7 @@ namespace pAgenceAPI.Repositories
                     ? ", DATE_LIVRAISON_EFFECTIVE = CURDATE()"
                     : "";
                 await connection.ExecuteAsync(
-                    $"UPDATE COLIS SET STATUT = @Statut{extra} WHERE ID_COLIS = @Id",
+                    $"UPDATE colis SET STATUT = @Statut{extra} WHERE ID_COLIS = @Id",
                     new { Id = id, Statut = statut });
                 return "Statut mis à jour !";
             }
@@ -237,7 +237,7 @@ namespace pAgenceAPI.Repositories
                 using var connection = new MySqlConnection(_connectionString);
                 var extra = nouveauStatut == "Livré" ? ", DATE_LIVRAISON_EFFECTIVE = CURDATE()" : "";
                 return await connection.ExecuteAsync(
-                    $"UPDATE COLIS SET STATUT = @NouveauStatut{extra} WHERE ID_voyage = @IdVoyage AND STATUT = @StatutActuel",
+                    $"UPDATE colis SET STATUT = @NouveauStatut{extra} WHERE ID_voyage = @IdVoyage AND STATUT = @StatutActuel",
                     new { IdVoyage = idVoyage, StatutActuel = statutActuel, NouveauStatut = nouveauStatut });
             }
             catch (Exception ex) { _logger.LogError(ex, "Erreur UpdateStatutByVoyageAsync voyage id={Id}", idVoyage); throw; }
@@ -249,7 +249,7 @@ namespace pAgenceAPI.Repositories
             {
                 using var connection = new MySqlConnection(_connectionString);
                 await connection.ExecuteAsync(
-                    "UPDATE COLIS SET STATUT = 'Livré', DATE_LIVRAISON_EFFECTIVE = CURDATE() WHERE ID_voyage = @IdVoyage AND STATUT NOT IN ('Livré','Retourné','Annulé')",
+                    "UPDATE colis SET STATUT = 'Livré', DATE_LIVRAISON_EFFECTIVE = CURDATE() WHERE ID_voyage = @IdVoyage AND STATUT NOT IN ('Livré','Retourné','Annulé')",
                     new { IdVoyage = idVoyage });
             }
             catch (Exception ex) { _logger.LogError(ex, "Erreur LivrerParVoyageAsync voyage id={Id}", idVoyage); throw; }
@@ -260,7 +260,7 @@ namespace pAgenceAPI.Repositories
             try
             {
                 using var connection = new MySqlConnection(_connectionString);
-                await connection.ExecuteAsync("DELETE FROM COLIS WHERE ID_COLIS = @Id", new { Id = id });
+                await connection.ExecuteAsync("DELETE FROM colis WHERE ID_COLIS = @Id", new { Id = id });
                 return "Colis supprimé avec succès !";
             }
             catch (Exception ex) { _logger.LogError(ex, "Erreur DeleteAsync colis id={Id}", id); throw; }

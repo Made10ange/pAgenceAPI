@@ -9,7 +9,16 @@ namespace pAgenceAPI.Controllers.personnel;
 public class FichePayeController : ControllerBase
 {
     private readonly IFichePayeRepository _repo;
-    public FichePayeController(IFichePayeRepository repo) => _repo = repo;
+    private readonly IEcritureRepository _ecritureRepo;
+    private readonly ILogger<FichePayeController> _logger;
+
+    public FichePayeController(IFichePayeRepository repo, IEcritureRepository ecritureRepo,
+        ILogger<FichePayeController> logger)
+    {
+        _repo = repo;
+        _ecritureRepo = ecritureRepo;
+        _logger = logger;
+    }
 
     [HttpGet("liste")]
     public async Task<IActionResult> Liste([FromQuery] int? annee, [FromQuery] int? mois)
@@ -43,7 +52,28 @@ public class FichePayeController : ControllerBase
 
     [HttpPut("payer/{id}")]
     public async Task<IActionResult> MarquerPaye(int id)
-        => await _repo.MarquerPayeAsync(id) ? Ok() : NotFound();
+    {
+        var fiche = await _repo.GetByIdAsync(id);
+        if (fiche is null) return NotFound();
+
+        var ok = await _repo.MarquerPayeAsync(id);
+        if (!ok) return NotFound();
+
+        // Écriture comptable : Débit 6411 / Crédit caisse
+        try
+        {
+            var numTransaction = $"SALAIRE-{id}-{DateTime.Now:yyyyMMddHHmm}";
+            var nomEmploye = $"{fiche.NomPersonnel} {fiche.PrenomPersonnel}".Trim();
+            await _ecritureRepo.EcritureSalaireAsync(numTransaction, nomEmploye, fiche.Net_A_Payer,
+                idAgence: null, codeUser: null);
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "Écriture salaire ignorée pour fiche {Id}", id);
+        }
+
+        return Ok();
+    }
 
     [HttpDelete("supprimer/{id}")]
     public async Task<IActionResult> Supprimer(int id)

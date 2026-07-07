@@ -38,4 +38,8 @@ public interface IEcritureRepository
     /// <summary>Idem pour un enregistrement de bagage.</summary>
     Task<bool> EcritureBagageAsync(string numTransaction, string? refBagage, decimal montant,
         string? passager, int? idAgence, int? codeUser);
+
+    /// <summary>Génère l'écriture comptable d'un paiement de salaire (6411 / caisse).</summary>
+    Task<bool> EcritureSalaireAsync(string numTransaction, string nomEmploye, decimal montant,
+        int? idAgence, int? codeUser);
 }

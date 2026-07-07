@@ -26,7 +26,7 @@ namespace pAgenceAPI.Repositories
                 CONCAT(tv.POINT_DEPART, ' -> ', tv.POINT_ARRIVEE) AS Trajet_Voyage
               FROM paiement p
               LEFT JOIN passager pa    ON p.ID_passager    = pa.ID_passager
-              LEFT JOIN COLIS c        ON p.ID_COLIS       = c.ID_COLIS
+              LEFT JOIN colis c        ON p.ID_COLIS       = c.ID_COLIS
               LEFT JOIN voyage v       ON p.ID_voyage      = v.ID_voyage
               LEFT JOIN type_voyage tv ON v.ID_type_voyage  = tv.ID_type_voyage";
 
@@ -168,7 +168,7 @@ namespace pAgenceAPI.Repositories
                 $@"SELECT MONTH(p.DATE_paiement) AS Mois, SUM(p.MONTANT) AS Total
                    FROM paiement p
                    LEFT JOIN voyage v ON p.ID_voyage = v.ID_voyage
-                   LEFT JOIN COLIS c  ON p.ID_COLIS  = c.ID_COLIS
+                   LEFT JOIN colis c  ON p.ID_COLIS  = c.ID_COLIS
                    WHERE p.STATUT = 'Payé' AND YEAR(p.DATE_paiement) = @annee {where}
                    GROUP BY MONTH(p.DATE_paiement)",
                 new { annee, idAgence });

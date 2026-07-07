@@ -272,4 +272,31 @@ public class EcritureRepository : IEcritureRepository
             return false;
         }
     }
+
+    public async Task<bool> EcritureSalaireAsync(string numTransaction, string nomEmploye, decimal montant,
+        int? idAgence, int? codeUser)
+    {
+        try
+        {
+            using var db = new MySqlConnection(_cs);
+            var p = new DynamicParameters();
+            p.Add("p_num_transaction", numTransaction);
+            p.Add("p_nom_employe",     nomEmploye);
+            p.Add("p_montant",         montant);
+            p.Add("p_id_agence",       idAgence);
+            p.Add("p_code_user",       codeUser);
+            p.Add("p_ok",              dbType: System.Data.DbType.Byte,
+                  direction: System.Data.ParameterDirection.Output);
+
+            await db.ExecuteAsync("sp_ecriture_salaire_auto", p,
+                commandType: System.Data.CommandType.StoredProcedure);
+
+            return p.Get<byte>("p_ok") == 1;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "EcritureSalaire ignorée — {Num}", numTransaction);
+            return false;
+        }
+    }
 }

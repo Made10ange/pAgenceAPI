@@ -141,7 +141,99 @@ namespace pAgenceAPI.Repositories
                 WHERE ID_reservation = @Id",
                 new { StatutP = statutPaiement, RefP = referencePaiement, Provider = provider,
                       DateP = datePaiement, StatutR = statutRes, Id = id });
+
+            // Quand le paiement est confirmé, créer le passager s'il n'existe pas encore
+            if (statutPaiement == "Payé" && rows > 0)
+            {
+                try { await LierOuCreerPassagerAsync(conn, id); } catch { /* non bloquant */ }
+            }
+
             return rows > 0;
+        }
+
+        private async Task LierOuCreerPassagerAsync(MySqlConnection conn, int idReservation)
+        {
+            // Récupérer les infos client + agence de la réservation
+            var res = await conn.QueryFirstOrDefaultAsync<dynamic>(@"
+                SELECT r.NOM_CLIENT, r.PRENOM_CLIENT, r.TELEPHONE_CLIENT,
+                       r.NUMERO_CNI_CLIENT, r.EMAIL_CLIENT, r.ID_passager,
+                       v.Id_Agence
+                FROM reservation r
+                LEFT JOIN voyage v ON r.ID_voyage = v.ID_voyage
+                WHERE r.ID_reservation = @Id", new { Id = idReservation });
+
+            if (res == null) return;
+
+            // Déjà lié à un passager
+            if (res.ID_passager != null && (int)res.ID_passager > 0) return;
+
+            string? tel  = res.TELEPHONE_CLIENT;
+            string? nom  = res.NOM_CLIENT;
+            string? prenom = res.PRENOM_CLIENT;
+            string? cni  = res.NUMERO_CNI_CLIENT;
+            string? email = res.EMAIL_CLIENT;
+            int? idAgence = (int?)res.Id_Agence;
+
+            if (string.IsNullOrWhiteSpace(tel) && string.IsNullOrWhiteSpace(nom)) return;
+
+            // Chercher un passager existant uniquement si le nom ET le prénom correspondent exactement
+            // (évite de lier la réservation à un passager différent qui aurait le même téléphone)
+            int? idPassager = null;
+            if (!string.IsNullOrWhiteSpace(nom) && !string.IsNullOrWhiteSpace(prenom))
+            {
+                idPassager = await conn.ExecuteScalarAsync<int?>(@"
+                    SELECT ID_passager FROM passager
+                    WHERE LOWER(NOM) = LOWER(@Nom) AND LOWER(PRENOM) = LOWER(@Prenom)
+                    LIMIT 1", new { Nom = nom, Prenom = prenom });
+            }
+
+            // Créer le passager s'il n'existe pas (ou si le nom ne correspond à aucun existant)
+            if (idPassager == null || idPassager == 0)
+            {
+                idPassager = await conn.ExecuteScalarAsync<int>(@"
+                    INSERT INTO passager
+                        (NOM, PRENOM, TELEPHONE, NUMERO_PIECE, EMAIL, SEXE, Id_Agence)
+                    VALUES
+                        (@Nom, @Prenom, @Tel, @Cni, @Email, 'Non précisé', @IdAgence);
+                    SELECT LAST_INSERT_ID();",
+                    new { Nom = nom, Prenom = prenom, Tel = tel, Cni = cni,
+                          Email = email, IdAgence = idAgence });
+            }
+
+            // Lier la réservation au passager
+            if (idPassager > 0)
+            {
+                await conn.ExecuteAsync(
+                    "UPDATE reservation SET ID_passager = @IdP WHERE ID_reservation = @Id",
+                    new { IdP = idPassager, Id = idReservation });
+
+                // Créer l'entrée d'embarquement si elle n'existe pas déjà
+                var idVoyage = await conn.ExecuteScalarAsync<int?>(
+                    "SELECT ID_voyage FROM reservation WHERE ID_reservation = @Id",
+                    new { Id = idReservation });
+
+                var numSiege = await conn.ExecuteScalarAsync<int?>(
+                    "SELECT NUMERO_SIEGE FROM reservation WHERE ID_reservation = @Id",
+                    new { Id = idReservation });
+
+                if (idVoyage > 0)
+                {
+                    var existeEmbarquement = await conn.ExecuteScalarAsync<int>(@"
+                        SELECT COUNT(*) FROM embarquement_voyage_passager
+                        WHERE ID_voyage = @IdV AND ID_passager = @IdP",
+                        new { IdV = idVoyage, IdP = idPassager });
+
+                    if (existeEmbarquement == 0)
+                    {
+                        await conn.ExecuteAsync(@"
+                            INSERT INTO embarquement_voyage_passager
+                                (ID_voyage, ID_passager, STATUT_EMBARQUEMENT, NUMERO_SIEGE, DATE_ENREGISTREMENT)
+                            VALUES
+                                (@IdV, @IdP, 'En attente', @Siege, @Date)",
+                            new { IdV = idVoyage, IdP = idPassager, Siege = numSiege, Date = DateTime.Now });
+                    }
+                }
+            }
         }
 
         public async Task<bool> SetPassagerAsync(int id, int idPassager)

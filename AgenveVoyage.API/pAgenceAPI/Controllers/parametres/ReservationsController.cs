@@ -14,6 +14,7 @@ namespace pAgenceAPI.Controllers.parametres
         private readonly IVoyageRepository _voyageRepo;
         private readonly IAgenceRepository _agenceRepo;
         private readonly IEcritureRepository _ecritureRepo;
+        private readonly IBilletRepository _billetRepo;
         private readonly ILogger<ReservationsController> _logger;
 
         public ReservationsController(
@@ -23,6 +24,7 @@ namespace pAgenceAPI.Controllers.parametres
             IVoyageRepository voyageRepo,
             IAgenceRepository agenceRepo,
             IEcritureRepository ecritureRepo,
+            IBilletRepository billetRepo,
             ILogger<ReservationsController> logger)
         {
             _repo = repo;
@@ -31,6 +33,7 @@ namespace pAgenceAPI.Controllers.parametres
             _voyageRepo = voyageRepo;
             _agenceRepo = agenceRepo;
             _ecritureRepo = ecritureRepo;
+            _billetRepo = billetRepo;
             _logger = logger;
         }
 
@@ -137,46 +140,65 @@ namespace pAgenceAPI.Controllers.parametres
                 }
                 catch { /* log optionnel */ }
 
-                // Paiement confirmé : le client devient un passager en attente d'embarquement
+                // Paiement confirmé : écriture comptable + passager + embarquement
                 if (dto.StatutPaiement == "Payé")
                 {
                     try
                     {
                         var reservation = await _repo.GetByIdAsync(id);
-                        if (reservation != null && reservation.Id_Passager == null)
+                        if (reservation != null)
                         {
-                            // Le passager doit apparaître chez l'agence du point de départ : c'est là qu'il sera embarqué.
-                            var voyage = await _voyageRepo.GetByIdAsync(reservation.Id_Voyage);
+                            var voyage  = await _voyageRepo.GetByIdAsync(reservation.Id_Voyage);
                             var agences = await _agenceRepo.GetAllAsync();
                             var agenceDepart = agences.FirstOrDefault(a =>
                                 string.Equals(a.Ville?.Trim(), reservation.Point_Depart?.Trim(), StringComparison.OrdinalIgnoreCase));
+                            var idAgenceVente = agenceDepart?.Id_Agence ?? voyage?.Id_Agence;
 
-                            var idPassager = await _passagerRepo.AddAsync(new PassagerModel
+                            // Créer le passager, le billet et l'embarquement seulement s'il n'est pas encore lié
+                            if (reservation.Id_Passager == null)
                             {
-                                Nom = reservation.Nom_Client,
-                                Prenom = reservation.Prenom_Client,
-                                Telephone = reservation.Telephone_Client,
-                                Email = reservation.Email_Client,
-                                Type_Piece = "CNI",
-                                Numero_Piece = reservation.Numero_Cni_Client,
-                                Id_Agence = agenceDepart?.Id_Agence ?? voyage?.Id_Agence
-                            });
+                                var idPassager = await _passagerRepo.AddAsync(new PassagerModel
+                                {
+                                    Nom          = reservation.Nom_Client,
+                                    Prenom       = reservation.Prenom_Client,
+                                    Telephone    = reservation.Telephone_Client,
+                                    Email        = reservation.Email_Client,
+                                    Type_Piece   = "CNI",
+                                    Numero_Piece = reservation.Numero_Cni_Client,
+                                    Id_Agence    = idAgenceVente
+                                });
 
-                            await _repo.SetPassagerAsync(id, idPassager);
+                                await _repo.SetPassagerAsync(id, idPassager);
 
-                            await _embarquementRepo.AddAsync(new EmbarquementVoyagePassagerModel
-                            {
-                                Id_Voyage = reservation.Id_Voyage,
-                                Id_Passager = idPassager,
-                                Statut_Embarquement = "Confirmé",
-                                Numero_Siege = reservation.Numero_Siege,
-                                Date_Enregistrement = DateTime.Now
-                            });
+                                // Créer un billet officiel pour le passager en ligne
+                                await _billetRepo.AjouterAsync(new BilletModel
+                                {
+                                    Id_Passager    = idPassager,
+                                    Point_Depart   = reservation.Point_Depart ?? "",
+                                    Point_Arrivee  = reservation.Point_Arrivee ?? "",
+                                    Id_Type_Voyage = voyage?.Id_Type_Voyage,
+                                    Montant        = reservation.Montant,
+                                    Date_Achat     = DateTime.Now,
+                                    Id_Voyage_Prevu = reservation.Id_Voyage,
+                                    Numero_Siege   = reservation.Numero_Siege,
+                                    Mode_Paiement  = dto.Provider ?? "Mobile Money",
+                                    Vendu_Par      = "En ligne",
+                                    Statut         = "Valide"
+                                });
 
-                            // Écriture comptable automatique de la vente en ligne (silencieuse si journée non ouverte)
+                                await _embarquementRepo.AddAsync(new EmbarquementVoyagePassagerModel
+                                {
+                                    Id_Voyage           = reservation.Id_Voyage,
+                                    Id_Passager         = idPassager,
+                                    Statut_Embarquement = "En attente",
+                                    Numero_Siege        = reservation.Numero_Siege,
+                                    Date_Enregistrement = DateTime.Now
+                                });
+                            }
+
+                            // Écriture comptable — toujours générée si journée ouverte, quelle que soit la date
                             if (reservation.Montant > 0)
                             {
-                                var idAgenceVente = agenceDepart?.Id_Agence ?? voyage?.Id_Agence;
                                 var trajet = $"{reservation.Point_Depart} - {reservation.Point_Arrivee}";
                                 await _ecritureRepo.EcritureVenteBilletAsync(
                                     $"RES-{reservation.Reference}", reservation.Reference, reservation.Montant,
@@ -186,7 +208,7 @@ namespace pAgenceAPI.Controllers.parametres
                     }
                     catch (Exception ex)
                     {
-                        _logger.LogError(ex, "Erreur création passager/embarquement après paiement, reservation id={Id}", id);
+                        _logger.LogError(ex, "Erreur écriture/passager après paiement, reservation id={Id}", id);
                     }
                 }
 
