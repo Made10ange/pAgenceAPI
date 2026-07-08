@@ -162,19 +162,10 @@ namespace pAgenceAPI.Repositories
                 LEFT JOIN voyage      vu  ON vu.Id_Voyage       = b.Id_Voyage_Utilise
                 LEFT JOIN type_voyage tvu ON tvu.Id_Type_Voyage = vu.Id_Type_Voyage
                 JOIN  voyage          v0   ON v0.Id_Voyage       = @idVoyage
-                LEFT JOIN type_voyage tv0  ON tv0.Id_Type_Voyage = v0.Id_Type_Voyage
+                JOIN  type_voyage     tv0  ON tv0.Id_Type_Voyage = v0.Id_Type_Voyage
                 WHERE b.Statut IN ('Valide', 'Reporté')
-                  AND (
-                        b.Id_Voyage_Prevu = @idVoyage
-                        OR b.Id_Voyage_Prevu IN (
-                            SELECT Id_Voyage FROM voyage
-                            WHERE Id_Type_Voyage = v0.Id_Type_Voyage
-                        )
-                        OR (b.Id_Voyage_Prevu IS NULL
-                            AND b.Id_Type_Voyage = v0.Id_Type_Voyage)
-                        OR (LOWER(b.Point_Depart)  = LOWER(tv0.Point_Depart)
-                            AND LOWER(b.Point_Arrivee) = LOWER(tv0.Point_Arrivee))
-                      )
+                  AND LOWER(b.Point_Depart)  = LOWER(tv0.Point_Depart)
+                  AND LOWER(b.Point_Arrivee) = LOWER(tv0.Point_Arrivee)
                 ORDER BY b.Date_Achat ASC";
 
             using var db = new MySqlConnection(_conn);
