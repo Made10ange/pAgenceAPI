@@ -79,6 +79,15 @@ namespace pAgenceAPI.Controllers.parametres
             return Ok(data);
         }
 
+        // GET api/Reservations/pour-embarquement/{idVoyage}
+        // Toutes réservations payées non utilisées du même type de voyage
+        [HttpGet("pour-embarquement/{idVoyage}")]
+        public async Task<IActionResult> GetPourEmbarquement(int idVoyage)
+        {
+            var data = await _repo.GetPourEmbarquementAsync(idVoyage);
+            return Ok(data);
+        }
+
         // POST api/Reservations/creer
         [HttpPost("creer")]
         public async Task<IActionResult> Creer([FromBody] ReservationModel model)

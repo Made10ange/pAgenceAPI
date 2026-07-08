@@ -9,6 +9,7 @@ namespace pAgenceAPI.Repositories
         Task<ReservationModel?> GetByIdAsync(int id);
         Task<ReservationModel?> GetByReferenceAsync(string reference);
         Task<List<ReservationModel>> GetByVoyageAsync(int idVoyage);
+        Task<List<ReservationModel>> GetPourEmbarquementAsync(int idVoyage);
         Task<int> AddAsync(ReservationModel reservation);
         Task<bool> UpdateStatutPaiementAsync(int id, string statutPaiement, string? referencePaiement, string? provider);
         Task<bool> SetPassagerAsync(int id, int idPassager);

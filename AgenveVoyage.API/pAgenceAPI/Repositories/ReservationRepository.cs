@@ -94,6 +94,43 @@ namespace pAgenceAPI.Repositories
             return result.ToList();
         }
 
+        public async Task<List<ReservationModel>> GetPourEmbarquementAsync(int idVoyage)
+        {
+            // Toutes les réservations payées non utilisées du même type de voyage
+            const string sql = @"
+                SELECT r.ID_reservation    as Id_Reservation,
+                       r.REFERENCE         as Reference,
+                       r.ID_voyage         as Id_Voyage,
+                       r.ID_passager       as Id_Passager,
+                       r.NOM_CLIENT        as Nom_Client,
+                       r.PRENOM_CLIENT     as Prenom_Client,
+                       r.TELEPHONE_CLIENT  as Telephone_Client,
+                       r.NUMERO_CNI_CLIENT as Numero_Cni_Client,
+                       r.EMAIL_CLIENT      as Email_Client,
+                       r.NUMERO_SIEGE      as Numero_Siege,
+                       r.MONTANT           as Montant,
+                       r.STATUT_paiement   as Statut_Paiement,
+                       r.STATUT_reservation as Statut_Reservation,
+                       tv.POINT_DEPART     as Point_Depart,
+                       tv.POINT_ARRIVEE    as Point_Arrivee,
+                       v.DATE_DEPART       as Date_Depart,
+                       v.HEURE_DEPART      as Heure_Depart,
+                       tv.LIBELLE_TYPE_VOYAGE as Libelle_Type_Voyage
+                FROM reservation r
+                JOIN voyage v_cible ON v_cible.Id_Voyage = @idVoyage
+                JOIN voyage v       ON v.Id_Voyage       = r.ID_voyage
+                JOIN type_voyage tv ON tv.Id_Type_Voyage = v.Id_Type_Voyage
+                WHERE r.STATUT_paiement = 'Payé'
+                  AND r.STATUT_reservation NOT IN ('Utilisée', 'Annulée')
+                  AND v.Id_Type_Voyage = v_cible.Id_Type_Voyage
+                  AND r.ID_passager IS NOT NULL
+                ORDER BY r.DATE_CREATION ASC";
+
+            using var conn = new MySqlConnection(_connectionString);
+            var result = await conn.QueryAsync<ReservationModel>(sql, new { idVoyage });
+            return result.ToList();
+        }
+
         public async Task<int> AddAsync(ReservationModel r)
         {
             // Générer la référence unique : RES-YYYYMMDD-XXXX
