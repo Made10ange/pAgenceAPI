@@ -34,7 +34,8 @@ namespace pAgenceAPI.Repositories
                 tv.POINT_ARRIVEE    as Point_Arrivee,
                 v.DATE_DEPART       as Date_Depart,
                 v.HEURE_DEPART      as Heure_Depart,
-                vh.IMMATRICULATION  as Immatriculation
+                vh.IMMATRICULATION  as Immatriculation,
+                tv.LIBELLE_TYPE_VOYAGE as Libelle_Type_Voyage
             FROM reservation r
             LEFT JOIN voyage v       ON r.ID_voyage        = v.ID_voyage
             LEFT JOIN type_voyage tv ON v.ID_type_voyage   = tv.ID_type_voyage

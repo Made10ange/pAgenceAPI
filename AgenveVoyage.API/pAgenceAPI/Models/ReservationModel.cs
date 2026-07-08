@@ -59,6 +59,7 @@ namespace pAgenceAPI.Models
         public DateTime? Date_Depart { get; set; }
         public TimeSpan? Heure_Depart { get; set; }
         public string? Immatriculation { get; set; }
+        public string? Libelle_Type_Voyage { get; set; }
     }
 
     public class PaiementLogModel
