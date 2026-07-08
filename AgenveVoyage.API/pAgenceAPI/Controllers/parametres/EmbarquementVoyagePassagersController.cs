@@ -194,6 +194,8 @@ namespace pAgenceAPI.Controllers.parametres
                     return NotFound(new { message = $"Embarquement ID {id} non trouvé" });
 
                 var message = await _repository.UpdateAsync(embarquement);
+                if (embarquement.Statut_Embarquement == "Confirmé")
+                    await _billetRepository.UtiliserParPassagerAsync(embarquement.Id_Passager, embarquement.Id_Voyage);
                 return Ok(new { message });
             }
             catch (Exception ex)
