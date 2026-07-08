@@ -117,13 +117,15 @@ namespace pAgenceAPI.Repositories
                        v.HEURE_DEPART      as Heure_Depart,
                        tv.LIBELLE_TYPE_VOYAGE as Libelle_Type_Voyage
                 FROM reservation r
-                JOIN voyage v_cible ON v_cible.Id_Voyage = @idVoyage
-                JOIN voyage v       ON v.Id_Voyage       = r.ID_voyage
-                JOIN type_voyage tv ON tv.Id_Type_Voyage = v.Id_Type_Voyage
+                JOIN voyage      v_cible  ON v_cible.Id_Voyage       = @idVoyage
+                JOIN type_voyage tv_cible ON tv_cible.Id_Type_Voyage  = v_cible.Id_Type_Voyage
+                JOIN voyage      v        ON v.Id_Voyage              = r.ID_voyage
+                JOIN type_voyage tv       ON tv.Id_Type_Voyage        = v.Id_Type_Voyage
                 WHERE r.STATUT_paiement = 'Payé'
                   AND r.STATUT_reservation NOT IN ('Utilisée', 'Annulée')
-                  AND v.Id_Type_Voyage = v_cible.Id_Type_Voyage
-                  AND r.ID_passager IS NOT NULL
+                  AND LOWER(tv.LIBELLE_TYPE_VOYAGE) = LOWER(tv_cible.LIBELLE_TYPE_VOYAGE)
+                  AND LOWER(tv.POINT_DEPART)        = LOWER(tv_cible.POINT_DEPART)
+                  AND LOWER(tv.POINT_ARRIVEE)       = LOWER(tv_cible.POINT_ARRIVEE)
                 ORDER BY r.DATE_CREATION ASC";
 
             using var conn = new MySqlConnection(_connectionString);
