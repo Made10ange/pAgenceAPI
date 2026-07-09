@@ -146,10 +146,10 @@ namespace pAgenceAPI.Repositories
 
         public async Task<IEnumerable<BilletModel>> GetPourEmbarquementAsync(int idVoyage)
         {
-            // Un billet est éligible à l'embarquement si :
-            //   1. Il est directement assigné à ce voyage (Id_Voyage_Prevu)
-            //   2. OU il a le même type de voyage ET le même trajet (Point_Depart / Point_Arrivee)
-            //   3. OU il a le même type de voyage et pas de trajet explicite stocké
+            // Stratégie : récupérer d'abord le trajet+libellé du voyage cible,
+            // puis ramener tous les billets valides qui correspondent.
+            // On évite de comparer les IDs de type_voyage car il peut en exister
+            // plusieurs avec le même libellé (doublons historiques).
             const string sql = @"
                 SELECT b.*,
                        p.Nom       AS Nom_Passager,
@@ -169,33 +169,33 @@ namespace pAgenceAPI.Repositories
                 LEFT JOIN type_voyage tv0 ON tv0.Id_Type_Voyage = v0.Id_Type_Voyage
                 WHERE b.Statut IN ('Valide', 'Reporté')
                   AND (
-                      -- 1. Billet assigné directement à ce voyage
+                      -- 1. Billet lié directement à ce voyage
                       b.Id_Voyage_Prevu = v0.Id_Voyage
+
                       OR
-                      -- 2. Même type + trajet identique
+
+                      -- 2. Même type_voyage ID
+                      (b.Id_Type_Voyage IS NOT NULL AND b.Id_Type_Voyage = v0.Id_Type_Voyage)
+
+                      OR
+
+                      -- 3. Même libellé type + même trajet (gère doublons type_voyage)
                       (
-                          b.Id_Type_Voyage = v0.Id_Type_Voyage
-                          AND b.Id_Type_Voyage IS NOT NULL
-                          AND v0.Id_Type_Voyage IS NOT NULL
+                          tv.Libelle_Type_Voyage IS NOT NULL
+                          AND tv0.Libelle_Type_Voyage IS NOT NULL
+                          AND LOWER(tv.Libelle_Type_Voyage) = LOWER(tv0.Libelle_Type_Voyage)
                           AND LOWER(COALESCE(b.Point_Depart,''))  = LOWER(COALESCE(tv0.Point_Depart,''))
                           AND LOWER(COALESCE(b.Point_Arrivee,'')) = LOWER(COALESCE(tv0.Point_Arrivee,''))
                       )
+
                       OR
-                      -- 3. Même type, trajet non renseigné sur le billet (billet générique)
+
+                      -- 4. Trajet direct sur le billet correspond au trajet du voyage
                       (
-                          b.Id_Type_Voyage = v0.Id_Type_Voyage
-                          AND b.Id_Type_Voyage IS NOT NULL
-                          AND v0.Id_Type_Voyage IS NOT NULL
-                          AND COALESCE(b.Point_Depart,'')  = ''
-                          AND COALESCE(b.Point_Arrivee,'') = ''
-                      )
-                      OR
-                      -- 4. Pas de type sur le billet mais trajet correspondant
-                      (
-                          b.Id_Type_Voyage IS NULL
-                          AND tv0.Id_Type_Voyage IS NOT NULL
-                          AND LOWER(COALESCE(b.Point_Depart,''))  = LOWER(COALESCE(tv0.Point_Depart,''))
-                          AND LOWER(COALESCE(b.Point_Arrivee,'')) = LOWER(COALESCE(tv0.Point_Arrivee,''))
+                          COALESCE(b.Point_Depart,'') != ''
+                          AND tv0.Point_Depart IS NOT NULL
+                          AND LOWER(b.Point_Depart)  = LOWER(tv0.Point_Depart)
+                          AND LOWER(b.Point_Arrivee) = LOWER(tv0.Point_Arrivee)
                       )
                   )
                 ORDER BY b.Date_Achat ASC";
