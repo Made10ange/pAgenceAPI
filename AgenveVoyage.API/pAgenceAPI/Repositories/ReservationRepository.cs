@@ -21,6 +21,7 @@ namespace pAgenceAPI.Repositories
                 r.NUMERO_CNI_CLIENT as Numero_Cni_Client,
                 r.EMAIL_CLIENT      as Email_Client,
                 r.NUMERO_SIEGE      as Numero_Siege,
+                r.SEXE_CLIENT       as Sexe_Client,
                 r.MONTANT           as Montant,
                 r.STATUT_paiement   as Statut_Paiement,
                 r.PROVIDER_paiement as Provider_Paiement,
@@ -154,11 +155,11 @@ namespace pAgenceAPI.Repositories
             var sql = @"
                 INSERT INTO reservation
                     (REFERENCE, ID_voyage, ID_passager, NOM_CLIENT, PRENOM_CLIENT,
-                     TELEPHONE_CLIENT, NUMERO_CNI_CLIENT, EMAIL_CLIENT, NUMERO_SIEGE, MONTANT,
+                     TELEPHONE_CLIENT, NUMERO_CNI_CLIENT, EMAIL_CLIENT, NUMERO_SIEGE, SEXE_CLIENT, MONTANT,
                      STATUT_paiement, STATUT_reservation)
                 VALUES
                     (@Reference, @Id_Voyage, @Id_Passager, @Nom_Client, @Prenom_Client,
-                     @Telephone_Client, @Numero_Cni_Client, @Email_Client, @Numero_Siege, @Montant,
+                     @Telephone_Client, @Numero_Cni_Client, @Email_Client, @Numero_Siege, @Sexe_Client, @Montant,
                      @Statut_Paiement, @Statut_Reservation);
                 SELECT LAST_INSERT_ID();";
 

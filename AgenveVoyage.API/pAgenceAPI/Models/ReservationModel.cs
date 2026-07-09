@@ -34,6 +34,9 @@ namespace pAgenceAPI.Models
 
         public int? Numero_Siege { get; set; }
 
+        [StringLength(20)]
+        public string? Sexe_Client { get; set; } = "Non précisé";
+
         [Required]
         public decimal Montant { get; set; }
 

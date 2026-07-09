@@ -117,6 +117,18 @@ try
 }
 catch { /* déjà nullable — pas grave */ }
 
+// Ajouter SEXE_CLIENT dans la table reservation (migration one-shot)
+try
+{
+    var connStrSexe = builder.Configuration.GetConnectionString("DefaultConnection");
+    using var connSexe = new MySqlConnector.MySqlConnection(connStrSexe);
+    await connSexe.OpenAsync();
+    await new MySqlConnector.MySqlCommand(
+        "ALTER TABLE reservation ADD COLUMN IF NOT EXISTS SEXE_CLIENT VARCHAR(20) DEFAULT 'Non précisé';",
+        connSexe).ExecuteNonQueryAsync();
+}
+catch { }
+
 // Créer l'admin par défaut si aucun agent n'existe
 using (var scope = app.Services.CreateScope())
 {

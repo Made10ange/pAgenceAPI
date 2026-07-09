@@ -174,6 +174,7 @@ namespace pAgenceAPI.Controllers.parametres
                                     Email        = reservation.Email_Client,
                                     Type_Piece   = "CNI",
                                     Numero_Piece = reservation.Numero_Cni_Client,
+                                    Sexe         = reservation.Sexe_Client ?? "Non précisé",
                                     Id_Agence    = idAgenceVente
                                 });
 
