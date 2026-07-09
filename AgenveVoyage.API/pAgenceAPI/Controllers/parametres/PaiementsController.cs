@@ -1,3 +1,4 @@
+using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using pAgenceAPI.Controllers;
 using pAgenceAPI.Models;
@@ -27,6 +28,46 @@ namespace pAgenceAPI.Controllers.parametres
             var a = annee ?? DateTime.Today.Year;
             var data = await _repo.GetChiffreAffaireMensuelAsync(a, AgenceId);
             return Ok(data.Select(d => new { mois = d.Mois, total = d.Total }));
+        }
+
+        // GET api/Paiements/recettes  — recettes du jour et du mois depuis la table billet (fiable)
+        [HttpGet("recettes")]
+        public async Task<IActionResult> Recettes()
+        {
+            try
+            {
+                var cs = HttpContext.RequestServices
+                    .GetRequiredService<IConfiguration>()
+                    .GetConnectionString("DefaultConnection")!;
+                using var conn = new MySqlConnector.MySqlConnection(cs);
+
+                // Recettes par billet (agence vendeuse ou agence du voyage)
+                var idAgence = AgenceId;
+                var sql = @"
+                    SELECT
+                        IFNULL(SUM(CASE WHEN DATE(b.Date_Achat) = CURDATE()                        THEN b.Montant ELSE 0 END), 0) AS RecettesJour,
+                        IFNULL(SUM(CASE WHEN MONTH(b.Date_Achat) = MONTH(CURDATE())
+                                         AND YEAR(b.Date_Achat)  = YEAR(CURDATE())                 THEN b.Montant ELSE 0 END), 0) AS RecettesMois,
+                        SUM(CASE WHEN DATE(b.Date_Achat) = CURDATE()                               THEN 1 ELSE 0 END)             AS NbJour,
+                        SUM(CASE WHEN MONTH(b.Date_Achat) = MONTH(CURDATE())
+                                  AND YEAR(b.Date_Achat)  = YEAR(CURDATE())                        THEN 1 ELSE 0 END)             AS NbMois
+                    FROM billet b
+                    LEFT JOIN voyage v ON v.Id_Voyage = b.Id_Voyage_Prevu
+                    WHERE (@idAgence IS NULL OR b.Id_Agence = @idAgence OR v.Id_Agence = @idAgence)";
+
+                var r = await conn.QueryFirstOrDefaultAsync<dynamic>(sql, new { idAgence });
+                return Ok(new
+                {
+                    RecettesJour  = (decimal)(r?.RecettesJour  ?? 0),
+                    RecettesMois  = (decimal)(r?.RecettesMois  ?? 0),
+                    NombreJour    = (int)(r?.NbJour ?? 0),
+                    NombreMois    = (int)(r?.NbMois ?? 0)
+                });
+            }
+            catch (Exception ex)
+            {
+                return Ok(new { RecettesJour = 0m, RecettesMois = 0m, NombreJour = 0, NombreMois = 0 });
+            }
         }
 
         [HttpGet("{id}")]
