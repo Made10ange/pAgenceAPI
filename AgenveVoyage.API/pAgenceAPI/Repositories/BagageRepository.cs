@@ -309,13 +309,28 @@ namespace pAgenceAPI.Repositories
             try
             {
                 using var connection = new MySqlConnection(_connectionString);
+                // Inclure les bagages des passagers qui :
+                //   1. Ont un enregistrement embarquement pour ce voyage
+                //   2. OU ont un billet valide pour ce voyage (même type+trajet)
                 return (await connection.QueryAsync<BagageModel>(
                     BaseSelectSql + @"
-                    WHERE b.ID_passager IN (
-                        SELECT ID_passager FROM embarquement_voyage_passager
-                        WHERE ID_voyage = @idVoyage
+                    JOIN voyage v0 ON v0.ID_voyage = @idVoyage
+                    LEFT JOIN type_voyage tv0 ON tv0.ID_type_voyage = v0.ID_type_voyage
+                    WHERE b.STATUT = 'En attente'
+                    AND b.ID_passager IN (
+                        SELECT ID_passager FROM embarquement_voyage_passager WHERE ID_voyage = @idVoyage
+                        UNION
+                        SELECT bl.ID_passager FROM billet bl
+                        WHERE bl.STATUT IN ('Valide','Reporté')
+                          AND bl.ID_passager IS NOT NULL
+                          AND (
+                              bl.ID_VOYAGE_PREVU = @idVoyage
+                              OR bl.ID_TYPE_VOYAGE = v0.ID_type_voyage
+                              OR (tv0.ID_type_voyage IS NOT NULL
+                                  AND LOWER(COALESCE(bl.POINT_DEPART,'')) = LOWER(COALESCE(tv0.POINT_DEPART,''))
+                                  AND LOWER(COALESCE(bl.POINT_ARRIVEE,'')) = LOWER(COALESCE(tv0.POINT_ARRIVEE,'')))
+                          )
                     )
-                    AND b.STATUT = 'En attente'
                     ORDER BY b.DATE_ENREGISTREMENT DESC",
                     new { idVoyage }
                 )).ToList();
