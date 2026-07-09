@@ -10,14 +10,17 @@ namespace pAgenceAPI.Controllers.parametres
     {
         private readonly IBilletRepository _repo;
         private readonly IEcritureRepository _ecriture;
+        private readonly IReservationRepository _reservationRepo;
         private readonly ILogger<BilletsController> _log;
 
         public BilletsController(IBilletRepository repo, IEcritureRepository ecriture,
+                                 IReservationRepository reservationRepo,
                                  ILogger<BilletsController> log)
         {
-            _repo     = repo;
-            _ecriture = ecriture;
-            _log      = log;
+            _repo            = repo;
+            _ecriture        = ecriture;
+            _reservationRepo = reservationRepo;
+            _log             = log;
         }
 
         [HttpGet("liste")]
@@ -105,6 +108,20 @@ namespace pAgenceAPI.Controllers.parametres
                     await _ecriture.EcritureVenteBilletAsync(
                         numTx, created.Numero_Billet, created.Montant,
                         created.Libelle_Type_Voyage, trajet, AgenceId, UserId);
+                }
+
+                // Marquer les réservations en ligne du passager comme "Utilisée" (le billet les remplace)
+                if (billet.Id_Passager > 0)
+                {
+                    var reservations = await _reservationRepo.GetAllAsync();
+                    foreach (var r in reservations.Where(r =>
+                        r.Id_Passager == billet.Id_Passager &&
+                        r.Statut_Paiement == "Payé" &&
+                        r.Statut_Reservation != "Utilisée" &&
+                        r.Statut_Reservation != "Annulée"))
+                    {
+                        await _reservationRepo.UpdateStatutReservationAsync(r.Id_Reservation, "Utilisée");
+                    }
                 }
 
                 return CreatedAtAction(nameof(GetById), new { id }, created);
