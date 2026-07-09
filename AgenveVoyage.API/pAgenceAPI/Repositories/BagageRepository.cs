@@ -46,8 +46,12 @@ namespace pAgenceAPI.Repositories
             try
             {
                 using var connection = new MySqlConnection(_connectionString);
+                // Inclure les bagages dont le voyage passager OU le voyage bagage appartient à cette agence,
+                // MAIS AUSSI les bagages sans voyage lié (créés directement, pas encore assignés)
                 var sql = idAgence.HasValue
-                    ? BaseSelectSql + " WHERE vp.Id_Agence = @IdAgence ORDER BY b.DATE_ENREGISTREMENT DESC"
+                    ? BaseSelectSql + @" WHERE (vp.Id_Agence = @IdAgence OR vb.Id_Agence = @IdAgence
+                                               OR (vp.Id_Agence IS NULL AND vb.Id_Agence IS NULL))
+                                        ORDER BY b.DATE_ENREGISTREMENT DESC"
                     : BaseSelectSql + " ORDER BY b.DATE_ENREGISTREMENT DESC";
                 return (await connection.QueryAsync<BagageModel>(sql, new { IdAgence = idAgence })).ToList();
             }
