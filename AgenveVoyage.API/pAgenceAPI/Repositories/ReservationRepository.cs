@@ -127,6 +127,7 @@ namespace pAgenceAPI.Repositories
                   AND LOWER(tv.LIBELLE_TYPE_VOYAGE) = LOWER(tv_cible.LIBELLE_TYPE_VOYAGE)
                   AND LOWER(tv.POINT_DEPART)        = LOWER(tv_cible.POINT_DEPART)
                   AND LOWER(tv.POINT_ARRIVEE)       = LOWER(tv_cible.POINT_ARRIVEE)
+                  AND DATE(v.DATE_DEPART)           <= DATE(v_cible.DATE_DEPART)
                 ORDER BY r.DATE_CREATION ASC";
 
             using var conn = new MySqlConnection(_connectionString);
