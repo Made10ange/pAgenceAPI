@@ -100,9 +100,13 @@ namespace pAgenceAPI.Repositories
                 return (await connection.QueryAsync<ColisModel>(
                     BaseSelectSql + @"
                     JOIN voyage v ON v.ID_voyage = @idVoyage
-                    JOIN type_voyage tv ON tv.ID_type_voyage = v.ID_type_voyage
-                    WHERE LOWER(c.POINT_DEPART)  = LOWER(tv.POINT_DEPART)
-                      AND LOWER(c.POINT_ARRIVEE) = LOWER(tv.POINT_ARRIVEE)
+                    LEFT JOIN type_voyage tv ON tv.ID_type_voyage = v.ID_type_voyage
+                    WHERE (
+                        (tv.POINT_DEPART IS NOT NULL
+                         AND LOWER(c.POINT_DEPART)  = LOWER(tv.POINT_DEPART)
+                         AND LOWER(c.POINT_ARRIVEE) = LOWER(tv.POINT_ARRIVEE))
+                        OR c.ID_VOYAGE = @idVoyage
+                    )
                       AND c.STATUT NOT IN ('Livré', 'Annulé')
                     ORDER BY c.DATE_ENVOI DESC",
                     new { idVoyage }
