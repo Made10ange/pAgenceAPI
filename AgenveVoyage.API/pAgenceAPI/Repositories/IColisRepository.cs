@@ -8,6 +8,7 @@ namespace pAgenceAPI.Repositories
         Task<ColisModel?> GetByIdAsync(int id);
         Task<ColisModel?> GetByReferenceAsync(string reference);
         Task<List<ColisModel>> GetByVoyageAsync(int idVoyage);
+        Task<List<ColisModel>> GetByTrajetVoyageAsync(int idVoyage);
         Task<List<ColisModel>> GetByStatutAsync(string statut);
         Task<List<ColisModel>> SearchAsync(string motCle);
         Task<int> AddAsync(ColisModel colis);

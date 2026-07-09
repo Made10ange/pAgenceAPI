@@ -191,6 +191,13 @@ namespace pAgenceAPI.Controllers.parametres
             }
         }
 
+        [HttpGet("par-embarquement/{idVoyage}")]
+        public async Task<ActionResult<List<BagageModel>>> GetByPassagersEmbarques(int idVoyage)
+        {
+            try { return Ok(await _repository.GetByPassagersEmbarquesAsync(idVoyage)); }
+            catch (Exception ex) { return Problem(detail: ex.Message, statusCode: 500); }
+        }
+
         [HttpGet("en-attente")]
         public async Task<ActionResult<List<BagageModel>>> GetEnAttente()
         {

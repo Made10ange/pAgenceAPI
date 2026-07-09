@@ -31,5 +31,8 @@ namespace pAgenceAPI.Repositories
 
         // Retourne tous les bagages livrés (archives)
         Task<List<BagageModel>> GetArchivesAsync(int? idAgence = null);
+
+        // Retourne les bagages des passagers embarqués sur un voyage
+        Task<List<BagageModel>> GetByPassagersEmbarquesAsync(int idVoyage);
     }
 }

@@ -92,6 +92,25 @@ namespace pAgenceAPI.Repositories
             catch (Exception ex) { _logger.LogError(ex, "Erreur GetByVoyageAsync colis id={Id}", idVoyage); throw; }
         }
 
+        public async Task<List<ColisModel>> GetByTrajetVoyageAsync(int idVoyage)
+        {
+            try
+            {
+                using var connection = new MySqlConnection(_connectionString);
+                return (await connection.QueryAsync<ColisModel>(
+                    BaseSelectSql + @"
+                    JOIN voyage v ON v.ID_voyage = @idVoyage
+                    JOIN type_voyage tv ON tv.ID_type_voyage = v.ID_type_voyage
+                    WHERE LOWER(c.POINT_DEPART)  = LOWER(tv.POINT_DEPART)
+                      AND LOWER(c.POINT_ARRIVEE) = LOWER(tv.POINT_ARRIVEE)
+                      AND c.STATUT NOT IN ('Livré', 'Annulé')
+                    ORDER BY c.DATE_ENVOI DESC",
+                    new { idVoyage }
+                )).ToList();
+            }
+            catch (Exception ex) { _logger.LogError(ex, "Erreur GetByTrajetVoyageAsync idVoyage={Id}", idVoyage); throw; }
+        }
+
         public async Task<List<ColisModel>> GetByStatutAsync(string statut)
         {
             try

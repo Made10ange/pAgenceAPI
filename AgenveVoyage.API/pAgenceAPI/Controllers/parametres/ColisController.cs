@@ -68,6 +68,13 @@ namespace pAgenceAPI.Controllers.parametres
             catch (Exception ex) { return Problem(detail: ex.Message, statusCode: 500); }
         }
 
+        [HttpGet("par-trajet-voyage/{idVoyage}")]
+        public async Task<ActionResult<List<ColisModel>>> GetByTrajetVoyage(int idVoyage)
+        {
+            try { return Ok(await _repository.GetByTrajetVoyageAsync(idVoyage)); }
+            catch (Exception ex) { return Problem(detail: ex.Message, statusCode: 500); }
+        }
+
         [HttpGet("par-statut")]
         public async Task<ActionResult<List<ColisModel>>> GetByStatut([FromQuery] string statut)
         {

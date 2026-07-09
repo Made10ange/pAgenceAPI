@@ -300,6 +300,25 @@ namespace pAgenceAPI.Repositories
             catch (Exception ex) { _logger.LogError(ex, "Erreur LivrerParVoyageAsync voyage id={Id}", idVoyage); throw; }
         }
 
+        public async Task<List<BagageModel>> GetByPassagersEmbarquesAsync(int idVoyage)
+        {
+            try
+            {
+                using var connection = new MySqlConnection(_connectionString);
+                return (await connection.QueryAsync<BagageModel>(
+                    BaseSelectSql + @"
+                    WHERE b.ID_passager IN (
+                        SELECT ID_passager FROM embarquement_voyage_passager
+                        WHERE ID_voyage = @idVoyage
+                    )
+                    AND b.STATUT = 'En attente'
+                    ORDER BY b.DATE_ENREGISTREMENT DESC",
+                    new { idVoyage }
+                )).ToList();
+            }
+            catch (Exception ex) { _logger.LogError(ex, "Erreur GetByPassagersEmbarquesAsync idVoyage={Id}", idVoyage); throw; }
+        }
+
         public async Task<List<BagageModel>> GetArchivesAsync(int? idAgence = null)
         {
             try
