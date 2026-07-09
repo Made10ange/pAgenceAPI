@@ -117,6 +117,39 @@ try
 }
 catch { /* déjà nullable — pas grave */ }
 
+// Créer les tables groupe, utilisateur_groupe, privilege si elles n'existent pas
+try
+{
+    var connStrG = builder.Configuration.GetConnectionString("DefaultConnection");
+    using var connG = new MySqlConnector.MySqlConnection(connStrG);
+    await connG.OpenAsync();
+    await new MySqlConnector.MySqlCommand(@"
+        CREATE TABLE IF NOT EXISTS groupe (
+            ID_groupe INT AUTO_INCREMENT PRIMARY KEY,
+            Libelle VARCHAR(100) NOT NULL,
+            Description VARCHAR(255) NULL,
+            Couleur VARCHAR(20) DEFAULT '#7C3AED',
+            Actif TINYINT(1) DEFAULT 1,
+            Date_Creation DATETIME DEFAULT CURRENT_TIMESTAMP
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+        CREATE TABLE IF NOT EXISTS utilisateur_groupe (
+            Id_Utilisateur INT NOT NULL,
+            ID_groupe INT NOT NULL,
+            Date_Affectation DATETIME DEFAULT CURRENT_TIMESTAMP,
+            PRIMARY KEY (Id_Utilisateur, ID_groupe)
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
+
+        CREATE TABLE IF NOT EXISTS privilege (
+            ID_privilege INT AUTO_INCREMENT PRIMARY KEY,
+            ID_groupe INT NOT NULL,
+            Module VARCHAR(50) NOT NULL,
+            Action VARCHAR(50) NOT NULL,
+            Autorise TINYINT(1) DEFAULT 1
+        ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;", connG).ExecuteNonQueryAsync();
+}
+catch { }
+
 // Ajouter SEXE_CLIENT dans la table reservation (migration one-shot)
 try
 {
