@@ -174,8 +174,7 @@ namespace pAgenceAPI.Controllers.parametres
 
                 var message = await _repository.AddAsync(embarquement);
                 await _billetRepository.UtiliserParPassagerAsync(embarquement.Id_Passager, embarquement.Id_Voyage);
-                // Marquer les réservations payées du passager comme "Utilisée"
-                await MarquerReservationsUtilisees(embarquement.Id_Passager);
+                await MarquerReservationsUtilisees(embarquement.Id_Passager, embarquement.Id_Voyage);
                 return Ok(new { message });
             }
             catch (Exception ex)
@@ -201,7 +200,7 @@ namespace pAgenceAPI.Controllers.parametres
                 if (embarquement.Statut_Embarquement == "Confirmé")
                 {
                     await _billetRepository.UtiliserParPassagerAsync(embarquement.Id_Passager, embarquement.Id_Voyage);
-                    await MarquerReservationsUtilisees(embarquement.Id_Passager);
+                    await MarquerReservationsUtilisees(embarquement.Id_Passager, embarquement.Id_Voyage);
                 }
                 return Ok(new { message });
             }
@@ -231,13 +230,15 @@ namespace pAgenceAPI.Controllers.parametres
             }
         }
 
-        private async Task MarquerReservationsUtilisees(int idPassager)
+        private async Task MarquerReservationsUtilisees(int idPassager, int idVoyage)
         {
             try
             {
+                // Marquer uniquement la réservation liée à CE voyage comme "Utilisée"
                 var reservations = await _reservationRepository.GetAllAsync();
                 foreach (var r in reservations.Where(r =>
                     r.Id_Passager == idPassager &&
+                    r.Id_Voyage   == idVoyage &&
                     r.Statut_Paiement == "Payé" &&
                     r.Statut_Reservation != "Utilisée" &&
                     r.Statut_Reservation != "Annulée"))

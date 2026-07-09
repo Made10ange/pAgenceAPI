@@ -162,6 +162,36 @@ try
 }
 catch { }
 
+// Créer les billets manquants pour les réservations en ligne déjà payées (one-shot)
+try
+{
+    var connStrBillets = builder.Configuration.GetConnectionString("DefaultConnection");
+    using var connBillets = new MySqlConnector.MySqlConnection(connStrBillets);
+    await connBillets.OpenAsync();
+    await new MySqlConnector.MySqlCommand(@"
+        INSERT INTO billet
+            (ID_passager, POINT_DEPART, POINT_ARRIVEE, ID_TYPE_VOYAGE,
+             MONTANT, DATE_ACHAT, ID_VOYAGE_PREVU, NUMERO_SIEGE,
+             MODE_PAIEMENT, VENDU_PAR, STATUT)
+        SELECT r.ID_passager,
+               tv.POINT_DEPART, tv.POINT_ARRIVEE, tv.ID_type_voyage,
+               r.MONTANT, COALESCE(r.DATE_paiement, r.DATE_CREATION),
+               r.ID_voyage, r.NUMERO_SIEGE,
+               'Mobile Money', 'En ligne', 'Valide'
+        FROM reservation r
+        JOIN voyage v       ON r.ID_voyage        = v.ID_voyage
+        JOIN type_voyage tv ON v.ID_type_voyage   = tv.ID_type_voyage
+        WHERE r.STATUT_paiement = 'Payé'
+          AND r.STATUT_reservation NOT IN ('Utilisée', 'Annulée')
+          AND r.ID_passager IS NOT NULL
+          AND NOT EXISTS (
+              SELECT 1 FROM billet b
+              WHERE b.ID_passager = r.ID_passager
+                AND b.ID_VOYAGE_PREVU = r.ID_voyage
+          )", connBillets).ExecuteNonQueryAsync();
+}
+catch { }
+
 // Créer l'admin par défaut si aucun agent n'existe
 using (var scope = app.Services.CreateScope())
 {

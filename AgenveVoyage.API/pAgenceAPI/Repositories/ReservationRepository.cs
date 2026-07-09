@@ -127,7 +127,15 @@ namespace pAgenceAPI.Repositories
                   AND LOWER(tv.LIBELLE_TYPE_VOYAGE) = LOWER(tv_cible.LIBELLE_TYPE_VOYAGE)
                   AND LOWER(tv.POINT_DEPART)        = LOWER(tv_cible.POINT_DEPART)
                   AND LOWER(tv.POINT_ARRIVEE)       = LOWER(tv_cible.POINT_ARRIVEE)
-                  AND DATE(v.DATE_DEPART)           <= DATE(v_cible.DATE_DEPART)
+                  -- Exclure les passagers dont le billet pour ce type+trajet est déjà utilisé
+                  AND NOT EXISTS (
+                      SELECT 1 FROM billet b
+                      LEFT JOIN type_voyage tb ON b.ID_TYPE_VOYAGE = tb.ID_type_voyage
+                      WHERE b.ID_passager = r.ID_passager
+                        AND b.STATUT = 'Utilisé'
+                        AND LOWER(COALESCE(b.POINT_DEPART,'')) = LOWER(tv_cible.POINT_DEPART)
+                        AND LOWER(COALESCE(b.POINT_ARRIVEE,'')) = LOWER(tv_cible.POINT_ARRIVEE)
+                  )
                 ORDER BY r.DATE_CREATION ASC";
 
             using var conn = new MySqlConnection(_connectionString);
@@ -273,6 +281,47 @@ namespace pAgenceAPI.Repositories
                             VALUES
                                 (@IdV, @IdP, 'En attente', @Siege, @Date)",
                             new { IdV = idVoyage, IdP = idPassager, Siege = numSiege, Date = DateTime.Now });
+                    }
+
+                    // Créer le billet si aucun n'existe pour ce passager+voyage
+                    var existeBillet = await conn.ExecuteScalarAsync<int>(@"
+                        SELECT COUNT(*) FROM billet WHERE ID_passager = @IdP AND ID_VOYAGE_PREVU = @IdV",
+                        new { IdV = idVoyage, IdP = idPassager });
+
+                    if (existeBillet == 0)
+                    {
+                        var infoVoyage = await conn.QueryFirstOrDefaultAsync<dynamic>(@"
+                            SELECT tv.POINT_DEPART, tv.POINT_ARRIVEE, tv.ID_type_voyage,
+                                   r2.MONTANT, r2.NUMERO_SIEGE as NSiege, v.PRIX
+                            FROM reservation r2
+                            JOIN voyage v ON r2.ID_voyage = v.ID_voyage
+                            JOIN type_voyage tv ON v.ID_type_voyage = tv.ID_type_voyage
+                            WHERE r2.ID_reservation = @IdRes",
+                            new { IdRes = idReservation });
+
+                        if (infoVoyage != null)
+                        {
+                            decimal montant = (decimal)(infoVoyage.MONTANT ?? infoVoyage.PRIX ?? 0);
+                            await conn.ExecuteAsync(@"
+                                INSERT INTO billet
+                                    (ID_passager, POINT_DEPART, POINT_ARRIVEE, ID_TYPE_VOYAGE,
+                                     MONTANT, DATE_ACHAT, ID_VOYAGE_PREVU, NUMERO_SIEGE,
+                                     MODE_PAIEMENT, VENDU_PAR, STATUT)
+                                VALUES
+                                    (@IdP, @Dep, @Arr, @IdTv,
+                                     @Montant, @Now, @IdV, @Siege,
+                                     'Mobile Money', 'En ligne', 'Valide')",
+                                new {
+                                    IdP    = idPassager,
+                                    Dep    = (string?)infoVoyage.POINT_DEPART,
+                                    Arr    = (string?)infoVoyage.POINT_ARRIVEE,
+                                    IdTv   = (int?)infoVoyage.ID_type_voyage,
+                                    Montant = montant,
+                                    Now    = DateTime.Now,
+                                    IdV    = idVoyage,
+                                    Siege  = (int?)infoVoyage.NSiege ?? (int?)numSiege
+                                });
+                        }
                     }
                 }
             }
