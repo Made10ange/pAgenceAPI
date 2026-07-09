@@ -31,6 +31,12 @@ public interface IEcritureRepository
     Task<bool> EcritureVenteBilletAsync(string numTransaction, string numBillet, decimal montant,
         string? libelleType, string? trajet, int? idAgence, int? codeUser);
 
+    /// <summary>
+    /// Écriture directe (sans vérification de journée ouverte) — utilisée pour les paiements en ligne.
+    /// </summary>
+    Task<bool> EcritureVenteBilletDirecteAsync(string numTransaction, string numBillet, decimal montant,
+        string? libelleType, string? trajet, int? idAgence);
+
     /// <summary>Idem pour un enregistrement de colis.</summary>
     Task<bool> EcritureColisAsync(string numTransaction, string? refColis, decimal montant,
         string? expediteur, string? destinataire, int? idAgence, int? codeUser);

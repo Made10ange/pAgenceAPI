@@ -216,6 +216,49 @@ public class EcritureRepository : IEcritureRepository
         }
     }
 
+    public async Task<bool> EcritureVenteBilletDirecteAsync(string numTransaction, string numBillet,
+        decimal montant, string? libelleType, string? trajet, int? idAgence)
+    {
+        try
+        {
+            using var db = new MySqlConnection(_cs);
+
+            // Caisse principale → fallback '5710'
+            var numCaisse = await db.ExecuteScalarAsync<string>(
+                "SELECT numcompte FROM caisse WHERE est_principale = 1 LIMIT 1") ?? "5710";
+
+            var compteVente = (libelleType?.Contains("VIP") == true)    ? "7102" :
+                              (libelleType?.Contains("Report") == true)  ? "7103" : "7101";
+
+            var libelle = $"Vente billet {numBillet}"
+                        + (trajet != null ? $" - {trajet}" : "");
+
+            await db.ExecuteAsync(@"
+                INSERT INTO operation
+                    (date_operation, numcompte, debit, credit, libelle, num_transaction, code_agence, code_user, valide)
+                VALUES (NOW(), @Caisse, @Montant, 0, @Libelle, @NumTrans, @IdAgence, NULL, 1);
+
+                UPDATE compte SET cumul_debit  = cumul_debit  + @Montant, solde = solde + @Montant
+                WHERE numcompte = @Caisse;
+
+                INSERT INTO operation
+                    (date_operation, numcompte, debit, credit, libelle, num_transaction, code_agence, code_user, valide)
+                VALUES (NOW(), @CompteVente, 0, @Montant, @Libelle, @NumTrans, @IdAgence, NULL, 1);
+
+                UPDATE compte SET cumul_credit = cumul_credit + @Montant, solde = solde - @Montant
+                WHERE numcompte = @CompteVente;",
+                new { Caisse = numCaisse, Montant = montant, Libelle = libelle,
+                      NumTrans = numTransaction, IdAgence = idAgence, CompteVente = compteVente });
+
+            return true;
+        }
+        catch (Exception ex)
+        {
+            _logger.LogWarning(ex, "EcritureVenteBilletDirecte ignorée — {Num}", numTransaction);
+            return false;
+        }
+    }
+
     public async Task<bool> EcritureColisAsync(string numTransaction, string? refColis,
         decimal montant, string? expediteur, string? destinataire, int? idAgence, int? codeUser)
     {

@@ -206,13 +206,21 @@ namespace pAgenceAPI.Controllers.parametres
                                 });
                             }
 
-                            // Écriture comptable — toujours générée si journée ouverte, quelle que soit la date
+                            // Écriture comptable : via procédure (journée ouverte) sinon écriture directe
                             if (reservation.Montant > 0)
                             {
                                 var trajet = $"{reservation.Point_Depart} - {reservation.Point_Arrivee}";
-                                await _ecritureRepo.EcritureVenteBilletAsync(
+                                var ecritureOk = await _ecritureRepo.EcritureVenteBilletAsync(
                                     $"RES-{reservation.Reference}", reservation.Reference, reservation.Montant,
                                     "En ligne", trajet, idAgenceVente, null);
+
+                                if (!ecritureOk)
+                                {
+                                    // Aucune journée ouverte → écriture directe (paiements en ligne hors-heures)
+                                    await _ecritureRepo.EcritureVenteBilletDirecteAsync(
+                                        $"RES-{reservation.Reference}", reservation.Reference, reservation.Montant,
+                                        "En ligne", trajet, idAgenceVente);
+                                }
                             }
                         }
                     }
