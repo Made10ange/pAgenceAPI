@@ -161,16 +161,16 @@ namespace pAgenceAPI.Repositories
         public async Task<List<(int Mois, decimal Total)>> GetChiffreAffaireMensuelAsync(int annee, int? idAgence = null)
         {
             using var conn = CreateConnection();
-            var where = idAgence.HasValue
-                ? "AND (v.Id_Agence IS NULL OR v.Id_Agence = @idAgence) AND (c.Id_Agence IS NULL OR c.Id_Agence = @idAgence)"
-                : "";
+            // Lit depuis la table operation (comptes de produits 7xxx) — source réelle des ventes billets/colis
+            var whereAgence = idAgence.HasValue ? "AND o.code_agence = @idAgence" : "";
             var rows = await conn.QueryAsync<(int Mois, decimal Total)>(
-                $@"SELECT MONTH(p.DATE_paiement) AS Mois, SUM(p.MONTANT) AS Total
-                   FROM paiement p
-                   LEFT JOIN voyage v ON p.ID_voyage = v.ID_voyage
-                   LEFT JOIN colis c  ON p.ID_COLIS  = c.ID_COLIS
-                   WHERE p.STATUT = 'Payé' AND YEAR(p.DATE_paiement) = @annee {where}
-                   GROUP BY MONTH(p.DATE_paiement)",
+                $@"SELECT MONTH(o.date_operation) AS Mois, SUM(o.credit) AS Total
+                   FROM operation o
+                   WHERE o.numcompte LIKE '7%'
+                     AND o.credit > 0
+                     AND YEAR(o.date_operation) = @annee
+                     {whereAgence}
+                   GROUP BY MONTH(o.date_operation)",
                 new { annee, idAgence });
 
             var parMois = rows.ToDictionary(r => r.Mois, r => r.Total);
