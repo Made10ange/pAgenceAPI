@@ -12,6 +12,7 @@ namespace pAgenceAPI.Controllers.parametres
         private readonly IVoyageRepository _voyageRepository;
         private readonly IPassagerRepository _passagerRepository;
         private readonly IBilletRepository _billetRepository;
+        private readonly IReservationRepository _reservationRepository;
         private readonly ILogger<EmbarquementsController> _logger;
 
         public EmbarquementsController(
@@ -19,12 +20,14 @@ namespace pAgenceAPI.Controllers.parametres
             IVoyageRepository voyageRepository,
             IPassagerRepository passagerRepository,
             IBilletRepository billetRepository,
+            IReservationRepository reservationRepository,
             ILogger<EmbarquementsController> logger)
         {
             _repository = repository;
             _voyageRepository = voyageRepository;
             _passagerRepository = passagerRepository;
             _billetRepository = billetRepository;
+            _reservationRepository = reservationRepository;
             _logger = logger;
         }
 
@@ -170,8 +173,9 @@ namespace pAgenceAPI.Controllers.parametres
                 embarquement.Date_Enregistrement ??= DateTime.Now;
 
                 var message = await _repository.AddAsync(embarquement);
-                // Marquer automatiquement le billet du passager comme "Utilisé"
                 await _billetRepository.UtiliserParPassagerAsync(embarquement.Id_Passager, embarquement.Id_Voyage);
+                // Marquer les réservations payées du passager comme "Utilisée"
+                await MarquerReservationsUtilisees(embarquement.Id_Passager);
                 return Ok(new { message });
             }
             catch (Exception ex)
@@ -195,7 +199,10 @@ namespace pAgenceAPI.Controllers.parametres
 
                 var message = await _repository.UpdateAsync(embarquement);
                 if (embarquement.Statut_Embarquement == "Confirmé")
+                {
                     await _billetRepository.UtiliserParPassagerAsync(embarquement.Id_Passager, embarquement.Id_Voyage);
+                    await MarquerReservationsUtilisees(embarquement.Id_Passager);
+                }
                 return Ok(new { message });
             }
             catch (Exception ex)
@@ -222,6 +229,23 @@ namespace pAgenceAPI.Controllers.parametres
                 _logger.LogError(ex, "Erreur Delete embarquement id={Id}", id);
                 return Problem(detail: ex.Message, statusCode: 500, title: "Erreur lors de la suppression");
             }
+        }
+
+        private async Task MarquerReservationsUtilisees(int idPassager)
+        {
+            try
+            {
+                var reservations = await _reservationRepository.GetAllAsync();
+                foreach (var r in reservations.Where(r =>
+                    r.Id_Passager == idPassager &&
+                    r.Statut_Paiement == "Payé" &&
+                    r.Statut_Reservation != "Utilisée" &&
+                    r.Statut_Reservation != "Annulée"))
+                {
+                    await _reservationRepository.UpdateStatutReservationAsync(r.Id_Reservation, "Utilisée");
+                }
+            }
+            catch { /* non bloquant */ }
         }
 
         // POST api/Embarquements/valider-groupe
