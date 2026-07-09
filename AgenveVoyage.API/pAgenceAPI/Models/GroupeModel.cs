@@ -35,3 +35,33 @@ public class GroupePrivilegeDto
     public int Id_Groupe { get; set; }
     public List<int> Ids_Privileges { get; set; } = new();
 }
+
+public class JournalAuditModel
+{
+    public int Id_Journal { get; set; }
+    public int? Id_Utilisateur { get; set; }
+    public string? Login_Agent { get; set; }
+    public string? Nom_Agent { get; set; }
+    public string? Module { get; set; }
+    public string? Action { get; set; }
+    public string? Details { get; set; }
+    public string? Ancienne_Valeur { get; set; }
+    public string? Nouvelle_Valeur { get; set; }
+    public string? IP_Address { get; set; }
+    public string? User_Agent { get; set; }
+    public string Statut { get; set; } = "Succès";
+    public DateTime Date_Action { get; set; }
+}
+
+public class HistoriqueConnexionModel
+{
+    public int Id_Connexion { get; set; }
+    public int? Id_Utilisateur { get; set; }
+    public string Login_Tente { get; set; } = "";
+    public string? Nom_Agent { get; set; }
+    public string Statut { get; set; } = "Succès";
+    public string? Motif_Echec { get; set; }
+    public string? IP_Address { get; set; }
+    public string? User_Agent { get; set; }
+    public DateTime Date_Connexion { get; set; }
+}
