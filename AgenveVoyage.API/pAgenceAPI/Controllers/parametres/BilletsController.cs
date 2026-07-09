@@ -72,6 +72,38 @@ namespace pAgenceAPI.Controllers.parametres
             catch (Exception ex) { _log.LogError(ex, "billets embarquement voyage {id}", idVoyage); return StatusCode(500, ex.Message); }
         }
 
+        // DEBUG : voir les données brutes pour diagnostiquer l'embarquement
+        [HttpGet("debug-embarquement/{idVoyage:int}")]
+        public async Task<IActionResult> DebugEmbarquement(int idVoyage)
+        {
+            try
+            {
+                var cs = HttpContext.RequestServices.GetRequiredService<IConfiguration>().GetConnectionString("DefaultConnection")!;
+                using var db = new MySqlConnector.MySqlConnection(cs);
+
+                var voyage = await db.QueryFirstOrDefaultAsync(
+                    @"SELECT v.Id_Voyage, v.Id_Type_Voyage, tv.Libelle_Type_Voyage,
+                             tv.Point_Depart as TV_Depart, tv.Point_Arrivee as TV_Arrivee
+                      FROM voyage v LEFT JOIN type_voyage tv ON tv.Id_Type_Voyage = v.Id_Type_Voyage
+                      WHERE v.Id_Voyage = @id", new { id = idVoyage });
+
+                var billets = await db.QueryAsync(
+                    @"SELECT b.Id_Billet, b.Numero_Billet, b.Id_Passager, b.Id_Type_Voyage,
+                             b.Point_Depart as B_Depart, b.Point_Arrivee as B_Arrivee,
+                             b.Id_Voyage_Prevu, b.Statut,
+                             tv.Libelle_Type_Voyage as TV_Libelle,
+                             p.Nom, p.Prenom
+                      FROM billet b
+                      LEFT JOIN type_voyage tv ON tv.Id_Type_Voyage = b.Id_Type_Voyage
+                      LEFT JOIN passager p ON p.Id_Passager = b.Id_Passager
+                      WHERE b.Statut IN ('Valide','Reporté')
+                      ORDER BY b.Date_Achat DESC LIMIT 20");
+
+                return Ok(new { voyage, billets });
+            }
+            catch (Exception ex) { return StatusCode(500, ex.Message); }
+        }
+
         [HttpGet("sieges-occupes/{idVoyage:int}")]
         public async Task<IActionResult> SiegesOccupes(int idVoyage)
         {
