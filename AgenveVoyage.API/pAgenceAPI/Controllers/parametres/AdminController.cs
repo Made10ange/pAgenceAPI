@@ -16,7 +16,7 @@ namespace pAgenceAPI.Controllers.parametres
         }
 
         // Appeler UNE SEULE FOIS pour corriger les reservations dupliquees
-        [HttpPost("fix-reservations-utilisees")]
+        [HttpGet("fix-reservations-utilisees")]
         public async Task<IActionResult> FixReservationsUtilisees()
         {
             const string sql = @"
