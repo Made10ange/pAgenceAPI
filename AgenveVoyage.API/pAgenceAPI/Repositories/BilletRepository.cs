@@ -146,6 +146,10 @@ namespace pAgenceAPI.Repositories
 
         public async Task<IEnumerable<BilletModel>> GetPourEmbarquementAsync(int idVoyage)
         {
+            // Un billet est éligible à l'embarquement si :
+            //   1. Il est directement assigné à ce voyage (Id_Voyage_Prevu)
+            //   2. OU il a le même type de voyage ET le même trajet (Point_Depart / Point_Arrivee)
+            //   3. OU il a le même type de voyage et pas de trajet explicite stocké
             const string sql = @"
                 SELECT b.*,
                        p.Nom       AS Nom_Passager,
@@ -161,12 +165,39 @@ namespace pAgenceAPI.Repositories
                 LEFT JOIN type_voyage tvp ON tvp.Id_Type_Voyage = vp.Id_Type_Voyage
                 LEFT JOIN voyage      vu  ON vu.Id_Voyage       = b.Id_Voyage_Utilise
                 LEFT JOIN type_voyage tvu ON tvu.Id_Type_Voyage = vu.Id_Type_Voyage
-                JOIN  voyage          v0   ON v0.Id_Voyage      = @idVoyage
-                JOIN  type_voyage     tv0  ON tv0.Id_Type_Voyage = v0.Id_Type_Voyage
+                JOIN  voyage          v0  ON v0.Id_Voyage       = @idVoyage
+                LEFT JOIN type_voyage tv0 ON tv0.Id_Type_Voyage = v0.Id_Type_Voyage
                 WHERE b.Statut IN ('Valide', 'Reporté')
-                  AND LOWER(b.Point_Depart)  = LOWER(tv0.Point_Depart)
-                  AND LOWER(b.Point_Arrivee) = LOWER(tv0.Point_Arrivee)
-                  AND (b.Id_Type_Voyage = v0.Id_Type_Voyage OR b.Id_Type_Voyage IS NULL)
+                  AND (
+                      -- 1. Billet assigné directement à ce voyage
+                      b.Id_Voyage_Prevu = v0.Id_Voyage
+                      OR
+                      -- 2. Même type + trajet identique
+                      (
+                          b.Id_Type_Voyage = v0.Id_Type_Voyage
+                          AND b.Id_Type_Voyage IS NOT NULL
+                          AND v0.Id_Type_Voyage IS NOT NULL
+                          AND LOWER(COALESCE(b.Point_Depart,''))  = LOWER(COALESCE(tv0.Point_Depart,''))
+                          AND LOWER(COALESCE(b.Point_Arrivee,'')) = LOWER(COALESCE(tv0.Point_Arrivee,''))
+                      )
+                      OR
+                      -- 3. Même type, trajet non renseigné sur le billet (billet générique)
+                      (
+                          b.Id_Type_Voyage = v0.Id_Type_Voyage
+                          AND b.Id_Type_Voyage IS NOT NULL
+                          AND v0.Id_Type_Voyage IS NOT NULL
+                          AND COALESCE(b.Point_Depart,'')  = ''
+                          AND COALESCE(b.Point_Arrivee,'') = ''
+                      )
+                      OR
+                      -- 4. Pas de type sur le billet mais trajet correspondant
+                      (
+                          b.Id_Type_Voyage IS NULL
+                          AND tv0.Id_Type_Voyage IS NOT NULL
+                          AND LOWER(COALESCE(b.Point_Depart,''))  = LOWER(COALESCE(tv0.Point_Depart,''))
+                          AND LOWER(COALESCE(b.Point_Arrivee,'')) = LOWER(COALESCE(tv0.Point_Arrivee,''))
+                      )
+                  )
                 ORDER BY b.Date_Achat ASC";
 
             using var db = new MySqlConnection(_conn);
