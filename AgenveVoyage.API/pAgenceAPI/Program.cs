@@ -124,7 +124,7 @@ try
     using var connSexe = new MySqlConnector.MySqlConnection(connStrSexe);
     await connSexe.OpenAsync();
     await new MySqlConnector.MySqlCommand(
-        "ALTER TABLE reservation ADD COLUMN IF NOT EXISTS SEXE_CLIENT VARCHAR(20) DEFAULT 'Non précisé';",
+        "ALTER TABLE reservation ADD COLUMN SEXE_CLIENT VARCHAR(20) DEFAULT 'Non précisé';",
         connSexe).ExecuteNonQueryAsync();
 }
 catch { }
