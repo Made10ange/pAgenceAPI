@@ -349,7 +349,10 @@ namespace pAgenceAPI.Repositories
                         EXISTS (
                           SELECT 1 FROM billet bil
                           JOIN passager pp ON pp.Id_Passager = bil.Id_Passager
+                          LEFT JOIN voyage vbil ON vbil.Id_Voyage = bil.Id_Voyage_Prevu
                           WHERE bil.Statut IN ('Valide', 'Reporté')
+                            -- Isolation agence : le billet doit appartenir à la même agence que le voyage cible
+                            AND (vbil.Id_Agence = v0.Id_Agence OR bil.Id_Voyage_Prevu IS NULL)
                             AND (
                               bil.Id_Passager = b.ID_passager
                               OR (
