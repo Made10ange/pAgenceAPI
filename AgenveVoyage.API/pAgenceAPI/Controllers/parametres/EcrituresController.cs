@@ -59,9 +59,15 @@ public class EcrituresController : AgenceControllerBase
     [HttpGet("journee-ouverte")]
     public async Task<IActionResult> JourneeOuverte([FromQuery] DateTime? date = null)
     {
-        var d = date ?? DateTime.Today;
-        var ok = await _repo.JourneeOuverteAsync(d, AgenceId);
-        return Ok(new { ouverte = ok, date = d.ToString("yyyy-MM-dd") });
+        // Si une date précise est demandée, on vérifie cette date exacte
+        if (date.HasValue)
+        {
+            var ok = await _repo.JourneeOuverteAsync(date.Value, AgenceId);
+            return Ok(new { ouverte = ok, date = date.Value.ToString("yyyy-MM-dd") });
+        }
+        // Sinon : chercher n'importe quelle journée ouverte pour l'agence
+        var dateOuverte = await _repo.GetDateJourneeOuverteAsync(AgenceId);
+        return Ok(new { ouverte = dateOuverte.HasValue, date = (dateOuverte ?? DateTime.Today).ToString("yyyy-MM-dd") });
     }
 
     // GET api/Ecritures/prochaine-journee
