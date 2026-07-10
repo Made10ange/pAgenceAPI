@@ -204,56 +204,7 @@ namespace pAgenceAPI.Controllers.parametres
             catch (Exception ex) { return Problem(detail: ex.Message, statusCode: 500); }
         }
 
-        [HttpGet("debug-embarquement/{idVoyage}")]
-        public async Task<IActionResult> DebugEmbarquement(int idVoyage)
-        {
-            try
-            {
-                var cs = HttpContext.RequestServices.GetRequiredService<IConfiguration>().GetConnectionString("DefaultConnection")!;
-                using var db = new MySqlConnector.MySqlConnection(cs);
-                await db.OpenAsync();
-
-                var billets = await _billetRepository.GetPourEmbarquementAsync(idVoyage);
-                var passagerIds = billets.Where(b => b.Id_Passager > 0).Select(b => b.Id_Passager).Distinct().ToList();
-
-                // Passagers des billets avec leurs noms
-                var passagersBillets = passagerIds.Any()
-                    ? (await db.QueryAsync<dynamic>(
-                        "SELECT Id_Passager, Nom, Prenom FROM passager WHERE Id_Passager IN @ids",
-                        new { ids = passagerIds })).ToList()
-                    : new List<dynamic>();
-
-                // Bagages "En attente" avec nom du passager ET ID_voyage_passager
-                var tousLesBagages = (await db.QueryAsync<dynamic>(
-                    @"SELECT b.ID_bagage, b.ID_passager, b.ID_voyage_passager, b.ID_voyage_bagage,
-                             b.STATUT, b.DESCRIPTION,
-                             CONCAT(p.NOM,' ',p.PRENOM) AS Nom_Passager
-                      FROM bagage b
-                      LEFT JOIN passager p ON p.Id_Passager = b.ID_passager
-                      WHERE b.STATUT='En attente' LIMIT 20")).ToList();
-
-                // Bagages par ID_voyage_passager = idVoyage
-                var bagagesParVoyage = (await db.QueryAsync<dynamic>(
-                    @"SELECT b.ID_bagage, b.ID_passager, b.ID_voyage_passager, b.STATUT, b.DESCRIPTION,
-                             CONCAT(p.NOM,' ',p.PRENOM) AS Nom_Passager
-                      FROM bagage b
-                      LEFT JOIN passager p ON p.Id_Passager = b.ID_passager
-                      WHERE b.ID_voyage_passager = @idVoyage",
-                    new { idVoyage })).ToList();
-
-                return Ok(new {
-                    idVoyage,
-                    nbBillets = billets.Count(),
-                    passagerIds,
-                    passagersBillets,
-                    bagagesParVoyagePassager = bagagesParVoyage,
-                    tousLesBagagesEnAttente = tousLesBagages
-                });
-            }
-            catch (Exception ex) { return StatusCode(500, ex.Message); }
-        }
-
-        [HttpGet("en-attente")]
+[HttpGet("en-attente")]
         public async Task<ActionResult<List<BagageModel>>> GetEnAttente()
         {
             try { return Ok(await _repository.GetEnAttenteAsync()); }
