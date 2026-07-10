@@ -6,7 +6,7 @@ namespace pAgenceAPI.Controllers.personnel;
 
 [ApiController]
 [Route("api/[controller]")]
-public class FichePayeController : ControllerBase
+public class FichePayeController : AgenceControllerBase
 {
     private readonly IFichePayeRepository _repo;
     private readonly IEcritureRepository _ecritureRepo;
@@ -22,7 +22,7 @@ public class FichePayeController : ControllerBase
 
     [HttpGet("liste")]
     public async Task<IActionResult> Liste([FromQuery] int? annee, [FromQuery] int? mois)
-        => Ok(await _repo.GetAllAsync(annee, mois));
+        => Ok(await _repo.GetAllAsync(annee, mois, AgenceId));
 
     [HttpGet("personnel/{idPersonnel}")]
     public async Task<IActionResult> ParPersonnel(int idPersonnel)
@@ -65,7 +65,7 @@ public class FichePayeController : ControllerBase
             var numTransaction = $"SALAIRE-{id}-{DateTime.Now:yyyyMMddHHmm}";
             var nomEmploye = $"{fiche.NomPersonnel} {fiche.PrenomPersonnel}".Trim();
             await _ecritureRepo.EcritureSalaireAsync(numTransaction, nomEmploye, fiche.Net_A_Payer,
-                idAgence: null, codeUser: null);
+                idAgence: AgenceId, codeUser: UserId);
         }
         catch (Exception ex)
         {
@@ -83,7 +83,7 @@ public class FichePayeController : ControllerBase
     public async Task<IActionResult> Generer([FromQuery] int mois, [FromQuery] int annee)
     {
         if (mois < 1 || mois > 12 || annee < 2020) return BadRequest("Mois ou année invalide.");
-        await _repo.GenererFichesAsync(mois, annee);
+        await _repo.GenererFichesAsync(mois, annee, AgenceId);
         return Ok(new { message = $"Fiches générées pour {mois}/{annee}" });
     }
 }

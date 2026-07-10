@@ -20,15 +20,16 @@ public class FichePayeRepository : IFichePayeRepository
         JOIN personnel p ON f.ID_personnel = p.ID_personnel
         LEFT JOIN poste po ON p.ID_poste = po.ID_poste";
 
-    public async Task<IEnumerable<FichePayeModel>> GetAllAsync(int? annee = null, int? mois = null)
+    public async Task<IEnumerable<FichePayeModel>> GetAllAsync(int? annee = null, int? mois = null, int? idAgence = null)
     {
         using var connection = new MySqlConnection(_connectionString);
         var where = new List<string>();
-        if (annee.HasValue) where.Add("f.Annee = @Annee");
-        if (mois.HasValue) where.Add("f.Mois = @Mois");
+        if (annee.HasValue)    where.Add("f.Annee = @Annee");
+        if (mois.HasValue)     where.Add("f.Mois = @Mois");
+        if (idAgence.HasValue) where.Add("p.Id_Agence = @IdAgence");
         var sql = SelectJoin + (where.Count > 0 ? " WHERE " + string.Join(" AND ", where) : "")
                 + " ORDER BY f.Annee DESC, f.Mois DESC, p.Nom";
-        return await connection.QueryAsync<FichePayeModel>(sql, new { Annee = annee, Mois = mois });
+        return await connection.QueryAsync<FichePayeModel>(sql, new { Annee = annee, Mois = mois, IdAgence = idAgence });
     }
 
     public async Task<IEnumerable<FichePayeModel>> GetByPersonnelAsync(int idPersonnel)
@@ -88,13 +89,14 @@ public class FichePayeRepository : IFichePayeRepository
     }
 
     // Génère automatiquement une fiche pour chaque personnel actif pour le mois/année donné
-    public async Task GenererFichesAsync(int mois, int annee)
+    public async Task GenererFichesAsync(int mois, int annee, int? idAgence = null)
     {
         using var connection = new MySqlConnection(_connectionString);
-        await connection.ExecuteAsync(@"
+        var whereAgence = idAgence.HasValue ? "AND Id_Agence = @IdAgence" : "";
+        await connection.ExecuteAsync($@"
             INSERT IGNORE INTO fiche_paie (ID_personnel, Mois, Annee, Salaire_Base, Primes, Deductions, Net_A_Payer, Statut)
             SELECT ID_personnel, @Mois, @Annee, Salaire_Base, 0, 0, Salaire_Base, 'En attente'
-            FROM personnel WHERE Statut = 'Actif'",
-            new { Mois = mois, Annee = annee });
+            FROM personnel WHERE Statut = 'Actif' {whereAgence}",
+            new { Mois = mois, Annee = annee, IdAgence = idAgence });
     }
 }
