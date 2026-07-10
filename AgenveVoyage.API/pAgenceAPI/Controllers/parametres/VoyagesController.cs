@@ -245,7 +245,7 @@ namespace pAgenceAPI.Controllers.parametres
                     await _colisRepository.UpdateStatutByVoyageAsync(id, "En attente", "En cours");
                 else if (normalizedStatut == "Terminé")
                 {
-                    await _colisRepository.UpdateStatutByVoyageAsync(id, "En cours", "Livré");
+                    await _colisRepository.UpdateStatutByVoyageAsync(id, "En cours", "Terminé");
                     await _bagageRepository.LivrerParVoyageAsync(id);
                 }
 

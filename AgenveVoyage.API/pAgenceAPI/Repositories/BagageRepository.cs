@@ -298,7 +298,7 @@ namespace pAgenceAPI.Repositories
             {
                 using var connection = new MySqlConnection(_connectionString);
                 await connection.ExecuteAsync(
-                    "UPDATE bagage SET STATUT = 'Livré' WHERE ID_voyage_bagage = @IdVoyage AND STATUT NOT IN ('Livré','Annulé')",
+                    "UPDATE bagage SET STATUT = 'Terminé' WHERE ID_voyage_bagage = @IdVoyage AND STATUT NOT IN ('Terminé','Livré','Annulé')",
                     new { IdVoyage = idVoyage });
             }
             catch (Exception ex) { _logger.LogError(ex, "Erreur LivrerParVoyageAsync voyage id={Id}", idVoyage); throw; }
