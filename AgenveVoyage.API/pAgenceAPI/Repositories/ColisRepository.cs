@@ -268,6 +268,19 @@ namespace pAgenceAPI.Repositories
             catch (Exception ex) { _logger.LogError(ex, "Erreur UpdateStatutByVoyageAsync voyage id={Id}", idVoyage); throw; }
         }
 
+        public async Task<string> AssignerVoyageAsync(int idColis, int idVoyage)
+        {
+            try
+            {
+                using var connection = new MySqlConnection(_connectionString);
+                await connection.ExecuteAsync(
+                    "UPDATE colis SET ID_voyage = @IdVoyage, STATUT = 'En cours' WHERE ID_COLIS = @IdColis",
+                    new { IdColis = idColis, IdVoyage = idVoyage });
+                return "Colis chargé sur le voyage !";
+            }
+            catch (Exception ex) { _logger.LogError(ex, "Erreur AssignerVoyageAsync colis id={Id}", idColis); throw; }
+        }
+
         public async Task LivrerParVoyageAsync(int idVoyage)
         {
             try

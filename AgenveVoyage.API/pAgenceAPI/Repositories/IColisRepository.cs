@@ -16,6 +16,7 @@ namespace pAgenceAPI.Repositories
         Task<string> UpdateStatutAsync(int id, string statut);
         Task<int> UpdateStatutByVoyageAsync(int idVoyage, string statutActuel, string nouveauStatut);
         Task LivrerParVoyageAsync(int idVoyage);
+        Task<string> AssignerVoyageAsync(int idColis, int idVoyage);
         Task<string> DeleteAsync(int id);
         Task<string> GenererReferenceAsync();
     }

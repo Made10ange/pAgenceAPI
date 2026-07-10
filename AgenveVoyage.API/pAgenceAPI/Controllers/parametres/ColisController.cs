@@ -149,6 +149,13 @@ namespace pAgenceAPI.Controllers.parametres
             catch (Exception ex) { return Problem(detail: ex.Message, statusCode: 500); }
         }
 
+        [HttpPatch("assigner-voyage/{id}")]
+        public async Task<ActionResult<string>> AssignerVoyage(int id, [FromQuery] int idVoyage)
+        {
+            try { return Ok(await _repository.AssignerVoyageAsync(id, idVoyage)); }
+            catch (Exception ex) { return Problem(detail: ex.Message, statusCode: 500); }
+        }
+
         [HttpDelete("supprimer/{id}")]
         public async Task<ActionResult<string>> Delete(int id)
         {
