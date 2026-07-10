@@ -310,43 +310,74 @@ namespace pAgenceAPI.Repositories
             {
                 using var connection = new MySqlConnection(_connectionString);
 
-                // Étape 1 : récupérer les IDs passagers éligibles (même logique que l'onglet Passagers)
-                var passagerIds = (await connection.QueryAsync<int?>(@"
-                    SELECT DISTINCT bl.Id_Passager
-                    FROM billet bl
-                    JOIN  voyage      v0  ON v0.Id_Voyage       = @idVoyage
-                    LEFT JOIN type_voyage tv0 ON tv0.Id_Type_Voyage = v0.Id_Type_Voyage
-                    LEFT JOIN type_voyage tvb ON tvb.Id_Type_Voyage = bl.Id_Type_Voyage
-                    WHERE bl.Statut IN ('Valide','Reporté')
-                      AND bl.Id_Passager IS NOT NULL
-                      AND (
-                          bl.Id_Voyage_Prevu = v0.Id_Voyage
-                          OR bl.Id_Type_Voyage = v0.Id_Type_Voyage
-                          OR (tvb.Libelle_Type_Voyage IS NOT NULL
-                              AND tv0.Libelle_Type_Voyage IS NOT NULL
-                              AND LOWER(tvb.Libelle_Type_Voyage) = LOWER(tv0.Libelle_Type_Voyage)
-                              AND LOWER(COALESCE(bl.Point_Depart,''))  = LOWER(COALESCE(tv0.Point_Depart,''))
-                              AND LOWER(COALESCE(bl.Point_Arrivee,'')) = LOWER(COALESCE(tv0.Point_Arrivee,'')))
-                          OR (bl.Id_Type_Voyage IS NULL
-                              AND tv0.Point_Depart IS NOT NULL
-                              AND LOWER(COALESCE(bl.Point_Depart,''))  = LOWER(COALESCE(tv0.Point_Depart,''))
-                              AND LOWER(COALESCE(bl.Point_Arrivee,'')) = LOWER(COALESCE(tv0.Point_Arrivee,'')))
-                      )
-                    UNION
-                    SELECT Id_Passager FROM embarquement_voyage_passager WHERE Id_Voyage = @idVoyage",
-                    new { idVoyage }
-                )).Where(id => id.HasValue).Select(id => id!.Value).ToList();
-
-                if (!passagerIds.Any()) return new List<BagageModel>();
-
-                // Étape 2 : bagages En attente pour ces passagers
-                return (await connection.QueryAsync<BagageModel>(
-                    BaseSelectSql + @"
+                // Requête unique : lie les bagages aux passagers du voyage par ID OU par nom+prénom
+                // (gère les doublons passager où la même personne a deux enregistrements différents)
+                const string sql = @"
+                    SELECT DISTINCT
+                        b.ID_bagage             AS Id_Bagage,
+                        b.ID_passager           AS Id_Passager,
+                        b.ID_voyage_passager    AS Id_Voyage_Passager,
+                        b.ID_voyage_bagage      AS Id_Voyage_Bagage,
+                        b.DESCRIPTION           AS Description,
+                        b.POIDS                 AS Poids,
+                        b.STATUT                AS Statut,
+                        b.DATE_ENREGISTREMENT   AS Date_Enregistrement,
+                        b.MONTANT_TOTAL         AS Montant_Total,
+                        b.NUMERO_ORDRE          AS Numero_Ordre,
+                        b.TOTAL_bagageS         AS Total_Bagages,
+                        CONCAT(p.NOM, ' ', p.PRENOM) AS Nom_Passager,
+                        CONCAT(COALESCE(tvp.POINT_DEPART,''), ' → ', COALESCE(tvp.POINT_ARRIVEE,'')) AS Trajet_Passager,
+                        CONCAT(COALESCE(tvb2.POINT_DEPART,''), ' → ', COALESCE(tvb2.POINT_ARRIVEE,'')) AS Trajet_Bagage,
+                        veh.IMMATRICULATION     AS Immatriculation_Bagage
+                    FROM bagage b
+                    LEFT JOIN passager p    ON p.ID_passager        = b.ID_passager
+                    LEFT JOIN voyage  vp    ON vp.ID_voyage         = b.ID_voyage_passager
+                    LEFT JOIN type_voyage tvp ON tvp.ID_type_voyage = vp.ID_type_voyage
+                    LEFT JOIN voyage  vb2   ON vb2.ID_voyage        = b.ID_voyage_bagage
+                    LEFT JOIN type_voyage tvb2 ON tvb2.ID_type_voyage = vb2.ID_type_voyage
+                    LEFT JOIN vehicule veh  ON veh.ID_vehicule      = vb2.ID_vehicule
+                    JOIN  voyage v0         ON v0.ID_voyage         = @idVoyage
+                    LEFT JOIN type_voyage tv0 ON tv0.ID_type_voyage = v0.ID_type_voyage
                     WHERE b.STATUT = 'En attente'
-                      AND b.ID_passager IN @ids
-                    ORDER BY b.DATE_ENREGISTREMENT DESC",
-                    new { ids = passagerIds }
-                )).ToList();
+                      AND (
+                        -- 1. Bagage directement assigné à ce voyage passager
+                        b.ID_voyage_passager = @idVoyage
+
+                        OR
+                        -- 2. Le passager du bagage a un billet pour ce type de voyage
+                        --    Matching par ID passager OU par NOM+PRENOM (doublons passager)
+                        EXISTS (
+                          SELECT 1 FROM billet bil
+                          JOIN passager pp ON pp.Id_Passager = bil.Id_Passager
+                          WHERE bil.Statut IN ('Valide', 'Reporté')
+                            AND (
+                              bil.Id_Passager = b.ID_passager
+                              OR (
+                                p.NOM IS NOT NULL
+                                AND LOWER(TRIM(pp.NOM))    = LOWER(TRIM(p.NOM))
+                                AND LOWER(TRIM(pp.PRENOM)) = LOWER(TRIM(p.PRENOM))
+                              )
+                            )
+                            AND (
+                              bil.Id_Voyage_Prevu = v0.ID_voyage
+                              OR bil.Id_Type_Voyage = tv0.ID_type_voyage
+                              OR (
+                                LOWER(COALESCE(bil.Point_Depart,''))  = LOWER(COALESCE(tv0.Point_Depart,''))
+                                AND LOWER(COALESCE(bil.Point_Arrivee,'')) = LOWER(COALESCE(tv0.Point_Arrivee,''))
+                                AND COALESCE(tv0.Point_Depart,'') != ''
+                              )
+                              OR EXISTS (
+                                SELECT 1 FROM type_voyage tv2
+                                WHERE tv2.ID_type_voyage = bil.Id_Type_Voyage
+                                  AND tv0.Libelle_Type_Voyage IS NOT NULL
+                                  AND LOWER(tv2.Libelle_Type_Voyage) = LOWER(tv0.Libelle_Type_Voyage)
+                              )
+                            )
+                        )
+                      )
+                    ORDER BY b.DATE_ENREGISTREMENT DESC";
+
+                return (await connection.QueryAsync<BagageModel>(sql, new { idVoyage })).ToList();
             }
             catch (Exception ex) { _logger.LogError(ex, "Erreur GetByPassagersEmbarquesAsync idVoyage={Id}", idVoyage); throw; }
         }

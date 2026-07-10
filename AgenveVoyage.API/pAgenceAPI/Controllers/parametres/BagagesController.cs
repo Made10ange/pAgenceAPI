@@ -199,18 +199,7 @@ namespace pAgenceAPI.Controllers.parametres
         {
             try
             {
-                var billets = await _billetRepository.GetPourEmbarquementAsync(idVoyage);
-                var passagerIds = billets
-                    .Where(b => b.Id_Passager > 0)
-                    .Select(b => b.Id_Passager)
-                    .Distinct()
-                    .ToList();
-
-                if (!passagerIds.Any())
-                    return Ok(new List<BagageModel>());
-
-                var bagages = await _repository.GetByPassagerIdsAsync(passagerIds);
-                return Ok(bagages);
+                return Ok(await _repository.GetByPassagersEmbarquesAsync(idVoyage));
             }
             catch (Exception ex) { return Problem(detail: ex.Message, statusCode: 500); }
         }
