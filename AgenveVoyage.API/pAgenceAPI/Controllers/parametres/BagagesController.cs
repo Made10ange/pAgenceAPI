@@ -10,15 +10,17 @@ namespace pAgenceAPI.Controllers.parametres
     public class BagagesController : AgenceControllerBase
     {
         private readonly IBagageRepository _repository;
+        private readonly IBilletRepository _billetRepository;
         private readonly IEcritureRepository _ecriture;
         private readonly ILogger<BagagesController> _logger;
 
-        public BagagesController(IBagageRepository repository, IEcritureRepository ecriture,
-                                 ILogger<BagagesController> logger)
+        public BagagesController(IBagageRepository repository, IBilletRepository billetRepository,
+                                 IEcritureRepository ecriture, ILogger<BagagesController> logger)
         {
-            _repository = repository;
-            _ecriture   = ecriture;
-            _logger     = logger;
+            _repository       = repository;
+            _billetRepository = billetRepository;
+            _ecriture         = ecriture;
+            _logger           = logger;
         }
 
         [HttpGet]
@@ -194,7 +196,23 @@ namespace pAgenceAPI.Controllers.parametres
         [HttpGet("par-embarquement/{idVoyage}")]
         public async Task<ActionResult<List<BagageModel>>> GetByPassagersEmbarques(int idVoyage)
         {
-            try { return Ok(await _repository.GetByPassagersEmbarquesAsync(idVoyage)); }
+            try
+            {
+                // Réutilise la logique billets (déjà prouvée pour l'onglet Passagers)
+                // pour obtenir les IDs passagers éligibles, puis cherche leurs bagages.
+                var billets = await _billetRepository.GetPourEmbarquementAsync(idVoyage);
+                var passagerIds = billets
+                    .Where(b => b.Id_Passager > 0)
+                    .Select(b => b.Id_Passager)
+                    .Distinct()
+                    .ToList();
+
+                if (!passagerIds.Any())
+                    return Ok(new List<BagageModel>());
+
+                var bagages = await _repository.GetByPassagerIdsAsync(passagerIds);
+                return Ok(bagages);
+            }
             catch (Exception ex) { return Problem(detail: ex.Message, statusCode: 500); }
         }
 
