@@ -1,3 +1,4 @@
+using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using pAgenceAPI.Models;
 using pAgenceAPI.Repositories;
@@ -211,6 +212,43 @@ namespace pAgenceAPI.Controllers.parametres
             {
                 _logger.LogError(ex, "Erreur Delete voyage id={Id}", id);
                 return Problem(detail: ex.Message, statusCode: 500, title: "Erreur lors de la suppression du voyage");
+            }
+        }
+
+        [HttpDelete("supprimer-force/{id}")]
+        public async Task<ActionResult<string>> DeleteForce(int id)
+        {
+            try
+            {
+                var existing = await _repository.GetByIdAsync(id);
+                if (existing == null)
+                    return NotFound(new { message = $"Voyage ID {id} non trouvé" });
+
+                var cs = HttpContext.RequestServices.GetRequiredService<IConfiguration>().GetConnectionString("DefaultConnection")!;
+                using var db = new MySqlConnector.MySqlConnection(cs);
+                await db.OpenAsync();
+                using var tx = await db.BeginTransactionAsync();
+                try
+                {
+                    await db.ExecuteAsync("DELETE FROM embarquement_voyage_passager WHERE Id_Voyage = @id", new { id }, tx);
+                    await db.ExecuteAsync("UPDATE billet SET Id_Voyage_Prevu = NULL WHERE Id_Voyage_Prevu = @id", new { id }, tx);
+                    await db.ExecuteAsync("UPDATE billet SET Id_Voyage_Utilise = NULL WHERE Id_Voyage_Utilise = @id", new { id }, tx);
+                    await db.ExecuteAsync("UPDATE bagage SET ID_voyage_passager = NULL WHERE ID_voyage_passager = @id", new { id }, tx);
+                    await db.ExecuteAsync("UPDATE bagage SET ID_voyage_bagage = NULL WHERE ID_voyage_bagage = @id", new { id }, tx);
+                    await db.ExecuteAsync("UPDATE colis SET ID_VOYAGE = NULL WHERE ID_VOYAGE = @id", new { id }, tx);
+                    await db.ExecuteAsync("DELETE FROM assignation_chauffeur_voyage WHERE Id_Voyage = @id", new { id }, tx);
+                    await db.ExecuteAsync("DELETE FROM reservation WHERE Id_Voyage = @id", new { id }, tx);
+                    await db.ExecuteAsync("DELETE FROM voyage WHERE ID_voyage = @id", new { id }, tx);
+                    await tx.CommitAsync();
+                }
+                catch { await tx.RollbackAsync(); throw; }
+
+                return Ok(new { message = "Voyage et toutes ses données liées supprimés avec succès." });
+            }
+            catch (Exception ex)
+            {
+                _logger.LogError(ex, "Erreur DeleteForce voyage id={Id}", id);
+                return Problem(detail: ex.Message, statusCode: 500, title: "Erreur suppression forcée");
             }
         }
 
