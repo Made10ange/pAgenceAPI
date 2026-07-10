@@ -322,17 +322,23 @@ namespace pAgenceAPI.Repositories
                         )
                         OR EXISTS (
                             SELECT 1 FROM billet bl
-                            JOIN voyage v_cible ON v_cible.ID_voyage = @idVoyage
+                            JOIN  voyage      v_cible  ON v_cible.ID_voyage       = @idVoyage
                             LEFT JOIN type_voyage tv_cible ON tv_cible.ID_type_voyage = v_cible.ID_type_voyage
+                            LEFT JOIN type_voyage tv_bl   ON tv_bl.ID_type_voyage   = bl.Id_Type_Voyage
                             WHERE bl.Id_Passager = b.ID_passager
                               AND bl.Statut IN ('Valide','Reporté')
                               AND (
                                   bl.Id_Voyage_Prevu = @idVoyage
-                                  OR (bl.Id_Type_Voyage IS NOT NULL AND bl.Id_Type_Voyage = v_cible.ID_type_voyage)
-                                  OR (tv_cible.Point_Depart IS NOT NULL
-                                      AND LOWER(COALESCE(bl.Point_Depart,'')) = LOWER(COALESCE(tv_cible.Point_Depart,''))
-                                      AND LOWER(COALESCE(bl.Point_Arrivee,'')) = LOWER(COALESCE(tv_cible.Point_Arrivee,''))
-                                      AND (bl.Id_Type_Voyage IS NULL OR bl.Id_Type_Voyage = v_cible.ID_type_voyage))
+                                  OR bl.Id_Type_Voyage = v_cible.ID_type_voyage
+                                  OR (tv_bl.Libelle_Type_Voyage IS NOT NULL
+                                      AND tv_cible.Libelle_Type_Voyage IS NOT NULL
+                                      AND LOWER(tv_bl.Libelle_Type_Voyage) = LOWER(tv_cible.Libelle_Type_Voyage)
+                                      AND LOWER(COALESCE(bl.Point_Depart,''))  = LOWER(COALESCE(tv_cible.Point_Depart,''))
+                                      AND LOWER(COALESCE(bl.Point_Arrivee,'')) = LOWER(COALESCE(tv_cible.Point_Arrivee,'')))
+                                  OR (bl.Id_Type_Voyage IS NULL
+                                      AND tv_cible.Point_Depart IS NOT NULL
+                                      AND LOWER(COALESCE(bl.Point_Depart,''))  = LOWER(COALESCE(tv_cible.Point_Depart,''))
+                                      AND LOWER(COALESCE(bl.Point_Arrivee,'')) = LOWER(COALESCE(tv_cible.Point_Arrivee,'')))
                               )
                         )
                     )
