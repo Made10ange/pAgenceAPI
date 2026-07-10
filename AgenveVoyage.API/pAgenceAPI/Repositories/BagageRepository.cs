@@ -315,21 +315,26 @@ namespace pAgenceAPI.Repositories
                 return (await connection.QueryAsync<BagageModel>(
                     BaseSelectSql + @"
                     WHERE b.STATUT = 'En attente'
-                    AND b.ID_passager IN (
-                        SELECT ID_passager FROM embarquement_voyage_passager WHERE ID_voyage = @idVoyage
-                        UNION
-                        SELECT bl.ID_passager FROM billet bl
-                        JOIN voyage v_ref ON v_ref.ID_voyage = @idVoyage
-                        LEFT JOIN type_voyage tv_ref ON tv_ref.ID_type_voyage = v_ref.ID_type_voyage
-                        WHERE bl.STATUT IN ('Valide','Reporté')
-                          AND bl.ID_passager IS NOT NULL
-                          AND (
-                              bl.ID_VOYAGE_PREVU = @idVoyage
-                              OR bl.ID_TYPE_VOYAGE = v_ref.ID_type_voyage
-                              OR (tv_ref.POINT_DEPART IS NOT NULL
-                                  AND LOWER(COALESCE(bl.POINT_DEPART,'')) = LOWER(COALESCE(tv_ref.POINT_DEPART,''))
-                                  AND LOWER(COALESCE(bl.POINT_ARRIVEE,'')) = LOWER(COALESCE(tv_ref.POINT_ARRIVEE,'')))
-                          )
+                    AND (
+                        EXISTS (
+                            SELECT 1 FROM embarquement_voyage_passager e
+                            WHERE e.Id_Passager = b.ID_passager AND e.Id_Voyage = @idVoyage
+                        )
+                        OR EXISTS (
+                            SELECT 1 FROM billet bl
+                            JOIN voyage v_cible ON v_cible.ID_voyage = @idVoyage
+                            LEFT JOIN type_voyage tv_cible ON tv_cible.ID_type_voyage = v_cible.ID_type_voyage
+                            WHERE bl.Id_Passager = b.ID_passager
+                              AND bl.Statut IN ('Valide','Reporté')
+                              AND (
+                                  bl.Id_Voyage_Prevu = @idVoyage
+                                  OR (bl.Id_Type_Voyage IS NOT NULL AND bl.Id_Type_Voyage = v_cible.ID_type_voyage)
+                                  OR (tv_cible.Point_Depart IS NOT NULL
+                                      AND LOWER(COALESCE(bl.Point_Depart,'')) = LOWER(COALESCE(tv_cible.Point_Depart,''))
+                                      AND LOWER(COALESCE(bl.Point_Arrivee,'')) = LOWER(COALESCE(tv_cible.Point_Arrivee,''))
+                                      AND (bl.Id_Type_Voyage IS NULL OR bl.Id_Type_Voyage = v_cible.ID_type_voyage))
+                              )
+                        )
                     )
                     ORDER BY b.DATE_ENREGISTREMENT DESC",
                     new { idVoyage }

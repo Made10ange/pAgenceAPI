@@ -99,14 +99,14 @@ namespace pAgenceAPI.Repositories
                 using var connection = new MySqlConnection(_connectionString);
                 return (await connection.QueryAsync<ColisModel>(
                     BaseSelectSql + @"
-                    JOIN voyage v ON v.ID_voyage = @idVoyage
-                    LEFT JOIN type_voyage tv ON tv.ID_type_voyage = v.ID_type_voyage
+                    JOIN voyage v_cible ON v_cible.ID_voyage = @idVoyage
+                    LEFT JOIN type_voyage tv_cible ON tv_cible.ID_type_voyage = v_cible.ID_type_voyage
                     WHERE (
                         c.ID_VOYAGE = @idVoyage
                         OR (
-                            tv.POINT_DEPART IS NOT NULL
-                            AND LOWER(c.VILLE_DEPART)  = LOWER(tv.POINT_DEPART)
-                            AND LOWER(c.VILLE_ARRIVEE) = LOWER(tv.POINT_ARRIVEE)
+                            tv_cible.POINT_DEPART IS NOT NULL
+                            AND LOWER(c.VILLE_DEPART)  = LOWER(tv_cible.POINT_DEPART)
+                            AND LOWER(c.VILLE_ARRIVEE) = LOWER(tv_cible.POINT_ARRIVEE)
                         )
                     )
                       AND c.STATUT NOT IN ('Livré', 'Annulé')

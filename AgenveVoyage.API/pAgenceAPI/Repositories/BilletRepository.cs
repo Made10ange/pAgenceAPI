@@ -190,9 +190,10 @@ namespace pAgenceAPI.Repositories
 
                       OR
 
-                      -- 4. Trajet direct sur le billet correspond au trajet du voyage
+                      -- 4. Billet sans type_voyage, trajet correspond (évite les faux positifs inter-types)
                       (
-                          COALESCE(b.Point_Depart,'') != ''
+                          b.Id_Type_Voyage IS NULL
+                          AND COALESCE(b.Point_Depart,'') != ''
                           AND tv0.Point_Depart IS NOT NULL
                           AND LOWER(b.Point_Depart)  = LOWER(tv0.Point_Depart)
                           AND LOWER(b.Point_Arrivee) = LOWER(tv0.Point_Arrivee)
