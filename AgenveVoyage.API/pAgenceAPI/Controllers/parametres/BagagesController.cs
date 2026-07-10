@@ -1,3 +1,4 @@
+using Dapper;
 using Microsoft.AspNetCore.Mvc;
 using pAgenceAPI.Controllers;
 using pAgenceAPI.Models;
@@ -198,8 +199,6 @@ namespace pAgenceAPI.Controllers.parametres
         {
             try
             {
-                // Réutilise la logique billets (déjà prouvée pour l'onglet Passagers)
-                // pour obtenir les IDs passagers éligibles, puis cherche leurs bagages.
                 var billets = await _billetRepository.GetPourEmbarquementAsync(idVoyage);
                 var passagerIds = billets
                     .Where(b => b.Id_Passager > 0)
@@ -214,6 +213,38 @@ namespace pAgenceAPI.Controllers.parametres
                 return Ok(bagages);
             }
             catch (Exception ex) { return Problem(detail: ex.Message, statusCode: 500); }
+        }
+
+        [HttpGet("debug-embarquement/{idVoyage}")]
+        public async Task<IActionResult> DebugEmbarquement(int idVoyage)
+        {
+            try
+            {
+                var cs = HttpContext.RequestServices.GetRequiredService<IConfiguration>().GetConnectionString("DefaultConnection")!;
+                using var db = new MySqlConnector.MySqlConnection(cs);
+                await db.OpenAsync();
+
+                var billets = await _billetRepository.GetPourEmbarquementAsync(idVoyage);
+                var passagerIds = billets.Where(b => b.Id_Passager > 0).Select(b => b.Id_Passager).Distinct().ToList();
+
+                var bagagesEnAttente = passagerIds.Any()
+                    ? (await db.QueryAsync<dynamic>(
+                        "SELECT ID_bagage, ID_passager, STATUT, DESCRIPTION FROM bagage WHERE ID_passager IN @ids",
+                        new { ids = passagerIds })).ToList()
+                    : new List<dynamic>();
+
+                var tousLesBagages = (await db.QueryAsync<dynamic>(
+                    "SELECT ID_bagage, ID_passager, STATUT, DESCRIPTION FROM bagage WHERE STATUT='En attente' LIMIT 10")).ToList();
+
+                return Ok(new {
+                    idVoyage,
+                    nbBillets = billets.Count(),
+                    passagerIds,
+                    bagagesTrouves = bagagesEnAttente,
+                    tousLesBagagesEnAttente = tousLesBagages
+                });
+            }
+            catch (Exception ex) { return StatusCode(500, ex.Message); }
         }
 
         [HttpGet("en-attente")]
