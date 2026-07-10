@@ -309,41 +309,43 @@ namespace pAgenceAPI.Repositories
             try
             {
                 using var connection = new MySqlConnection(_connectionString);
-                // Inclure les bagages des passagers qui :
-                //   1. Ont un enregistrement embarquement pour ce voyage
-                //   2. OU ont un billet valide pour ce voyage (même type+trajet)
+
+                // Étape 1 : récupérer les IDs passagers éligibles (même logique que l'onglet Passagers)
+                var passagerIds = (await connection.QueryAsync<int?>(@"
+                    SELECT DISTINCT bl.Id_Passager
+                    FROM billet bl
+                    JOIN  voyage      v0  ON v0.Id_Voyage       = @idVoyage
+                    LEFT JOIN type_voyage tv0 ON tv0.Id_Type_Voyage = v0.Id_Type_Voyage
+                    LEFT JOIN type_voyage tvb ON tvb.Id_Type_Voyage = bl.Id_Type_Voyage
+                    WHERE bl.Statut IN ('Valide','Reporté')
+                      AND bl.Id_Passager IS NOT NULL
+                      AND (
+                          bl.Id_Voyage_Prevu = v0.Id_Voyage
+                          OR bl.Id_Type_Voyage = v0.Id_Type_Voyage
+                          OR (tvb.Libelle_Type_Voyage IS NOT NULL
+                              AND tv0.Libelle_Type_Voyage IS NOT NULL
+                              AND LOWER(tvb.Libelle_Type_Voyage) = LOWER(tv0.Libelle_Type_Voyage)
+                              AND LOWER(COALESCE(bl.Point_Depart,''))  = LOWER(COALESCE(tv0.Point_Depart,''))
+                              AND LOWER(COALESCE(bl.Point_Arrivee,'')) = LOWER(COALESCE(tv0.Point_Arrivee,'')))
+                          OR (bl.Id_Type_Voyage IS NULL
+                              AND tv0.Point_Depart IS NOT NULL
+                              AND LOWER(COALESCE(bl.Point_Depart,''))  = LOWER(COALESCE(tv0.Point_Depart,''))
+                              AND LOWER(COALESCE(bl.Point_Arrivee,'')) = LOWER(COALESCE(tv0.Point_Arrivee,'')))
+                      )
+                    UNION
+                    SELECT Id_Passager FROM embarquement_voyage_passager WHERE Id_Voyage = @idVoyage",
+                    new { idVoyage }
+                )).Where(id => id.HasValue).Select(id => id!.Value).ToList();
+
+                if (!passagerIds.Any()) return new List<BagageModel>();
+
+                // Étape 2 : bagages En attente pour ces passagers
                 return (await connection.QueryAsync<BagageModel>(
                     BaseSelectSql + @"
                     WHERE b.STATUT = 'En attente'
-                    AND (
-                        EXISTS (
-                            SELECT 1 FROM embarquement_voyage_passager e
-                            WHERE e.Id_Passager = b.ID_passager AND e.Id_Voyage = @idVoyage
-                        )
-                        OR EXISTS (
-                            SELECT 1 FROM billet bl
-                            JOIN  voyage      v_cible  ON v_cible.ID_voyage       = @idVoyage
-                            LEFT JOIN type_voyage tv_cible ON tv_cible.ID_type_voyage = v_cible.ID_type_voyage
-                            LEFT JOIN type_voyage tv_bl   ON tv_bl.ID_type_voyage   = bl.Id_Type_Voyage
-                            WHERE bl.Id_Passager = b.ID_passager
-                              AND bl.Statut IN ('Valide','Reporté')
-                              AND (
-                                  bl.Id_Voyage_Prevu = @idVoyage
-                                  OR bl.Id_Type_Voyage = v_cible.ID_type_voyage
-                                  OR (tv_bl.Libelle_Type_Voyage IS NOT NULL
-                                      AND tv_cible.Libelle_Type_Voyage IS NOT NULL
-                                      AND LOWER(tv_bl.Libelle_Type_Voyage) = LOWER(tv_cible.Libelle_Type_Voyage)
-                                      AND LOWER(COALESCE(bl.Point_Depart,''))  = LOWER(COALESCE(tv_cible.Point_Depart,''))
-                                      AND LOWER(COALESCE(bl.Point_Arrivee,'')) = LOWER(COALESCE(tv_cible.Point_Arrivee,'')))
-                                  OR (bl.Id_Type_Voyage IS NULL
-                                      AND tv_cible.Point_Depart IS NOT NULL
-                                      AND LOWER(COALESCE(bl.Point_Depart,''))  = LOWER(COALESCE(tv_cible.Point_Depart,''))
-                                      AND LOWER(COALESCE(bl.Point_Arrivee,'')) = LOWER(COALESCE(tv_cible.Point_Arrivee,'')))
-                              )
-                        )
-                    )
+                      AND b.ID_passager IN @ids
                     ORDER BY b.DATE_ENREGISTREMENT DESC",
-                    new { idVoyage }
+                    new { ids = passagerIds }
                 )).ToList();
             }
             catch (Exception ex) { _logger.LogError(ex, "Erreur GetByPassagersEmbarquesAsync idVoyage={Id}", idVoyage); throw; }
