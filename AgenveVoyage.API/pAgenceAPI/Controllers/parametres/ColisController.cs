@@ -108,7 +108,7 @@ namespace pAgenceAPI.Controllers.parametres
             try
             {
                 var idAgenceColis = colis.Id_Agence ?? AgenceId;
-                if (colis.Prix_Transport > 0 && !await _ecriture.JourneeOuverteAsync(DateTime.Today, idAgenceColis))
+                if (colis.Prix_Transport > 0 && await _ecriture.GetDateJourneeOuverteAsync(idAgenceColis) is null)
                     return BadRequest(new { message = "Aucune journée comptable ouverte pour votre agence. Impossible d'enregistrer ce colis." });
 
                 var id = await _repository.AddAsync(colis);

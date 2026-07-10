@@ -52,7 +52,7 @@ public class TransfertsCaisseController : AgenceControllerBase
     {
         try
         {
-            if (!await _ecriture.JourneeOuverteAsync(DateTime.Today, AgenceId))
+            if (await _ecriture.GetDateJourneeOuverteAsync(AgenceId) is null)
                 return BadRequest(new { message = "Aucune journée comptable ouverte pour votre agence. Impossible d'effectuer un transfert de caisse." });
 
             var id = await _repo.InitierAsync(model, UserId);

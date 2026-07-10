@@ -91,6 +91,12 @@ public class EcrituresController : AgenceControllerBase
                 return StatusCode(403, new { message = "Seuls l'administrateur ou le caissier principal peuvent ouvrir/clôturer la journée." });
 
             var d = date ?? DateTime.Today;
+
+            // Bloquer la réouverture d'une journée déjà clôturée
+            var derniere = await _repo.GetDerniereJourneeAsync(AgenceId);
+            if (derniere.HasValue && derniere.Value.Date.Date == d.Date && derniere.Value.Statut == "Clôturée")
+                return BadRequest(new { message = $"La journée du {d:dd/MM/yyyy} est déjà clôturée et ne peut plus être réouverte." });
+
             await _repo.OuvrirJourneeAsync(UserId ?? 0, AgenceId.Value, d);
             return Ok(new { message = $"Journée du {d:dd/MM/yyyy} ouverte avec succès." });
         }

@@ -128,7 +128,8 @@ namespace pAgenceAPI.Controllers.parametres
         {
             try
             {
-                if (!await _ecriture.JourneeOuverteAsync(DateTime.Today, AgenceId))
+                var dateJournee = await _ecriture.GetDateJourneeOuverteAsync(AgenceId);
+                if (dateJournee is null)
                     return BadRequest(new { message = "Aucune journée comptable ouverte pour votre agence. Impossible de vendre un billet." });
 
                 var id      = await _repo.AjouterAsync(billet);

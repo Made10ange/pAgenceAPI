@@ -96,6 +96,16 @@ public class EcritureRepository : IEcritureRepository
         return count > 0;
     }
 
+    // ── Date de la journée ouverte (n'importe quelle date) ─────────────────
+    public async Task<DateTime?> GetDateJourneeOuverteAsync(int? idAgence)
+    {
+        using var db = new MySqlConnection(_cs);
+        var row = await db.QueryFirstOrDefaultAsync<DateTime?>(
+            "SELECT date_journee FROM journee_comptable WHERE code_agence=@idAgence AND statut='Ouverte' ORDER BY date_journee DESC LIMIT 1",
+            new { idAgence });
+        return row;
+    }
+
     // ── Ouvrir la journée d'une agence ──────────────────────────────────────
     public async Task OuvrirJourneeAsync(int codeUser, int idAgence, DateTime? date = null)
     {

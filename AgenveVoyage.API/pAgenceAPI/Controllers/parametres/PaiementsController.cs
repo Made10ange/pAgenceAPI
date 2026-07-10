@@ -102,7 +102,7 @@ namespace pAgenceAPI.Controllers.parametres
         {
             if (!ModelState.IsValid) return BadRequest(ModelState);
 
-            if (!await _ecriture.JourneeOuverteAsync(DateTime.Today, AgenceId))
+            if (await _ecriture.GetDateJourneeOuverteAsync(AgenceId) is null)
                 return BadRequest(new { message = "Aucune journée comptable ouverte pour votre agence. Impossible d'enregistrer un paiement." });
 
             var result = await _repo.AddAsync(paiement);

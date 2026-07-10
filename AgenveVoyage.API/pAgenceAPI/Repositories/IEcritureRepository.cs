@@ -13,6 +13,9 @@ public interface IEcritureRepository
     /// <summary>Vérifie si une journée comptable est ouverte pour la date et l'agence données.</summary>
     Task<bool> JourneeOuverteAsync(DateTime date, int? idAgence = null);
 
+    /// <summary>Retourne la date de la journée ouverte pour cette agence (quelle que soit la date), ou null si aucune journée ouverte.</summary>
+    Task<DateTime?> GetDateJourneeOuverteAsync(int? idAgence);
+
     Task OuvrirJourneeAsync(int codeUser, int idAgence, DateTime? date = null);
     Task CloturerJourneeAsync(int codeUser, int idAgence, DateTime? date = null);
 

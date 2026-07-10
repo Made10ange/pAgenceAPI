@@ -82,7 +82,7 @@ namespace pAgenceAPI.Controllers.parametres
             try
             {
                 if (bagage.Montant_Total.HasValue && bagage.Montant_Total.Value > 0
-                    && !await _ecriture.JourneeOuverteAsync(DateTime.Today, AgenceId))
+                    && await _ecriture.GetDateJourneeOuverteAsync(AgenceId) is null)
                     return BadRequest(new { message = "Aucune journée comptable ouverte pour votre agence. Impossible d'enregistrer ce bagage." });
 
                 var id = await _repository.AddAsync(bagage);
@@ -141,7 +141,7 @@ namespace pAgenceAPI.Controllers.parametres
         {
             try
             {
-                if (req.Montant_Total > 0 && !await _ecriture.JourneeOuverteAsync(DateTime.Today, AgenceId))
+                if (req.Montant_Total > 0 && await _ecriture.GetDateJourneeOuverteAsync(AgenceId) is null)
                     return BadRequest(new { message = "Aucune journée comptable ouverte pour votre agence. Impossible d'enregistrer ces bagages." });
 
                 await _repository.EnregistrerParPassagerAsync(req.Id_Passager, req.Id_Voyage, req.Montant_Total, req.Bagages);
