@@ -227,20 +227,37 @@ namespace pAgenceAPI.Controllers.parametres
                 var billets = await _billetRepository.GetPourEmbarquementAsync(idVoyage);
                 var passagerIds = billets.Where(b => b.Id_Passager > 0).Select(b => b.Id_Passager).Distinct().ToList();
 
-                var bagagesEnAttente = passagerIds.Any()
+                // Passagers des billets avec leurs noms
+                var passagersBillets = passagerIds.Any()
                     ? (await db.QueryAsync<dynamic>(
-                        "SELECT ID_bagage, ID_passager, STATUT, DESCRIPTION FROM bagage WHERE ID_passager IN @ids",
+                        "SELECT Id_Passager, Nom, Prenom FROM passager WHERE Id_Passager IN @ids",
                         new { ids = passagerIds })).ToList()
                     : new List<dynamic>();
 
+                // Bagages "En attente" avec nom du passager ET ID_voyage_passager
                 var tousLesBagages = (await db.QueryAsync<dynamic>(
-                    "SELECT ID_bagage, ID_passager, STATUT, DESCRIPTION FROM bagage WHERE STATUT='En attente' LIMIT 10")).ToList();
+                    @"SELECT b.ID_bagage, b.ID_passager, b.ID_voyage_passager, b.ID_voyage_bagage,
+                             b.STATUT, b.DESCRIPTION,
+                             CONCAT(p.NOM,' ',p.PRENOM) AS Nom_Passager
+                      FROM bagage b
+                      LEFT JOIN passager p ON p.Id_Passager = b.ID_passager
+                      WHERE b.STATUT='En attente' LIMIT 20")).ToList();
+
+                // Bagages par ID_voyage_passager = idVoyage
+                var bagagesParVoyage = (await db.QueryAsync<dynamic>(
+                    @"SELECT b.ID_bagage, b.ID_passager, b.ID_voyage_passager, b.STATUT, b.DESCRIPTION,
+                             CONCAT(p.NOM,' ',p.PRENOM) AS Nom_Passager
+                      FROM bagage b
+                      LEFT JOIN passager p ON p.Id_Passager = b.ID_passager
+                      WHERE b.ID_voyage_passager = @idVoyage",
+                    new { idVoyage })).ToList();
 
                 return Ok(new {
                     idVoyage,
                     nbBillets = billets.Count(),
                     passagerIds,
-                    bagagesTrouves = bagagesEnAttente,
+                    passagersBillets,
+                    bagagesParVoyagePassager = bagagesParVoyage,
                     tousLesBagagesEnAttente = tousLesBagages
                 });
             }
