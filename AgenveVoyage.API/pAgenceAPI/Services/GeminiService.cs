@@ -35,6 +35,7 @@ namespace pAgenceAPI.Services
 - voyages_aujourdhui : lister uniquement les voyages dont la date de départ est aujourd'hui
 - chauffeur_plus_actif : trouver le chauffeur ayant le plus de voyages assignés
 - chercher_chauffeur : rechercher un chauffeur précis par son nom (mets le nom dans ""mot_cle"")
+- aide : l'utilisateur demande comment utiliser l'application (""comment faire X"", ""où se trouve Y"", tutoriel/aide) plutôt que des données réelles
 - inconnu : si la question ne correspond à aucune action ci-dessus
 
 Choisis liste_voyages_en_cours / liste_voyages_programmes / liste_voyages_termines seulement si l'utilisateur précise explicitement ce statut (""en cours"", ""programmés"", ""terminés"", ""à venir""...). Sinon utilise liste_voyages.
@@ -153,8 +154,93 @@ Question de l'utilisateur : ""{question}""";
                 return new GeminiIntentResult { Action = "liste_agences", ViaSecours = true };
             if (q.Contains("billet"))
                 return new GeminiIntentResult { Action = "liste_billets", ViaSecours = true };
+            if (q.Contains("comment") || q.Contains("où") || q.Contains("ou se trouve") || q.Contains("tutoriel"))
+                return new GeminiIntentResult { Action = "aide", ViaSecours = true };
 
             return new GeminiIntentResult { Action = "inconnu", ViaSecours = true };
+        }
+
+        private const string BaseConnaissanceAide = @"
+[Voyages] Ajouter un voyage : Opérations > Voyages > Nouveau voyage, choisir type de voyage, véhicule, chauffeur, date et heure, puis valider.
+[Voyages] Modifier/supprimer un voyage : Opérations > Voyages, boutons crayon (modifier) ou corbeille (supprimer).
+[Voyages] Voir les voyages archivés : onglet Archives de la page Voyages.
+[Passagers] Vendre un billet : Passagers > Ajouter, choisir le type de voyage puis le trajet, remplir les infos du passager et le mode de paiement, cliquer sur VALIDER.
+[Passagers] Retrouver un passager déjà enregistré : taper son nom dans le champ Nom du Guichet passagers, une liste de suggestions apparaît.
+[Embarquements] Embarquer des passagers : Opérations > Embarquements, sélectionner le voyage, cocher les passagers présents, Valider l'embarquement.
+[Embarquements] Bordereau de voyage : généré automatiquement après validation de l'embarquement, s'ouvre dans un nouvel onglet.
+[Bagages/Colis] Enregistrer un bagage ou un colis : Opérations > Bagages ou Colis > Nouveau, renseigner passager/expéditeur, description et trajet.
+[Paiements] Voir les paiements reçus : menu Paiements.
+[Comptabilité] Rapport de caisse : Opérations > Rapport de caisse.
+[Comptabilité] Affecter un caissier à une caisse : Comptabilité > Affectation caissiers.
+[Paramètres] Ajouter un chauffeur ou véhicule : Paramètres > Chauffeurs ou Véhicules > Ajouter.
+[Interface] Changer la langue : boutons FR/EN en haut de page.
+[Interface] Mode sombre : icône lune/soleil en haut de page.
+[Interface] Se déconnecter : bouton Déconnexion en haut à droite.";
+
+        /// <summary>
+        /// Répond aux questions "comment faire X" en s'appuyant sur la base de connaissance de l'application
+        /// (fusion de la FAQ statique avec l'IA générative).
+        /// </summary>
+        public async Task<string> RepondreAideAsync(string question)
+        {
+            for (int tentative = 1; tentative <= 2; tentative++)
+            {
+                try
+                {
+                    var reponse = await AppellerAideAsync(question);
+                    if (reponse != null) return reponse;
+                }
+                catch { }
+                if (tentative == 1) await Task.Delay(600);
+            }
+
+            return RechercheAideSecours(question);
+        }
+
+        private async Task<string?> AppellerAideAsync(string question)
+        {
+            var prompt = $@"Tu es l'assistant d'aide de l'application AgenceV (logiciel de gestion d'agence de voyage).
+Voici la documentation d'utilisation disponible :
+{BaseConnaissanceAide}
+
+Réponds à la question de l'utilisateur UNIQUEMENT à partir de cette documentation, en français, en 2-3 phrases claires et directes, sans formatage markdown.
+Si aucune information pertinente n'existe dans la documentation, réponds exactement : ""Je n'ai pas d'information à ce sujet dans mon guide d'utilisation.""
+
+Question : ""{question}""";
+
+            var url = $"https://generativelanguage.googleapis.com/v1beta/models/{_model}:generateContent?key={_apiKey}";
+            var body = new
+            {
+                contents = new object[] { new { role = "user", parts = new object[] { new { text = prompt } } } },
+                generationConfig = new { temperature = 0.2 }
+            };
+
+            var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
+            var response = await _http.PostAsync(url, content);
+            if (!response.IsSuccessStatusCode) return null;
+
+            var raw = await response.Content.ReadAsStringAsync();
+            using var doc = JsonDocument.Parse(raw);
+            return doc.RootElement.GetProperty("candidates")[0].GetProperty("content")
+                .GetProperty("parts")[0].GetProperty("text").GetString()?.Trim();
+        }
+
+        private string RechercheAideSecours(string question)
+        {
+            var q = question.ToLowerInvariant();
+            var lignes = BaseConnaissanceAide.Split('\n', StringSplitOptions.RemoveEmptyEntries);
+
+            var motsClesQuestion = q.Split(' ', StringSplitOptions.RemoveEmptyEntries)
+                .Where(m => m.Length > 3).ToList();
+
+            var meilleure = lignes
+                .Select(l => new { Ligne = l, Score = motsClesQuestion.Count(m => l.ToLowerInvariant().Contains(m)) })
+                .OrderByDescending(x => x.Score)
+                .FirstOrDefault();
+
+            return (meilleure != null && meilleure.Score > 0)
+                ? meilleure.Ligne.Trim()
+                : "Je n'ai pas trouvé de réponse précise. Consultez le centre d'aide (icône ?) pour la liste complète des questions fréquentes.";
         }
 
         /// <summary>

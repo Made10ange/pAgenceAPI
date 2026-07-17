@@ -170,6 +170,11 @@ namespace pAgenceAPI.Controllers.parametres
                         Donnees = liste.Select(c => new { c.Id_Chauffeur, c.Nom, c.Prenom, c.Telephone })
                     });
                 }
+                case "aide":
+                {
+                    var reponse = await _gemini.RepondreAideAsync(dto.Message);
+                    return Ok(new ChatReponseDto { Reponse = reponse });
+                }
                 case "erreur_ia":
                     return Ok(new ChatReponseDto { Reponse = "Le service IA est momentanément indisponible, réessayez dans un instant." });
                 default:
