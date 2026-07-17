@@ -10,6 +10,13 @@ namespace pAgenceAPI.Services
         public bool ViaSecours { get; set; } = false;
     }
 
+    public class RechercheVoyageResult
+    {
+        public string? Depart { get; set; }
+        public string? Arrivee { get; set; }
+        public DateTime? Date { get; set; }
+    }
+
     public class GeminiService
     {
         private readonly HttpClient _http;
@@ -25,9 +32,13 @@ namespace pAgenceAPI.Services
 - liste_vehicules : lister tous les véhicules
 - liste_agences : lister toutes les agences
 - liste_billets : lister tous les billets
+- voyages_aujourdhui : lister uniquement les voyages dont la date de départ est aujourd'hui
+- chauffeur_plus_actif : trouver le chauffeur ayant le plus de voyages assignés
+- chercher_chauffeur : rechercher un chauffeur précis par son nom (mets le nom dans ""mot_cle"")
 - inconnu : si la question ne correspond à aucune action ci-dessus
 
-Choisis liste_voyages_en_cours / liste_voyages_programmes / liste_voyages_termines seulement si l'utilisateur précise explicitement ce statut (""en cours"", ""programmés"", ""terminés"", ""à venir""...). Sinon utilise liste_voyages.";
+Choisis liste_voyages_en_cours / liste_voyages_programmes / liste_voyages_termines seulement si l'utilisateur précise explicitement ce statut (""en cours"", ""programmés"", ""terminés"", ""à venir""...). Sinon utilise liste_voyages.
+Choisis chercher_chauffeur seulement si l'utilisateur cite un nom de personne précis. Choisis liste_chauffeurs s'il veut la liste complète.";
 
         public GeminiService(IHttpClientFactory httpClientFactory, IConfiguration config)
         {
@@ -120,10 +131,14 @@ Question de l'utilisateur : ""{question}""";
         {
             var q = question.ToLowerInvariant();
 
+            if (q.Contains("chauffeur le plus actif") || q.Contains("chauffeur plus actif") || q.Contains("meilleur chauffeur"))
+                return new GeminiIntentResult { Action = "chauffeur_plus_actif", ViaSecours = true };
             if (q.Contains("chauffeur"))
                 return new GeminiIntentResult { Action = "liste_chauffeurs", ViaSecours = true };
             if (q.Contains("voyage") || q.Contains("trajet"))
             {
+                if (q.Contains("aujourd'hui") || q.Contains("aujourdhui") || q.Contains("aujourd’hui"))
+                    return new GeminiIntentResult { Action = "voyages_aujourdhui", ViaSecours = true };
                 if (q.Contains("en cours"))
                     return new GeminiIntentResult { Action = "liste_voyages_en_cours", ViaSecours = true };
                 if (q.Contains("programm"))
@@ -140,6 +155,93 @@ Question de l'utilisateur : ""{question}""";
                 return new GeminiIntentResult { Action = "liste_billets", ViaSecours = true };
 
             return new GeminiIntentResult { Action = "inconnu", ViaSecours = true };
+        }
+
+        /// <summary>
+        /// Extrait ville de départ / arrivée / date d'une phrase libre pour la recherche de voyage
+        /// (utilisé par l'assistant de réservation en ligne, public).
+        /// </summary>
+        public async Task<RechercheVoyageResult> ExtraireRechercheVoyageAsync(string question)
+        {
+            for (int tentative = 1; tentative <= 2; tentative++)
+            {
+                try
+                {
+                    var resultat = await AppellerExtractionAsync(question);
+                    if (resultat != null)
+                        return resultat;
+                }
+                catch { }
+
+                if (tentative == 1)
+                    await Task.Delay(600);
+            }
+
+            // Secours : extraction naïve par mots-clés / villes connues
+            return ExtractionParMotsClesSecours(question);
+        }
+
+        private async Task<RechercheVoyageResult?> AppellerExtractionAsync(string question)
+        {
+            var aujourdhui = DateTime.Today.ToString("yyyy-MM-dd");
+            var prompt = $@"Tu es l'assistant de réservation de l'application AgenceV (transport interurbain de voyageurs).
+Aujourd'hui nous sommes le {aujourdhui}.
+Analyse la phrase de l'utilisateur et extrait : la ville de départ, la ville d'arrivée, et la date du voyage (au format YYYY-MM-DD).
+Résous les dates relatives (""demain"", ""après-demain"", ""ce weekend"") par rapport à aujourd'hui.
+Si une information est absente, mets null.
+
+Réponds UNIQUEMENT avec un JSON strict : {{""depart"": ""...ou null"", ""arrivee"": ""...ou null"", ""date"": ""YYYY-MM-DDou null""}}
+Aucun texte autour, pas de markdown.
+
+Phrase de l'utilisateur : ""{question}""";
+
+            var url = $"https://generativelanguage.googleapis.com/v1beta/models/{_model}:generateContent?key={_apiKey}";
+            var body = new
+            {
+                contents = new object[] { new { role = "user", parts = new object[] { new { text = prompt } } } },
+                generationConfig = new { temperature = 0.1 }
+            };
+
+            var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
+            var response = await _http.PostAsync(url, content);
+            if (!response.IsSuccessStatusCode) return null;
+
+            var raw = await response.Content.ReadAsStringAsync();
+            using var doc = JsonDocument.Parse(raw);
+            var text = doc.RootElement.GetProperty("candidates")[0].GetProperty("content")
+                .GetProperty("parts")[0].GetProperty("text").GetString() ?? "{}";
+            text = text.Trim().Trim('`');
+            if (text.StartsWith("json")) text = text[4..].Trim();
+
+            using var parsed = JsonDocument.Parse(text);
+            string? Lire(string prop) =>
+                parsed.RootElement.TryGetProperty(prop, out var v) && v.ValueKind == JsonValueKind.String ? v.GetString() : null;
+
+            DateTime? date = null;
+            if (DateTime.TryParse(Lire("date"), out var d)) date = d;
+
+            return new RechercheVoyageResult { Depart = Lire("depart"), Arrivee = Lire("arrivee"), Date = date };
+        }
+
+        private RechercheVoyageResult ExtractionParMotsClesSecours(string question)
+        {
+            var q = question.ToLowerInvariant();
+            var resultat = new RechercheVoyageResult();
+
+            if (q.Contains("demain"))
+                resultat.Date = DateTime.Today.AddDays(1);
+            else if (q.Contains("après-demain") || q.Contains("apres-demain"))
+                resultat.Date = DateTime.Today.AddDays(2);
+            else if (q.Contains("aujourd'hui") || q.Contains("aujourdhui"))
+                resultat.Date = DateTime.Today;
+
+            // Villes camerounaises courantes — complétez selon vos agences
+            var villes = new[] { "yaoundé", "yaounde", "douala", "bafoussam", "bamenda", "garoua", "maroua", "ngaoundéré", "ngaoundere", "bertoua", "ebolowa", "buea", "limbe", "kribi", "dschang" };
+            var trouvees = villes.Where(v => q.Contains(v)).ToList();
+            if (trouvees.Count >= 1) resultat.Depart = trouvees[0];
+            if (trouvees.Count >= 2) resultat.Arrivee = trouvees[1];
+
+            return resultat;
         }
     }
 }

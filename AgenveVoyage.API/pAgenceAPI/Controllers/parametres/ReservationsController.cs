@@ -97,6 +97,16 @@ namespace pAgenceAPI.Controllers.parametres
 
             try
             {
+                // Détection simple d'anomalie : trop de réservations rapprochées avec le même numéro
+                if (!string.IsNullOrWhiteSpace(model.Telephone_Client))
+                {
+                    var recentes = (await _repo.SearchAsync(model.Telephone_Client))
+                        .Count(r => r.Telephone_Client == model.Telephone_Client
+                                 && r.Date_Creation >= DateTime.Now.AddMinutes(-10));
+                    if (recentes >= 3)
+                        return BadRequest(new { message = "Trop de réservations effectuées récemment avec ce numéro de téléphone. Merci de patienter quelques minutes avant de réessayer, ou de contacter l'agence." });
+                }
+
                 // Vérifier disponibilité du siège
                 if (model.Numero_Siege.HasValue)
                 {
