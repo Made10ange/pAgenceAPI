@@ -1,0 +1,145 @@
+using System.Text;
+using System.Text.Json;
+
+namespace pAgenceAPI.Services
+{
+    public class GeminiIntentResult
+    {
+        public string Action { get; set; } = "inconnu";
+        public string? MotCle { get; set; }
+        public bool ViaSecours { get; set; } = false;
+    }
+
+    public class GeminiService
+    {
+        private readonly HttpClient _http;
+        private readonly string _apiKey;
+        private readonly string _model;
+
+        private const string ActionsDisponibles = @"
+- liste_chauffeurs : lister tous les chauffeurs
+- liste_voyages : lister tous les voyages, sans filtre de statut
+- liste_voyages_en_cours : lister uniquement les voyages dont le statut est ""En cours""
+- liste_voyages_programmes : lister uniquement les voyages dont le statut est ""Programmé""
+- liste_voyages_termines : lister uniquement les voyages dont le statut est ""Terminé""
+- liste_vehicules : lister tous les véhicules
+- liste_agences : lister toutes les agences
+- liste_billets : lister tous les billets
+- inconnu : si la question ne correspond à aucune action ci-dessus
+
+Choisis liste_voyages_en_cours / liste_voyages_programmes / liste_voyages_termines seulement si l'utilisateur précise explicitement ce statut (""en cours"", ""programmés"", ""terminés"", ""à venir""...). Sinon utilise liste_voyages.";
+
+        public GeminiService(IHttpClientFactory httpClientFactory, IConfiguration config)
+        {
+            _http = httpClientFactory.CreateClient();
+            _http.Timeout = TimeSpan.FromSeconds(8);
+            _apiKey = config["Gemini:ApiKey"] ?? throw new InvalidOperationException("Clé API Gemini manquante dans appsettings.Development.json");
+            _model = config["Gemini:Model"] ?? "gemini-flash-latest";
+        }
+
+        public async Task<GeminiIntentResult> InterpreterAsync(string question)
+        {
+            // 1) On tente l'IA (avec une nouvelle tentative en cas de surcharge passagère du service)
+            for (int tentative = 1; tentative <= 2; tentative++)
+            {
+                try
+                {
+                    var resultat = await AppellerGeminiAsync(question);
+                    if (resultat != null)
+                        return resultat;
+                }
+                catch
+                {
+                    // on retente une fois, puis on bascule sur le secours
+                }
+
+                if (tentative == 1)
+                    await Task.Delay(600);
+            }
+
+            // 2) Filet de sécurité : reconnaissance par mots-clés, toujours disponible hors-ligne
+            return ReconnaissanceParMotsCles(question);
+        }
+
+        private async Task<GeminiIntentResult?> AppellerGeminiAsync(string question)
+        {
+            var systemPrompt = $@"Tu es l'assistant vocal de l'application AgenceV, un logiciel de gestion d'agence de voyage.
+Analyse la question de l'utilisateur et détermine quelle action exécuter parmi la liste suivante :
+{ActionsDisponibles}
+
+Si l'utilisateur cherche un élément précis (ex: un nom de chauffeur), extrait le mot-clé dans ""mot_cle"".
+Réponds UNIQUEMENT avec un objet JSON strict de la forme : {{""action"": ""...""; ""mot_cle"": ""...ou null""}}
+Ne mets aucun texte autour du JSON, pas de balises markdown.
+
+Question de l'utilisateur : ""{question}""";
+
+            var url = $"https://generativelanguage.googleapis.com/v1beta/models/{_model}:generateContent?key={_apiKey}";
+
+            var body = new
+            {
+                contents = new object[]
+                {
+                    new { role = "user", parts = new object[] { new { text = systemPrompt } } }
+                },
+                generationConfig = new { temperature = 0.1 }
+            };
+
+            var content = new StringContent(JsonSerializer.Serialize(body), Encoding.UTF8, "application/json");
+            var response = await _http.PostAsync(url, content);
+
+            if (!response.IsSuccessStatusCode)
+                return null; // déclenche la nouvelle tentative / le secours
+
+            var raw = await response.Content.ReadAsStringAsync();
+
+            using var doc = JsonDocument.Parse(raw);
+            var text = doc.RootElement
+                .GetProperty("candidates")[0]
+                .GetProperty("content")
+                .GetProperty("parts")[0]
+                .GetProperty("text")
+                .GetString() ?? "{}";
+
+            text = text.Trim().Trim('`');
+            if (text.StartsWith("json")) text = text[4..].Trim();
+
+            using var parsed = JsonDocument.Parse(text);
+            var action = parsed.RootElement.TryGetProperty("action", out var a) ? a.GetString() : "inconnu";
+            string? motCle = parsed.RootElement.TryGetProperty("mot_cle", out var m) && m.ValueKind != JsonValueKind.Null
+                ? m.GetString()
+                : null;
+
+            return new GeminiIntentResult { Action = action ?? "inconnu", MotCle = motCle };
+        }
+
+        /// <summary>
+        /// Reconnaissance locale par mots-clés, utilisée si le service Gemini est indisponible
+        /// (quota dépassé, surcharge, coupure réseau). Garantit que le chatbot répond toujours.
+        /// </summary>
+        private GeminiIntentResult ReconnaissanceParMotsCles(string question)
+        {
+            var q = question.ToLowerInvariant();
+
+            if (q.Contains("chauffeur"))
+                return new GeminiIntentResult { Action = "liste_chauffeurs", ViaSecours = true };
+            if (q.Contains("voyage") || q.Contains("trajet"))
+            {
+                if (q.Contains("en cours"))
+                    return new GeminiIntentResult { Action = "liste_voyages_en_cours", ViaSecours = true };
+                if (q.Contains("programm"))
+                    return new GeminiIntentResult { Action = "liste_voyages_programmes", ViaSecours = true };
+                if (q.Contains("termin"))
+                    return new GeminiIntentResult { Action = "liste_voyages_termines", ViaSecours = true };
+                return new GeminiIntentResult { Action = "liste_voyages", ViaSecours = true };
+            }
+            if (q.Contains("véhicule") || q.Contains("vehicule") || q.Contains("bus") || q.Contains("car"))
+                return new GeminiIntentResult { Action = "liste_vehicules", ViaSecours = true };
+            if (q.Contains("agence"))
+                return new GeminiIntentResult { Action = "liste_agences", ViaSecours = true };
+            if (q.Contains("billet"))
+                return new GeminiIntentResult { Action = "liste_billets", ViaSecours = true };
+
+            return new GeminiIntentResult { Action = "inconnu", ViaSecours = true };
+        }
+    }
+}

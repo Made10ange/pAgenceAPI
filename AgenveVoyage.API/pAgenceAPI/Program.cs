@@ -69,6 +69,8 @@ builder.Services.AddScoped<ITransfertCaisseRepository, TransfertCaisseRepository
 builder.Services.AddScoped<IBalanceRepository, BalanceRepository>();
 builder.Services.AddSingleton<pAgenceAPI.Services.BackupService>();
 builder.Services.AddHostedService(sp => sp.GetRequiredService<pAgenceAPI.Services.BackupService>());
+builder.Services.AddHttpClient();
+builder.Services.AddScoped<pAgenceAPI.Services.GeminiService>();
 
 var app = builder.Build();
 
