@@ -156,6 +156,26 @@ namespace pAgenceAPI.Controllers.parametres
                         Donnees = top == null ? null : new[] { top }
                     });
                 }
+                case "chauffeurs_sans_voyage":
+                {
+                    var voyagesTous = await _voyages.GetAllAsync(AgenceId);
+                    var idChauffeursActifs = voyagesTous
+                        .Where(v => v.Statut == "En cours" || v.Statut == "Programmé")
+                        .Where(v => v.Id_Chauffeur.HasValue)
+                        .Select(v => v.Id_Chauffeur!.Value)
+                        .ToHashSet();
+
+                    var tousChauffeurs = await _chauffeurs.GetAllAsync(AgenceId);
+                    var libres = tousChauffeurs.Where(c => !idChauffeursActifs.Contains(c.Id_Chauffeur)).ToList();
+
+                    return Ok(new ChatReponseDto
+                    {
+                        Reponse = libres.Count == 0
+                            ? "Tous les chauffeurs sont actuellement affectés à un voyage."
+                            : $"{libres.Count} chauffeur(s) sans voyage en cours ou programmé :",
+                        Donnees = libres.Select(c => new { c.Id_Chauffeur, c.Nom, c.Prenom, c.Telephone })
+                    });
+                }
                 case "chercher_chauffeur":
                 {
                     if (string.IsNullOrWhiteSpace(intention.MotCle))

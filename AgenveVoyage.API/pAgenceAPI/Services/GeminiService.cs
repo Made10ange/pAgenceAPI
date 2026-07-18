@@ -34,6 +34,7 @@ namespace pAgenceAPI.Services
 - liste_billets : lister tous les billets
 - voyages_aujourdhui : lister uniquement les voyages dont la date de départ est aujourd'hui
 - chauffeur_plus_actif : trouver le chauffeur ayant le plus de voyages assignés
+- chauffeurs_sans_voyage : lister les chauffeurs non affectés à un voyage en cours ou programmé (chauffeurs disponibles/libres/inactifs)
 - chercher_chauffeur : rechercher un chauffeur précis par son nom (mets le nom dans ""mot_cle"")
 - aide : l'utilisateur demande comment utiliser l'application (""comment faire X"", ""où se trouve Y"", tutoriel/aide) plutôt que des données réelles
 - inconnu : si la question ne correspond à aucune action ci-dessus
@@ -134,6 +135,8 @@ Question de l'utilisateur : ""{question}""";
 
             if (q.Contains("chauffeur le plus actif") || q.Contains("chauffeur plus actif") || q.Contains("meilleur chauffeur"))
                 return new GeminiIntentResult { Action = "chauffeur_plus_actif", ViaSecours = true };
+            if (q.Contains("sans voyage") || q.Contains("disponible") || q.Contains("libre") || q.Contains("inactif"))
+                return new GeminiIntentResult { Action = "chauffeurs_sans_voyage", ViaSecours = true };
             if (q.Contains("chauffeur"))
                 return new GeminiIntentResult { Action = "liste_chauffeurs", ViaSecours = true };
             if (q.Contains("voyage") || q.Contains("trajet"))
